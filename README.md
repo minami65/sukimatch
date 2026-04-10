@@ -21,6 +21,11 @@
 - DB:SQLite
 
 ## セットアップ方法
+### バックエンド
+- サーバー起動
+  ```
+  uvicorn app.main:app --reload
+  ```
 
 ### バックエンド
 
