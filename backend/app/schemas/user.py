@@ -6,6 +6,6 @@ class UserCreate(BaseModel):
     password: str
 
 class UserUpdate(BaseModel):
-     nickname:str | None = None
-     mail_address:str | None = None
-     password:str | None = None
+    nickname:str | None = None
+    mail_address:str | None = None
+    password:str | None = None

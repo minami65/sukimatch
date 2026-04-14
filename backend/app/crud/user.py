@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
-import app.models.user as User
+from app.models.user import User
 from passlib.context import CryptContext
 from app.schemas.user import UserUpdate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# ユーザー登録
 def create_user(db: Session, user):
     hashed_password = pwd_context.hash(user.password)
 
@@ -19,6 +20,7 @@ def create_user(db: Session, user):
 
     return db_user
 
+# 更新
 def update_user(db: Session, user_id: int, user_data: UserUpdate):
     user = db.query(User).filter(User.id == user_id).first()
 
@@ -31,6 +33,7 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if user_data.mail_address is not None:
         user.mail_address = user_data.mail_address
 
+    # TODO:パスワードのハッシュ化
     if user_data.password is not None:
         user.password = user_data.password  
 
@@ -38,3 +41,14 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     db.refresh(user)
 
     return user
+
+# 一覧参照
+def get_users(db:Session):
+    return db.query(User).all()
+
+# 詳細取得
+def get_user(db:Session, user_id:int):
+    user = db.query(User).filter(User.id == user_id).first()
+
+    return user
+    

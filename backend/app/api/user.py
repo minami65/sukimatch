@@ -5,6 +5,8 @@ from app.schemas.user import UserCreate
 from app.crud.user import create_user
 from app.schemas.user import UserUpdate
 from app.crud.user import update_user
+from app.crud.user import get_users
+from app.crud.user import get_user
 
 router = APIRouter()
 
@@ -15,7 +17,7 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/users")
+@router.post("/user")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
@@ -27,3 +29,11 @@ def update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
         return {"error": "User not found"}
 
     return result
+
+@router.get("/users")
+def get_user_list(db:Session = Depends(get_db)):
+    return get_users(db)
+
+@router.get("/user/{user_id}")
+def get_user_detail(user_id:int,db:Session = Depends(get_db)):
+    return get_user(db)
