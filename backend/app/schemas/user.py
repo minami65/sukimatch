@@ -9,3 +9,11 @@ class UserUpdate(BaseModel):
     nickname:str | None = None
     mail_address:str | None = None
     password:str | None = None
+
+class UserResponse(BaseModel):
+    id:int
+    nickname:str
+    mail_address:str
+
+    class Config:
+        from_attributes = True

@@ -7,6 +7,7 @@ from app.schemas.user import UserUpdate
 from app.crud.user import update_user
 from app.crud.user import get_users
 from app.crud.user import get_user
+from app.schemas.user import UserResponse
 
 router = APIRouter()
 
@@ -16,12 +17,13 @@ def get_db():
         yield db
     finally:
         db.close()
-
+# 登録
 @router.post("/user")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
-@router.put("/users/{user_id}")
+# 更新
+@router.put("/user/{user_id}")
 def update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
     result = update_user(db, user_id, user)
 
@@ -30,10 +32,20 @@ def update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
 
     return result
 
+# 一覧参照
 @router.get("/users")
 def get_user_list(db:Session = Depends(get_db)):
     return get_users(db)
 
-@router.get("/user/{user_id}")
-def get_user_detail(user_id:int,db:Session = Depends(get_db)):
-    return get_user(db)
+# 詳細取得
+@router.get("/users/{user_id}",response_model=UserResponse)
+def get_user_detail(user_id: int,db:Session = Depends(get_db)):
+    user = get_user(db,user_id)
+
+    if not user:
+        return {"error":"User not found"}
+    return user
+
+# 検索
+
+# 削除

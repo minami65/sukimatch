@@ -5,7 +5,7 @@ from app.schemas.user import UserUpdate
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# ユーザー登録
+# 登録
 def create_user(db: Session, user):
     hashed_password = pwd_context.hash(user.password)
 
@@ -48,7 +48,9 @@ def get_users(db:Session):
 
 # 詳細取得
 def get_user(db:Session, user_id:int):
-    user = db.query(User).filter(User.id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
-    return user
+# 検索
+
+# 削除
     
