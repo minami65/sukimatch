@@ -10,9 +10,23 @@ def create_user(db: Session, user):
     hashed_password = pwd_context.hash(user.password)
 
     db_user = User(
-        nickname=user.nickname,
+        name= user.name,
+        age= user.age,
         mail_address=user.mail_address,
-        password=hashed_password
+        password=hashed_password,
+        bio= user.bio,
+        birth_location_id = user.birth_location_id,
+        current_location_id = user.current_location_id,
+        education_id = user.education_id,
+        job_id= user.job_id,
+        income_id= user.income_id,
+        height= user.height,
+        marriage_intention_id= user.marriage_intention_id,
+        holiday_id= user.holiday_id,
+        alcohol_id= user.alcohol_id,
+        smoking_id= user.smoking_id,
+        living_arrangement_id= user.living_arrangement_id,
+        meeting_preference_id= user.meeting_preference_id
     )
     db.add(db_user)
     db.commit()
@@ -27,11 +41,56 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if not user:
         return None
 
-    if user_data.nickname is not None:
-        user.nickname = user_data.nickname
+    if user_data.name is not None:
+        user.name = user_data.name
+    
+    if user_data.age is not None:
+        user.age = user_data.age
 
     if user_data.mail_address is not None:
         user.mail_address = user_data.mail_address
+
+    if user_data.password is not None:
+        user.password = user_data.password
+
+    if user_data.bio is not None:
+        user.bio = user_data.bio
+
+    if user_data.birth_location_id is not None:
+        user.birth_location_id = user_data.birth_location_id
+    
+    if user_data.current_location_id is not None:
+        user.current_location_id = user_data.current_location_id
+
+    if user_data.education_id is not None:
+        user.education_id = user_data.education_id
+
+    if user_data.job_id is not None:
+        user.job_id = user_data.job_id
+
+    if user_data.income_id is not None:
+        user.income_id = user_data.income_id
+
+    if user_data.height is not None:
+        user.height = user_data.height
+
+    if user_data.marriage_intention_id is not None:
+        user.marriage_intention_id = user_data.marriage_intention_id
+
+    if user_data.holiday_id is not None:
+        user.holiday_id = user_data.holiday_id
+
+    if user_data.alcohol_id is not None:
+        user.alcohol_id = user_data.alcohol_id
+
+    if user_data.smoking_id is not None:
+        user.smoking_id = user_data.smoking_id
+
+    if user_data.living_arrangement_id is not None:
+        user.living_arrangement_id = user_data.living_arrangement_id
+
+    if user_data.meeting_preference_id is not None:
+        user.meeting_preference_id = user_data.meeting_preference_id
 
     # TODO:パスワードのハッシュ化
     if user_data.password is not None:
@@ -48,9 +107,19 @@ def get_users(db:Session):
 
 # 詳細取得
 def get_user(db:Session, user_id:int):
-    return db.query(User).filter(User.id == user_id).first()
+    return db.query(User).filter(User.user_id == user_id).first()
 
 # 検索
+def search_user(db:Session,):
+    return db.query(User).filter().all()
 
 # 削除
+def delete_user(db:Session,user_id:int):
+    user = db.query(User).filter(User.user_id == user_id).first()
     
+    if user is None:
+        return None
+    
+    db.delete(user)
+    db.commit()
+    return user
