@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String,ForeignKey
+from sqlalchemy.orm import relationship
 from app.db import Base
 
 class User(Base):
@@ -9,15 +10,42 @@ class User(Base):
     mail_address = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     bio = Column(String,nullable=False)
-    birth_location_id = Column(Integer,nullable=False)
-    current_location_id = Column(Integer,nullable=False)
-    education_id = Column(Integer,nullable=False)
-    job_id = Column(Integer,nullable=False)
-    income_id = Column(Integer,nullable=False)
     height = Column(Integer,nullable=False)
-    marriage_intention_id = Column(Integer,nullable=False)
-    holiday_id = Column(Integer,nullable=False)
-    alcohol_id = Column(Integer,nullable=False)
-    smoking_id = Column(Integer,nullable=False)
-    living_arrangement_id = Column(Integer,nullable=False)
-    meeting_preference_id = Column(Integer,nullable=False)
+
+    # 外部キー
+    birth_location_id = Column(Integer,ForeignKey("birth_location.birth_location_id"))
+    birth = relationship("Birth")
+
+    current_location_id = Column(Integer, ForeignKey("current_location.current_location_id"))
+    location = relationship("Location")
+
+    education_id = Column(Integer,ForeignKey("education.education_id"))
+    education = relationship("Education")
+
+    job_id = Column(Integer,ForeignKey("job.job_id"))
+    job = relationship("Job")
+
+    income_id = Column(Integer,ForeignKey("income.income_id"))
+    income = relationship("Income")
+    
+    marriage_intention_id = Column(Integer,ForeignKey("marriage.marriage_intention_id"))
+    marriage = relationship("Marriage")
+
+    holiday_id = Column(Integer,ForeignKey("holiday.holiday_id"))
+    holiday = relationship("Holiday")
+
+    alcohol_id = Column(Integer,ForeignKey("alcohol.alcohol_id"))
+    alcohol = relationship("Alcohol")
+
+    smoking_id = Column(Integer,ForeignKey("smoking.smoking_id"))
+    smoking = relationship("Smoking")
+
+    living_arrangement_id = Column(Integer,ForeignKey("living_arrangement.living_arrangement_id"))
+    living = relationship("Living")
+
+    meeting_preference_id = Column(Integer,ForeignKey("meeting_preference.meeting_preference_id"))
+    meeting = relationship("Meeting")
+
+    
+
+    
