@@ -11,13 +11,20 @@ class User(Base):
     password = Column(String, nullable=False)
     bio = Column(String,nullable=False)
     height = Column(Integer,nullable=False)
+    current_location_id = Column(Integer, ForeignKey("locations.id"))
+    birth_location_id = Column(Integer,ForeignKey("locations.id"))
+    birth_location = relationship(
+        "Location",
+        foreign_keys=[birth_location_id]
+    )
 
+    current_location = relationship(
+        "Location",
+        foreign_keys=[current_location_id]
+    )
     # 外部キー
-    birth_location_id = Column(Integer,ForeignKey("birth_location.birth_location_id"))
     birth = relationship("Birth")
 
-    current_location_id = Column(Integer, ForeignKey("current_location.current_location_id"))
-    location = relationship("Location")
 
     education_id = Column(Integer,ForeignKey("education.education_id"))
     education = relationship("Education")

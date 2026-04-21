@@ -2,8 +2,7 @@ from fastapi import FastAPI
 from app.api import user
 from app.db import engine, Base
 from app.models.user import User
-from app.models.current_location import Location
-from app.models.birth_location import Birth
+from app.models.locations import Location
 from app.models.education import Education
 from app.models.job import Job
 from app.models.income import Income
