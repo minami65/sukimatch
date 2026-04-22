@@ -22,9 +22,6 @@ class User(Base):
         "Location",
         foreign_keys=[current_location_id]
     )
-    # 外部キー
-    birth = relationship("Birth")
-
 
     education_id = Column(Integer,ForeignKey("education.education_id"))
     education = relationship("Education")
