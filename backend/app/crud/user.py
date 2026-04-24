@@ -3,11 +3,14 @@ from app.models.user import User
 from passlib.context import CryptContext
 from app.schemas.user import UserUpdate
 
+# パスワードのハッシュ化
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # 登録
 def create_user(db: Session, user):
+    print("password:", user.password)
     hashed_password = pwd_context.hash(user.password)
+    print("hashed_password",hashed_password)
 
     db_user = User(
         name= user.name,
@@ -123,3 +126,7 @@ def delete_user(db:Session,user_id:int):
     db.delete(user)
     db.commit()
     return user
+
+# メールアドレスが一致するユーザーの取得
+def get_user_by_mail_address(db:Session,mail_address:str):
+    return db.query(User).filter(User.mail_address == mail_address).first()
