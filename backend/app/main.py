@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import user,locations,education,job,income,marriage,holiday,alcohol,smoking,living,meeting
+from app.api import user,locations,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth
 from app.db import engine, Base
 from app.models.user import User
 from app.models.locations import Location
@@ -36,3 +36,4 @@ app.include_router(alcohol.router)
 app.include_router(smoking.router)
 app.include_router(living.router)
 app.include_router(meeting.router)
+app.include_router(auth.router)
