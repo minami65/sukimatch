@@ -11,6 +11,7 @@ from app.crud.user import get_user
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
 from app.models.user import User
+from app.api.deps import get_current_user
 
 router = APIRouter()
 
@@ -20,6 +21,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 # 登録
 @router.post("/user")
 def register(user: UserCreate, db: Session = Depends(get_db)):
@@ -93,3 +95,8 @@ def get_user_detail(user_id: int,db:Session = Depends(get_db)):
 def delete(user_id: int,db:Session = Depends(get_db)):
     user = delete_user(db,user_id)
     return {"message":"user delete"}
+
+# プロフィール取得
+@router.get("/user/me")
+def get_me(current_user:User = Depends(get_current_user)):
+    return current_user
