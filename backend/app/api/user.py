@@ -6,7 +6,6 @@ from app.schemas.user import UserCreate
 from app.crud.user import create_user
 from app.schemas.user import UserUpdate
 from app.crud.user import update_user
-from app.crud.user import get_users
 from app.crud.user import get_user
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
@@ -26,16 +25,6 @@ def get_db():
 @router.post("/user")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
-
-# 更新
-@router.put("/user/{user_id}")
-def update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
-    result = update_user(db, user_id, user)
-
-    if not result:
-        return {"error": "User not found"}
-
-    return result
 
 # 一覧参照
 @router.get("/users")
@@ -100,3 +89,15 @@ def delete(user_id: int,db:Session = Depends(get_db)):
 @router.get("/user/me")
 def get_me(current_user:User = Depends(get_current_user)):
     return current_user
+
+# プロフィール更新
+@router.put("/users/me")
+def update(
+    user_data: UserUpdate, 
+    db: Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)):
+    
+    
+    result = update_user(db,current_user.user_id,user_data)
+
+    return result

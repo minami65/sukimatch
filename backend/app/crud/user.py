@@ -39,7 +39,7 @@ def create_user(db: Session, user):
 
 # 更新
 def update_user(db: Session, user_id: int, user_data: UserUpdate):
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(User).filter(User.user_id == user_id).first()
 
     if not user:
         return None
@@ -52,9 +52,6 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
 
     if user_data.mail_address is not None:
         user.mail_address = user_data.mail_address
-
-    if user_data.password is not None:
-        user.password = user_data.password
 
     if user_data.bio is not None:
         user.bio = user_data.bio
