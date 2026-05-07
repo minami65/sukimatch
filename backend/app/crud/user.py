@@ -15,9 +15,11 @@ def create_user(db: Session, user):
     db_user = User(
         name= user.name,
         age= user.age,
+        birthday = user.birthday,
         mail_address=user.mail_address,
         password=hashed_password,
         bio= user.bio,
+        gender_id = user.gender_id,
         birth_location_id = user.birth_location_id,
         current_location_id = user.current_location_id,
         education_id = user.education_id,
@@ -50,12 +52,18 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if user_data.age is not None:
         user.age = user_data.age
 
+    if user_data.birthday is not None:
+        user.birthday = user_data.birthday
+
     if user_data.mail_address is not None:
         user.mail_address = user_data.mail_address
 
     if user_data.bio is not None:
         user.bio = user_data.bio
 
+    if user_data.gender_id is not None:
+        user.gender_id = user_data.gender_id
+        
     if user_data.birth_location_id is not None:
         user.birth_location_id = user_data.birth_location_id
     
@@ -92,7 +100,7 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if user_data.meeting_preference_id is not None:
         user.meeting_preference_id = user_data.meeting_preference_id
 
-    # TODO:パスワードのハッシュ化
+    # パスワードのハッシュ化
     if user_data.password is not None:
         user.password = user_data.password  
 

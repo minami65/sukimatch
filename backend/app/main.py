@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api import user,locations,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth
+from app.api import user,locations,gender,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth,user_images
 from app.db import engine, Base
 from app.models.user import User
 from app.models.locations import Location
@@ -15,7 +15,7 @@ from app.models.meeting_preference import Meeting
 from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
-
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -27,6 +27,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(user.router)
 app.include_router(locations.router)
+app.include_router(gender.router)
 app.include_router(education.router)
 app.include_router(job.router)
 app.include_router(income.router)
@@ -37,3 +38,5 @@ app.include_router(smoking.router)
 app.include_router(living.router)
 app.include_router(meeting.router)
 app.include_router(auth.router)
+app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
+app.include_router(user_images.router)

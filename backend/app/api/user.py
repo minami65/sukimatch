@@ -30,8 +30,10 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 @router.get("/users")
 def get_user_list(
     age:Optional[int] = Query(None),
+    birthday:Optional [int] = Query(None),
     current_location_id:Optional[int] = Query(None),
     job_id:Optional[int] = Query(None),
+    gender_id :Optional[int] = Query(None),
     education_id:Optional[int] = Query(None),
     income_id:Optional[int] = Query(None),
     height:Optional[int] = Query(None),
@@ -47,6 +49,10 @@ def get_user_list(
     # 検索条件がある場合
     if age is not None:
         query = query.filter(User.age == age)
+    if birthday :
+        query = query.filter(User.birthday == birthday)
+    if gender_id:
+        query = query.filter(User.gender_id == gender_id)
     if current_location_id:
         query = query.filter(User.current_location_id == current_location_id)
     if job_id:

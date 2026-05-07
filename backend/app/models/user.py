@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,ForeignKey
+from sqlalchemy import Column, Integer, String,ForeignKey ,Date
 from sqlalchemy.orm import relationship
 from app.db import Base
 
@@ -7,6 +7,9 @@ class User(Base):
     user_id = Column(Integer, primary_key=True, index=True)
     name = Column(String,nullable=False)
     age = Column(Integer,nullable=False)
+    birthday = Column(Date,nullable=False)
+    gender_id = Column(Integer,ForeignKey("gender.gender_id"))
+    gender = relationship("Gender")
     mail_address = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     bio = Column(String,nullable=False)
