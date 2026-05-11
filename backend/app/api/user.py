@@ -7,10 +7,12 @@ from app.crud.user import create_user
 from app.schemas.user import UserUpdate
 from app.crud.user import update_user
 from app.crud.user import get_user
+from app.crud.user import create_like
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
 from app.models.user import User
 from app.api.deps import get_current_user
+
 
 router = APIRouter()
 
@@ -107,3 +109,11 @@ def update(
     result = update_user(db,current_user.user_id,user_data)
 
     return result
+
+@router.post("/users/{user_id}/like")
+def like_user(
+    user_id:int,
+    db:Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)
+    ):
+    return create_like(db,current_user.user_id,user_id)

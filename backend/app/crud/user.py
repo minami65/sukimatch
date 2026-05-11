@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from passlib.context import CryptContext
 from app.schemas.user import UserUpdate
+from fastapi import HTTPException
+from app.models.likes import Likes
 
 # パスワードのハッシュ化
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -135,3 +137,32 @@ def delete_user(db:Session,user_id:int):
 # メールアドレスが一致するユーザーの取得
 def get_user_by_mail_address(db:Session,mail_address:str):
     return db.query(User).filter(User.mail_address == mail_address).first()
+
+# いいね 
+def create_like(db:Session,from_user_id:int,to_user_id:int):
+
+    if from_user_id == to_user_id:
+        raise HTTPException(status_code=400,detail="cannot like yourself")
+    
+    #重複チェック
+    existing_like = db.query(Likes).filter(
+        Likes.from_user_id == from_user_id,
+        Likes.to_user_id == to_user_id
+    ).first()
+
+    if existing_like:
+        raise HTTPException(
+            status_code=400,
+            detail = "already liked"
+        )
+    
+    like = Likes(
+        from_user_id = from_user_id,
+        to_user_id = to_user_id
+    )
+
+    db.add(like)
+    db.commit()
+    db.refresh(like)
+
+    return  like
