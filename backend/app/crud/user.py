@@ -2,19 +2,26 @@ from sqlalchemy.orm import Session
 from app.models.user import User
 from passlib.context import CryptContext
 from app.schemas.user import UserUpdate
+from fastapi import HTTPException
+from app.models.likes import Likes
 
+# パスワードのハッシュ化
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # 登録
 def create_user(db: Session, user):
+    print("password:", user.password)
     hashed_password = pwd_context.hash(user.password)
+    print("hashed_password",hashed_password)
 
     db_user = User(
         name= user.name,
         age= user.age,
+        birthday = user.birthday,
         mail_address=user.mail_address,
         password=hashed_password,
         bio= user.bio,
+        gender_id = user.gender_id,
         birth_location_id = user.birth_location_id,
         current_location_id = user.current_location_id,
         education_id = user.education_id,
@@ -36,7 +43,7 @@ def create_user(db: Session, user):
 
 # 更新
 def update_user(db: Session, user_id: int, user_data: UserUpdate):
-    user = db.query(User).filter(User.id == user_id).first()
+    user = db.query(User).filter(User.user_id == user_id).first()
 
     if not user:
         return None
@@ -47,15 +54,18 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if user_data.age is not None:
         user.age = user_data.age
 
+    if user_data.birthday is not None:
+        user.birthday = user_data.birthday
+
     if user_data.mail_address is not None:
         user.mail_address = user_data.mail_address
-
-    if user_data.password is not None:
-        user.password = user_data.password
 
     if user_data.bio is not None:
         user.bio = user_data.bio
 
+    if user_data.gender_id is not None:
+        user.gender_id = user_data.gender_id
+        
     if user_data.birth_location_id is not None:
         user.birth_location_id = user_data.birth_location_id
     
@@ -92,7 +102,7 @@ def update_user(db: Session, user_id: int, user_data: UserUpdate):
     if user_data.meeting_preference_id is not None:
         user.meeting_preference_id = user_data.meeting_preference_id
 
-    # TODO:パスワードのハッシュ化
+    # パスワードのハッシュ化
     if user_data.password is not None:
         user.password = user_data.password  
 
@@ -123,3 +133,8 @@ def delete_user(db:Session,user_id:int):
     db.delete(user)
     db.commit()
     return user
+
+# メールアドレスが一致するユーザーの取得
+def get_user_by_mail_address(db:Session,mail_address:str):
+    return db.query(User).filter(User.mail_address == mail_address).first()
+

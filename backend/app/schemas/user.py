@@ -2,14 +2,17 @@ from pydantic import BaseModel
 
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from datetime import date
 
 class UserCreate(BaseModel):
     name: str
     age: int
+    birthday :date
     mail_address: EmailStr
     password: str
     bio: Optional[str] = None
 
+    gender_id:int
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -26,9 +29,11 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     name:Optional[str] = None
     age:Optional[int] = None
+    birthday :Optional[int] = None
     mail_address: Optional[str] = None
     password: Optional[str] = None
     bio:Optional[str] = None
+    gender_id :Optional[int] = None
     birth_location_id:Optional[int] = None
     current_location_id:Optional[int] = None
     education_id:Optional[int] = None
@@ -46,9 +51,11 @@ class UserResponse(BaseModel):
     user_id:int
     name:str
     age:int
+    birthday:date
     mail_address: str
     password: str
     bio:str
+    gender_id:int
     birth_location_id:int
     current_location_id:int
     education_id:int

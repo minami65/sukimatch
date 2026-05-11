@@ -6,11 +6,15 @@ from app.schemas.user import UserCreate
 from app.crud.user import create_user
 from app.schemas.user import UserUpdate
 from app.crud.user import update_user
-from app.crud.user import get_users
 from app.crud.user import get_user
+from app.crud.likes import create_like
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
 from app.models.user import User
+from app.models.likes import Likes
+from app.api.deps import get_current_user
+from app.crud.likes import get_my_likes ,get_liked_by_users,delete_like
+
 
 router = APIRouter()
 
@@ -20,27 +24,20 @@ def get_db():
         yield db
     finally:
         db.close()
+
 # 登録
 @router.post("/user")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
-# 更新
-@router.put("/user/{user_id}")
-def update(user_id: int, user: UserUpdate, db: Session = Depends(get_db)):
-    result = update_user(db, user_id, user)
-
-    if not result:
-        return {"error": "User not found"}
-
-    return result
-
 # 一覧参照
 @router.get("/users")
 def get_user_list(
     age:Optional[int] = Query(None),
+    birthday:Optional [int] = Query(None),
     current_location_id:Optional[int] = Query(None),
     job_id:Optional[int] = Query(None),
+    gender_id :Optional[int] = Query(None),
     education_id:Optional[int] = Query(None),
     income_id:Optional[int] = Query(None),
     height:Optional[int] = Query(None),
@@ -56,6 +53,10 @@ def get_user_list(
     # 検索条件がある場合
     if age is not None:
         query = query.filter(User.age == age)
+    if birthday :
+        query = query.filter(User.birthday == birthday)
+    if gender_id:
+        query = query.filter(User.gender_id == gender_id)
     if current_location_id:
         query = query.filter(User.current_location_id == current_location_id)
     if job_id:
@@ -93,3 +94,53 @@ def get_user_detail(user_id: int,db:Session = Depends(get_db)):
 def delete(user_id: int,db:Session = Depends(get_db)):
     user = delete_user(db,user_id)
     return {"message":"user delete"}
+
+# プロフィール取得
+@router.get("/user/me")
+def get_me(current_user:User = Depends(get_current_user)):
+    return current_user
+
+# プロフィール更新
+@router.put("/users/me")
+def update(
+    user_data: UserUpdate, 
+    db: Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)):
+    
+    
+    result = update_user(db,current_user.user_id,user_data)
+
+    return result
+
+@router.post("/users/{user_id}/like")
+def like_user(
+    user_id:int,
+    db:Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)
+    ):
+    return create_like(db,current_user.user_id,user_id)
+
+# 自分がしたいいね
+@router.get("/users/me/likes")
+def get_my_like_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return get_my_likes(db, current_user.user_id)
+
+# じぶんにきたいいね
+@router.get("/users/me/liked-by")
+def get_liked_by(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return get_liked_by_users(db, current_user.user_id)
+
+# いいね取り消し
+@router.delete("/users/{user_id}/like")
+def unlike_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return delete_like(db, current_user.user_id, user_id)
