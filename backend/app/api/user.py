@@ -7,11 +7,13 @@ from app.crud.user import create_user
 from app.schemas.user import UserUpdate
 from app.crud.user import update_user
 from app.crud.user import get_user
-from app.crud.user import create_like
+from app.crud.likes import create_like
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
 from app.models.user import User
+from app.models.likes import Likes
 from app.api.deps import get_current_user
+from app.crud.likes import get_my_likes ,get_liked_by_users,delete_like
 
 
 router = APIRouter()
@@ -117,3 +119,28 @@ def like_user(
     current_user:User = Depends(get_current_user)
     ):
     return create_like(db,current_user.user_id,user_id)
+
+# 自分がしたいいね
+@router.get("/users/me/likes")
+def get_my_like_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return get_my_likes(db, current_user.user_id)
+
+# じぶんにきたいいね
+@router.get("/users/me/liked-by")
+def get_liked_by(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return get_liked_by_users(db, current_user.user_id)
+
+# いいね取り消し
+@router.delete("/users/{user_id}/like")
+def unlike_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return delete_like(db, current_user.user_id, user_id)
