@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from app.models.likes import Likes
 from app.models.user import User
+from app.models.matches import Matches
 
 # いいね 
 def create_like(db:Session,from_user_id:int,to_user_id:int):
@@ -27,6 +28,25 @@ def create_like(db:Session,from_user_id:int,to_user_id:int):
     )
 
   db.add(like)
+
+  reverse_like = db.query(Likes).filter(
+      Likes.from_user_id == from_user_id,
+      Likes.to_user_id == to_user_id
+  ).first()
+  
+  if reverse_like:
+      existing_match = db.query(Matches).filter(
+          Matches.user1_id == min(from_user_id,to_user_id),
+          Matches.user2_id == max(from_user_id,to_user_id)
+      ).first()
+
+  if not existing_match:
+      match = Matches(
+            user1_id=min(from_user_id, to_user_id),
+            user2_id=max(from_user_id, to_user_id)
+          )
+      db.add(match)
+      
   db.commit()
   db.refresh(like)
 
