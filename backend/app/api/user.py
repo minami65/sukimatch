@@ -11,10 +11,10 @@ from app.crud.likes import create_like
 from app.schemas.user import UserResponse
 from app.crud.user import delete_user
 from app.models.user import User
-from app.models.likes import Likes
 from app.api.deps import get_current_user
 from app.crud.likes import get_my_likes ,get_liked_by_users,delete_like
-
+from app.models.footprint import FootPrint
+from app.crud.footprint import get_my_footprint
 
 router = APIRouter()
 
@@ -144,3 +144,31 @@ def unlike_user(
     current_user: User = Depends(get_current_user)
 ):
     return delete_like(db, current_user.user_id, user_id)
+
+# 足跡（登録)
+@router.post("/users/{user_id}/footprint")
+def create_footprint(
+    user_id:int,
+    db:Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)
+):
+    if current_user.user_id == user_id:
+        return {"自分には足跡つけません"}
+    
+    footprint = FootPrint(
+        visitor_user_id = current_user.user_id,
+        visited_user_id = user_id
+    )
+    db.add(footprint)
+    db.commit()
+    db.refresh(footprint)
+
+    return footprint
+
+# 足跡取得
+@router.get("/users/me/footprint")
+def get_visited_user(
+    db:Session = Depends(get_db),
+    current_user:User = Depends(get_current_user)
+):  
+    return get_my_footprint(db,current_user.user_id)
