@@ -3,7 +3,6 @@ from app.models.user import User
 from passlib.context import CryptContext
 from app.schemas.user import UserUpdate
 from fastapi import HTTPException
-from app.models.likes import Likes
 
 # パスワードのハッシュ化
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -138,3 +137,13 @@ def delete_user(db:Session,user_id:int):
 def get_user_by_mail_address(db:Session,mail_address:str):
     return db.query(User).filter(User.mail_address == mail_address).first()
 
+# パスワードリセット
+def password_reset(db:Session,mail_address:str ,password:str):
+    user = db.query(User).filter(User.mail_address == mail_address).first()
+    if not user:
+        raise HTTPException (status_code=404 , detail="ユーザーが存在しません")
+    user.password = pwd_context.hash(password)
+
+    db.commit()
+    db.refresh(user)
+    return user
