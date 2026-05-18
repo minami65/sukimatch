@@ -1,0 +1,62 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title h1 {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.couple_img {
+  text-align: center;
+}
+
+.couple {
+  width: 170px;
+}
+
+.login_form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid;
+  margin: 0 10px 20px 10px;
+}
+
+#email,
+#password {
+  width: 92%;
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  background-color: #abe8db;
+}
+
+.form_button {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 50%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.login {
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  background-color: #abe8db;
+}
+
+.new_registration {
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
+  background-color: #2a3455;
+  color: white;
+  text-decoration: none;
+}

@@ -1,0 +1,67 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 40px 0 20px 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 85%;
+  border: 1px solid;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 0 10px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+#card_number,
+#expiration_year,
+#expiration_month,
+#expiration_day,
+#security_code,
+#cardholder_name {
+  padding: 15px;
+  margin: 0;
+  border: none;
+  border-radius: 10px;
+  background-color: #abe8db;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.expiry {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+#expiration_year,
+#expiration_month,
+#expiration_day {
+  width: 100%;
+}
+
+.pay_button {
+  margin: 100px auto 0;
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2a3455;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+}
