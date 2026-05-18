@@ -40,7 +40,8 @@ def get_user_list(
     gender_id :Optional[int] = Query(None),
     education_id:Optional[int] = Query(None),
     income_id:Optional[int] = Query(None),
-    height:Optional[int] = Query(None),
+    min_height:Optional[int] = Query(None),
+    max_height:Optional[int] = Query(None),
     marriage_intention_id:Optional[int] = Query(None),
     holiday_id:Optional[int] = Query(None),
     alcohol_id:Optional[int] = Query(None),
@@ -63,10 +64,12 @@ def get_user_list(
         query = query.filter(User.job_id == job_id)
     if education_id:
         query = query.filter(User.education_id == education_id)
+    if min_height is not None:
+        query = query.filter(User.height >= min_height)
+    if max_height is not None:
+        query = query.filter(User.height <= max_height)
     if income_id:
         query = query.filter(User.income_id == income_id)
-    if height: # 範囲の設定が必要？
-        query = query.filter(User.height == height)
     if marriage_intention_id:
         query = query.filter(User.marriage_intention_id == marriage_intention_id)
     if holiday_id:
