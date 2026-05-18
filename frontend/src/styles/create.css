@@ -1,0 +1,65 @@
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 20px;
+  margin: 40px 0 20px 10px;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.signup {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid;
+  border-radius: 20px;
+  padding: 10px;
+  width: 90%;
+  margin: 0 10px;
+}
+
+.field input {
+  margin: 0;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #abe8db;
+  font-size: 16px;
+  width: 92%;
+}
+
+.field select {
+  margin: 0;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #abe8db;
+  font-size: 16px;
+  width: 100%;
+}
+
+.create_button {
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.register {
+  width: 50%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2a3455;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+}

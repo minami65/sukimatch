@@ -1,0 +1,19 @@
+* {
+  font-family: "Klee One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  background-color: #f8f4e6;
+}
+
+/* 英数字だけ上書き */
+:lang(en),
+code,
+pre {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /* background-color: #f8f4e6; */
+}
