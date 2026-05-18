@@ -2,19 +2,14 @@ from fastapi import APIRouter, Depends , Query
 from typing import Optional
 from sqlalchemy.orm import Session
 from app.db import SessionLocal
-from app.schemas.user import UserCreate
-from app.crud.user import create_user
-from app.schemas.user import UserUpdate
-from app.crud.user import update_user
-from app.crud.user import get_user
-from app.crud.likes import create_like
-from app.schemas.user import UserResponse
-from app.crud.user import delete_user
+from app.schemas.user import UserCreate ,UserUpdate,UserResponse
+from app.crud.user import create_user,get_user,update_user,password_reset,delete_user
 from app.models.user import User
 from app.api.deps import get_current_user
-from app.crud.likes import get_my_likes ,get_liked_by_users,delete_like
+from app.crud.likes import create_like,get_my_likes ,get_liked_by_users,delete_like
 from app.models.footprint import FootPrint
 from app.crud.footprint import get_my_footprint
+from app.schemas.auth import PasswordReset
 
 router = APIRouter()
 
@@ -30,7 +25,12 @@ def get_db():
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
-# 一覧参照
+# パスワード再登録
+@router.put("/password/reset")
+def reset_user_password(data:PasswordReset,db:Session = Depends(get_db)):
+    password_reset(db,data.mail_address,data.password_confirm)
+    return {"message":"password reset"}
+# 一覧参照 
 @router.get("/users")
 def get_user_list(
     age:Optional[int] = Query(None),
@@ -40,7 +40,8 @@ def get_user_list(
     gender_id :Optional[int] = Query(None),
     education_id:Optional[int] = Query(None),
     income_id:Optional[int] = Query(None),
-    height:Optional[int] = Query(None),
+    min_height:Optional[int] = Query(None),
+    max_height:Optional[int] = Query(None),
     marriage_intention_id:Optional[int] = Query(None),
     holiday_id:Optional[int] = Query(None),
     alcohol_id:Optional[int] = Query(None),
@@ -63,10 +64,12 @@ def get_user_list(
         query = query.filter(User.job_id == job_id)
     if education_id:
         query = query.filter(User.education_id == education_id)
+    if min_height is not None:
+        query = query.filter(User.height >= min_height)
+    if max_height is not None:
+        query = query.filter(User.height <= max_height)
     if income_id:
         query = query.filter(User.income_id == income_id)
-    if height: # 範囲の設定が必要？
-        query = query.filter(User.height == height)
     if marriage_intention_id:
         query = query.filter(User.marriage_intention_id == marriage_intention_id)
     if holiday_id:
