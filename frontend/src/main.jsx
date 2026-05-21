@@ -10,6 +10,7 @@ import UserList from "./userList.jsx";
 import UserDetails from "./userDetails.jsx";
 import MatchComplete from "./match.jsx";
 import Mypage from "./mypage.jsx";
+import Profile from "./profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -22,6 +23,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/userDetail/:id" element={<UserDetails />} />
       <Route path="/match" element={<MatchComplete />} />
       <Route path="/mypage" element={<Mypage />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   </BrowserRouter>,
 );

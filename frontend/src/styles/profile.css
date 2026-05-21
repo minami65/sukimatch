@@ -1,0 +1,93 @@
+body {
+  background-color: #f8f4f6;
+  margin: 0;
+  padding: 0;
+}
+
+.profileImage {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.profileImage img {
+  width: 180px;
+  height: 180px;
+  border: 1px solid #222;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.introductionText {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.introductionText input {
+  width: 80%;
+  max-width: 700px;
+  height: 200px;
+  border: 1px solid #222;
+  border-radius: 20px;
+  font-size: 20px;
+  padding: 20px;
+}
+
+.profileDetail {
+  width: 80%;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 40px;
+  border-top: #abe8db solid 2px;
+  border-bottom: #abe8db solid 2px;
+}
+
+.profileDetail > p {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.profileInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.profileInput p {
+  width: 35%;
+  font-size: 18px;
+  color: #333;
+}
+
+.profileInput input,
+.profileInput select {
+  width: 60%;
+  height: 35px;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-size: 18px;
+  background-color: white;
+  color: #333;
+  outline: none;
+}
+
+button {
+  display: block;
+  width: 250px;
+  height: 60px;
+  margin: 30px auto 100px auto;
+  border: none;
+  border-radius: 30px;
+  background-color: #2f3d6b;
+  color: white;
+  font-size: 20px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
