@@ -11,7 +11,7 @@ export default function Mypage() {
   const [mainImages, setImages] = useState(null);
   // TODO：ログイン実装したら変える
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5MzQ0NzM2fQ.LP4UOmTYuJl8wrmL9vfdXLVa06imeEayoxyMha6I12Y";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5NzgyNTg2fQ.xWIQ1xgC5RXmJWiZU6p_UkPll5f2PjQXWFEUWfL1Tqg";
 
   // ユーザーID取得
   useEffect(() => {
@@ -53,7 +53,8 @@ export default function Mypage() {
             className="mainImage"
           />
         )}
-        <Link to="/profile" className="mypageLink">
+        {/* 遷移先にuser_idを渡す */}
+        <Link to={`/profile/${userId}`} className="mypageLink">
           <p>プロフィール確認・編集</p>
         </Link>
       </div>

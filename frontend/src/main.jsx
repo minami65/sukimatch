@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/userDetail/:id" element={<UserDetails />} />
       <Route path="/match" element={<MatchComplete />} />
       <Route path="/mypage" element={<Mypage />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:userId" element={<Profile />} />
     </Routes>
   </BrowserRouter>,
 );
