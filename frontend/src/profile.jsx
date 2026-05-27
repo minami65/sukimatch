@@ -42,7 +42,7 @@ export default function Profile() {
       try {
         // const token = localStorage.getItem("token");
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5NzgyNTg2fQ.xWIQ1xgC5RXmJWiZU6p_UkPll5f2PjQXWFEUWfL1Tqg";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
 
         const userInfo = await fetch("http://127.0.0.1:8000/user/me", {
           headers: {
@@ -63,7 +63,7 @@ export default function Profile() {
     const fetchUserImage = async () => {
       try {
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5NzgyNTg2fQ.xWIQ1xgC5RXmJWiZU6p_UkPll5f2PjQXWFEUWfL1Tqg";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzMDQ2fQ.slK_I3W33-QtI-HGJNoY73ekMMKAJfYJhd1ClU9WoCU";
         const userImage = await fetch(
           `http://127.0.0.1:8000/users/${userId}/images`,
           {
@@ -222,7 +222,6 @@ export default function Profile() {
     };
     fetchMeeting();
   }, []);
-  console.log(images);
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -232,7 +231,7 @@ export default function Profile() {
     }));
   };
 
-  // 画像の登録
+  // 画像の表示
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
 
@@ -244,28 +243,35 @@ export default function Profile() {
     setImages((prev) => [...prev, ...newImages]);
   };
 
-  // その他登録
-  const handleSubmit = () => {
+  // 登録
+  const handleSubmit = async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5NzgyNTg2fQ.xWIQ1xgC5RXmJWiZU6p_UkPll5f2PjQXWFEUWfL1Tqg";
-    axios
-      .post("http://127.0.0.1:8000/users/me/images", images, {
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
+
+    try {
+      for (const image of images) {
+        if (!image.file) continue;
+
+        const formData = new FormData();
+        formData.append("file", image.file);
+
+        await axios.post("http://127.0.0.1:8000/users/me/images", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
+      await axios.put("http://127.0.0.1:8000/users/me", form, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then((res) => {
-        console.log(res);
       });
-    axios
-      .put("http://127.0.0.1:8000/users/me", form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      });
+
+      console.log("登録成功");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -296,9 +302,9 @@ export default function Profile() {
 
         {/* サブ画像一覧 */}
         <div className="subImages">
-          {images.length > 2 &&
+          {images.length > 1 &&
             images
-              .slice(2)
+              .slice(1)
               .map((m) => (
                 <img
                   key={m.id}
@@ -313,8 +319,9 @@ export default function Profile() {
       <div className="introductionText">
         <input
           type="text"
-          placeholder="自己紹介を入力してください"
-          value={form.bio}
+          name="bio"
+          value={form.bio || ""}
+          onChange={handleChange}
         />
       </div>
 
