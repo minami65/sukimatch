@@ -1,5 +1,4 @@
 import "./styles/myPage.css";
-import "./components/footer";
 import PageFooter from "./components/footer";
 import footprint from "./assets/footprint.png";
 import likes from "./assets/likes.png";
@@ -12,10 +11,9 @@ export default function Mypage() {
   const [mainImages, setImages] = useState(null);
   // TODO：ログイン実装したら変える
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5MTgwNDgwfQ.e0uqYYE7umRSwga5_YycXuraGzEUqvLVhKcKzNKXHl0";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
 
   // ユーザーID取得
-  // ログインユーザー取得
   useEffect(() => {
     fetch("http://127.0.0.1:8000/user/me", {
       headers: {
@@ -52,29 +50,30 @@ export default function Mypage() {
           <img
             src={`http://127.0.0.1:8000${mainImages.image_url}`}
             alt="プロフィール画像"
+            className="mainImage"
           />
         )}
-        <Link to="/profile" className="link">
+        {/* 遷移先にuser_idを渡す */}
+        <Link to={`/profile/${userId}`} className="mypageLink">
           <p>プロフィール確認・編集</p>
         </Link>
       </div>
 
       <div className="menu">
         <div className="img_footprint">
-          <Link to="/footprint" className="link">
+          <Link to="/footprint" className="mypageLink">
             <img src={footprint} alt="足跡" className="footprint" />
             足あと
           </Link>
         </div>
         <div className="img_likes">
-          <Link to="/likes" className="link">
+          <Link to="/likes" className="mypageLink">
             <img src={likes} alt="自分から" className="likes" />
             自分から
           </Link>
         </div>
         <div className="img_setting">
-          {/* 遷移先なし？ */}
-          <Link to="/setting" className="link">
+          <Link to="/setting" className="mypageLink">
             <img src={setting} alt="設定" className="setting" />
             <p>登録情報確認</p>
           </Link>
