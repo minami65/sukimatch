@@ -36,8 +36,23 @@
   font-size: 36px;
   cursor: pointer;
 }
+.deleteButton {
+  position: absolute;
+  right: 90px;
+  bottom: 80px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #2f3d6b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px;
+  cursor: pointer;
+}
 
 .subImages {
+  position: relative;
   display: flex;
   gap: 20px;
   margin-top: 20px;
@@ -51,23 +66,6 @@
   border-radius: 20px;
   border: 1px solid #2f3d6b;
   object-fit: cover;
-}
-
-.plusButton {
-  position: absolute;
-  right: 10px;
-  bottom: 0px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid #2f3d6b;
-  background-color: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 36px;
-  color: #2f3d6b;
-  cursor: pointer;
 }
 
 .introductionText {
