@@ -11,7 +11,7 @@ export default function Mypage() {
   const [mainImages, setImages] = useState(null);
   // TODO：ログイン実装したら変える
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
 
   // ユーザーID取得
   useEffect(() => {

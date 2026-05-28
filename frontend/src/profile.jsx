@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { userId } = useParams();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     birth_location_id: "",
@@ -42,7 +44,7 @@ export default function Profile() {
       try {
         // const token = localStorage.getItem("token");
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
 
         const userInfo = await fetch("http://127.0.0.1:8000/user/me", {
           headers: {
@@ -63,7 +65,7 @@ export default function Profile() {
     const fetchUserImage = async () => {
       try {
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzMDQ2fQ.slK_I3W33-QtI-HGJNoY73ekMMKAJfYJhd1ClU9WoCU";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
         const userImage = await fetch(
           `http://127.0.0.1:8000/users/${userId}/images`,
           {
@@ -232,10 +234,13 @@ export default function Profile() {
   };
 
   // 画像の表示
+  const [deletedImageIds, setDeletedImageIds] = useState([]);
+
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
 
     const newImages = files.map((file, index) => ({
+      tempId: crypto.randomUUID(),
       file,
       preview: URL.createObjectURL(file),
       sort_order: images.length + index + 1,
@@ -243,12 +248,38 @@ export default function Profile() {
     setImages((prev) => [...prev, ...newImages]);
   };
 
+  const handleImageDelete = (imageId) => {
+    setImages((prev) => {
+      const remaining = prev.filter(
+        (image) => image.id !== imageId && image.tempId !== imageId,
+      );
+
+      // If the removed image exists on the server, record its id so we can delete it on submit
+      const removed = prev.find((image) => image.id === imageId);
+      if (removed && removed.id) {
+        setDeletedImageIds((d) => [...d, removed.id]);
+      }
+
+      return remaining;
+    });
+    console.log("setImages", images);
+  };
   // 登録
   const handleSubmit = async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5ODYzODM1fQ.fxtu_fOs87soBnCqeR9YKWG_LR_m3IqHRMyhoNPZKss";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
 
     try {
+      for (const id of deletedImageIds) {
+        try {
+          await axios.delete(`http://127.0.0.1:8000/users/me/images/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        } catch (err) {
+          console.error(`Failed to delete image ${id}:`, err);
+        }
+      }
+
       for (const image of images) {
         if (!image.file) continue;
 
@@ -267,21 +298,23 @@ export default function Profile() {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log("登録成功");
+      navigate("/mypage");
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <div>
       <div className="imageSection">
         {/* メイン画像 */}
         <div className="mainProfileImage">
-          {images?.[0]?.image_url && (
+          {images?.[0] && (
             <img
-              src={`http://127.0.0.1:8000${images[0].image_url}`}
+              src={
+                images[0].image_url
+                  ? `http://127.0.0.1:8000${images[0].image_url}`
+                  : images[0].preview
+              }
               alt="プロフィール画像"
               className="profileImg"
             />
@@ -303,16 +336,27 @@ export default function Profile() {
         {/* サブ画像一覧 */}
         <div className="subImages">
           {images.length > 1 &&
-            images
-              .slice(1)
-              .map((m) => (
+            images.slice(1).map((m) => (
+              <div key={m.id || m.tempId} style={{ position: "relative" }}>
+                <button
+                  type="button"
+                  className="deleteButton"
+                  onClick={() => handleImageDelete(m.id || m.tempId)}
+                >
+                  ×
+                </button>
+
                 <img
-                  key={m.id}
-                  src={`http://127.0.0.1:8000${m.image_url}`}
+                  src={
+                    m.image_url
+                      ? `http://127.0.0.1:8000${m.image_url}`
+                      : m.preview
+                  }
                   alt="サブプロフィール"
                   className="subImage"
                 />
-              ))}
+              </div>
+            ))}
         </div>
       </div>
 
