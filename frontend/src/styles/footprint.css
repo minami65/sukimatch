@@ -1,0 +1,23 @@
+.title {
+  font-size: 25px;
+  font-family: "Klee One", sans-serif;
+  padding: 80px 20px 0px 20px;
+}
+.footprint-info {
+  display: flex;
+  gap: 20px;
+}
+.footprint-card {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  margin: 0 0 20px 20px;
+  border-top: #abe8db solid 2px;
+}
+.profileImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid #2f3d6b;
+  object-fit: cover;
+}

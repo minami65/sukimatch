@@ -11,7 +11,7 @@ export default function Mypage() {
   const [mainImages, setImages] = useState(null);
   // TODO：ログイン実装したら変える
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDM1Mjk3fQ.GoudyJero96Ds1Rcc6Avf0Ud5bIyZ1NvNAVRmRqDDYs";
 
   // ユーザーID取得
   useEffect(() => {
@@ -26,12 +26,8 @@ export default function Mypage() {
       });
   }, []);
 
-  console.log("userId:", userId);
-
   // 画像取得
   useEffect(() => {
-    console.log("userId", userId);
-
     if (!userId) return;
 
     fetch(`http://127.0.0.1:8000/users/${userId}/images`)

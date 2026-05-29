@@ -44,7 +44,7 @@ export default function Profile() {
       try {
         // const token = localStorage.getItem("token");
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDM1Mjk3fQ.GoudyJero96Ds1Rcc6Avf0Ud5bIyZ1NvNAVRmRqDDYs";
 
         const userInfo = await fetch("http://127.0.0.1:8000/user/me", {
           headers: {
@@ -65,7 +65,7 @@ export default function Profile() {
     const fetchUserImage = async () => {
       try {
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDMxNDU0fQ.L6t0QtZRh0xbq5LExQKg3kU9aEtc7txxwc1ZvXbXci0";
         const userImage = await fetch(
           `http://127.0.0.1:8000/users/${userId}/images`,
           {
@@ -254,7 +254,6 @@ export default function Profile() {
         (image) => image.id !== imageId && image.tempId !== imageId,
       );
 
-      // If the removed image exists on the server, record its id so we can delete it on submit
       const removed = prev.find((image) => image.id === imageId);
       if (removed && removed.id) {
         setDeletedImageIds((d) => [...d, removed.id]);
@@ -267,7 +266,7 @@ export default function Profile() {
   // 登録
   const handleSubmit = async () => {
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzc5OTUxMTY1fQ.DbTiPxxCGTB3O7dhjri9VITcFW61abGePjpSUhNi-QI";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDMxNDU0fQ.L6t0QtZRh0xbq5LExQKg3kU9aEtc7txxwc1ZvXbXci0";
 
     try {
       for (const id of deletedImageIds) {
