@@ -11,7 +11,7 @@ export default function Mypage() {
   const [mainImages, setImages] = useState(null);
   // TODO：ログイン実装したら変える
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDM1Mjk3fQ.GoudyJero96Ds1Rcc6Avf0Ud5bIyZ1NvNAVRmRqDDYs";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDQxMzIwfQ.jyJ1Xk4DJmcqPO8uywp3OMSO0QTTNtXGNthlnl8ptwg";
 
   // ユーザーID取得
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function Mypage() {
           </Link>
         </div>
         <div className="img_likes">
-          <Link to="/likes" className="mypageLink">
+          <Link to="/liked" className="mypageLink">
             <img src={likes} alt="自分から" className="likes" />
             自分から
           </Link>
