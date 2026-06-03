@@ -1,18 +1,23 @@
 import PageFooter from "./components/footer";
 import "./styles/liked.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Liked() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [images, setImages] = useState([]);
   const [locations, setLocations] = useState([]);
+  const token = localStorage.getItem("token");
 
   // いいね履歴取得
   useEffect(() => {
     const fetchLikedProfiles = async () => {
       try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDQ1NTgwfQ.V_wGSt6i5MglKdK9Q2bV7CjoWPLXOaWi0HT0djyQVjg";
+        if (!token) {
+          navigate("/");
+          return;
+        }
         const likedResponse = await fetch(
           "http://127.0.0.1:8000/users/me/likes",
           {
@@ -29,7 +34,7 @@ export default function Liked() {
       }
     };
     fetchLikedProfiles();
-  }, []);
+  }, [navigate, token]);
 
   // 画像取得
   useEffect(() => {
@@ -37,8 +42,10 @@ export default function Liked() {
 
     const fetchUserImages = async () => {
       try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDQ1NTgwfQ.V_wGSt6i5MglKdK9Q2bV7CjoWPLXOaWi0HT0djyQVjg";
+        if (!token) {
+          navigate("/");
+          return;
+        }
         const imageData = await Promise.all(
           profile.map(async (p) => {
             const userId = p.user_id;
@@ -61,7 +68,7 @@ export default function Liked() {
       }
     };
     fetchUserImages();
-  }, [profile]);
+  }, [profile, navigate, token]);
 
   // 都道府県取得
   useEffect(() => {
@@ -107,9 +114,6 @@ export default function Liked() {
             );
           })}
       </div>
-      {/* 年齢 */}
-
-      {/* 移住地 */}
       <PageFooter />
     </div>
   );

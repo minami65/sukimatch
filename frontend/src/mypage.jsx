@@ -5,16 +5,20 @@ import likes from "./assets/likes.png";
 import setting from "./assets/setting.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Mypage() {
+  const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [mainImages, setImages] = useState(null);
-  // TODO：ログイン実装したら変える
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDQxMzIwfQ.jyJ1Xk4DJmcqPO8uywp3OMSO0QTTNtXGNthlnl8ptwg";
+  const token = localStorage.getItem("token");
 
   // ユーザーID取得
   useEffect(() => {
+    if (!token) {
+      navigate("/");
+      return;
+    }
     fetch("http://127.0.0.1:8000/user/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -24,20 +28,22 @@ export default function Mypage() {
       .then((json) => {
         setUserId(json.user_id);
       });
-  }, []);
+  }, [navigate, token]);
 
   // 画像取得
   useEffect(() => {
     if (!userId) return;
 
-    fetch(`http://127.0.0.1:8000/users/${userId}/images`)
+    fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    })
       .then((res) => res.json())
       .then((json) => {
         const mainImages = json.find((image) => image.sort_order === 1);
         console.log(mainImages);
         setImages(mainImages);
       });
-  }, [userId]);
+  }, [userId, token]);
 
   return (
     <div>

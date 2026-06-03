@@ -7,8 +7,11 @@ export default function Likes({ footprintId }) {
 
   const handleLikeCreate = async () => {
     console.log("いいね！", footprintId);
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDM1Mjk3fQ.GoudyJero96Ds1Rcc6Avf0Ud5bIyZ1NvNAVRmRqDDYs";
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.assign("/");
+      return;
+    }
     try {
       await axios.post(
         `http://127.0.0.1:8000/users/${footprintId}/like`,

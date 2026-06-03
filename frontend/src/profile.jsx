@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const [form, setForm] = useState({
     birth_location_id: "",
@@ -42,9 +43,10 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        // const token = localStorage.getItem("token");
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDM1Mjk3fQ.GoudyJero96Ds1Rcc6Avf0Ud5bIyZ1NvNAVRmRqDDYs";
+        if (!token) {
+          navigate("/");
+          return;
+        }
 
         const userInfo = await fetch("http://127.0.0.1:8000/user/me", {
           headers: {
@@ -58,14 +60,16 @@ export default function Profile() {
       }
     };
     fetchUserInfo();
-  }, [userId]);
+  }, [navigate, token, userId]);
 
   // 登録済み画像取得
   useEffect(() => {
     const fetchUserImage = async () => {
       try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDMxNDU0fQ.L6t0QtZRh0xbq5LExQKg3kU9aEtc7txxwc1ZvXbXci0";
+        if (!token) {
+          navigate("/");
+          return;
+        }
         const userImage = await fetch(
           `http://127.0.0.1:8000/users/${userId}/images`,
           {
@@ -82,7 +86,7 @@ export default function Profile() {
       }
     };
     fetchUserImage();
-  }, [userId]);
+  }, [navigate, token, userId]);
 
   // 出身地・居住地
   useEffect(() => {
@@ -265,8 +269,10 @@ export default function Profile() {
   };
   // 登録
   const handleSubmit = async () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZXhwIjoxNzgwMDMxNDU0fQ.L6t0QtZRh0xbq5LExQKg3kU9aEtc7txxwc1ZvXbXci0";
+    if (!token) {
+      navigate("/");
+      return;
+    }
 
     try {
       for (const id of deletedImageIds) {
@@ -315,7 +321,7 @@ export default function Profile() {
                   : images[0].preview
               }
               alt="プロフィール画像"
-              className="profileImg"
+              className="profileImage"
             />
           )}
           <label htmlFor="imageUpload" className="plusButton">

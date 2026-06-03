@@ -1,31 +1,38 @@
+import { useState } from "react";
+import axios from "axios";
 import couple from "./assets/image2.png";
 import "./styles/form.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Airplane from "./components/airplane";
-// import { useRouter } from "next/router";
-// import { findUserByEmail, loginUser } from "../lib/authClient";
 
 const Form = () => {
-  // const router = useRouter();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // const handleSubmit = async (formData, setError) => {
-  //   try {
-  //     const user = await findUserByEmail(formData.email);
-
-  //     if (!user || user.password !== formData.password) {
-  //       setError("password", {
-  //         type: "manual",
-  //         message: "メールアドレスかパスワードが間違っています。",
-  //       });
-  //       throw new Error();
-  //     } else {
-  //       await loginUser(formData);
-  //       router.push("/");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed", error);
-  //   }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:8000/login", {
+        mail_address: email,
+        password: password,
+      });
+      localStorage.setItem("token", res.data.access_token);
+      navigate("/userList");
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setError("メールアドレスかパスワードが間違っています。");
+      } else {
+        setError("ログインに失敗しました。もう一度お試しください。");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -35,7 +42,7 @@ const Form = () => {
       <div className="couple_img">
         <img src={couple} className="couple" alt="Couple" />
       </div>
-      <form action="">
+      <form onSubmit={handleSubmit}>
         <div className="login_form">
           <input
             type="email"
@@ -43,6 +50,8 @@ const Form = () => {
             name="email"
             placeholder="メールアドレス"
             required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
@@ -50,14 +59,17 @@ const Form = () => {
             name="password"
             placeholder="パスワード"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        {error && <p style={{ color: "red", textAlign: "center", margin: "8px 0" }}>{error}</p>}
         <div className="form_button">
           <input
             type="submit"
             className="login"
-            value="ログイン"
-            // onSubmit={handleSubmit}
+            value={loading ? "ログイン中..." : "ログイン"}
+            disabled={loading}
           />
           <Link to="/create" className="new_registration">
             新規の方はこちら
