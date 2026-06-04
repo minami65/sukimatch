@@ -6,7 +6,7 @@ from app.schemas.user import UserCreate ,UserUpdate,UserResponse
 from app.crud.user import create_user,get_user,update_user,password_reset,delete_user
 from app.models.user import User
 from app.api.deps import get_current_user
-from app.crud.likes import create_like,get_my_likes ,get_liked_by_users,delete_like
+from app.crud.likes import create_like, get_my_likes, get_liked_by_users, delete_like, get_my_matches
 from app.models.footprint import FootPrint
 from app.crud.footprint import get_my_footprint
 from app.schemas.auth import PasswordReset
@@ -138,6 +138,14 @@ def get_liked_by(
     current_user: User = Depends(get_current_user)
 ):
     return get_liked_by_users(db, current_user.user_id)
+
+# マッチしたユーザー一覧
+@router.get("/users/me/matches")
+def get_match_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return get_my_matches(db, current_user.user_id)
 
 # いいね取り消し
 @router.delete("/users/{user_id}/like")
