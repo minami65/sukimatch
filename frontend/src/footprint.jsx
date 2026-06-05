@@ -4,6 +4,7 @@ import "./assets/default-profile.png";
 import { useState, useEffect } from "react";
 import Likes from "./components/likes";
 import { useNavigate } from "react-router-dom";
+import ToMypageButton from "./components/toMypageButton";
 
 export default function FootPrint() {
   const navigate = useNavigate();
@@ -131,9 +132,11 @@ export default function FootPrint() {
           );
         })
       ) : (
-        <p className="no-footprints">足あとがありません</p>
+        <div>
+          <p className="no-footprints">足あとがありません</p>
+        </div>
       )}
-
+      <ToMypageButton />
       <PageFooter />
     </div>
   );

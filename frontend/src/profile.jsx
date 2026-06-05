@@ -2,10 +2,10 @@ import PageFooter from "./components/footer";
 import "./styles/profile.css";
 import "./assets/default-profile.png";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ToMypageButton from "./components/toMypageButton";
 
 export default function Profile() {
   const { userId } = useParams();
@@ -575,13 +575,8 @@ export default function Profile() {
         <button onClick={handleSubmit} className="button">
           登録
         </button>
-        <button>
-          <Link to="/mypage" className="toMypage">
-            マイページへ戻る
-          </Link>
-        </button>
+        <ToMypageButton />
       </div>
-
       <PageFooter />
     </div>
   );
