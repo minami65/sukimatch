@@ -22,3 +22,7 @@
   left: 23px;
   background-color: #abe8db;
 }
+.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
