@@ -11,6 +11,7 @@ export default function FootPrint() {
   const [footprints, setFootprints] = useState([]);
   const [locations, setLocations] = useState([]);
   const [images, setImages] = useState([]);
+  const [likesUser, setLikesUser] = useState([]);
   const token = localStorage.getItem("token");
 
   // 足あと取得
@@ -96,22 +97,50 @@ export default function FootPrint() {
     fetchLocations();
   }, []);
 
+  // 自分からいいねした人を取得
+  useEffect(() => {
+    const fetchLikesUser = async () => {
+      if (!token) {
+        navigate("/");
+        return;
+      }
+      try {
+        const likesUserRes = await fetch(
+          "http://127.0.0.1:8000/users/me/likes",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+        const likesUserData = await likesUserRes.json();
+        setLikesUser(likesUserData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchLikesUser();
+  }, [navigate, token]);
+
   return (
     <div>
       <p className="title">あしあと</p>
       {/* 名前 */}
       {footprints.length > 0 ? (
         footprints.map((f) => {
-          console.log(f.id);
           const location = locations.find(
             (l) => l.id === f.current_location_id,
           );
+
+          // いいね済み判定
+          const isLiked = likesUser.some((user) => user.user_id === f.user_id);
           return (
-            <div className="footprint-card">
+            <div className="footprint-card" key={f.user_id}>
               {images.map((i) => {
                 if (i.user_id === f.user_id) {
                   return (
                     <img
+                      key={i.user_id}
                       src={`http://127.0.0.1:8000${i.images[0].image_url}`}
                       alt="Profile"
                       className="profileImg"
@@ -119,21 +148,23 @@ export default function FootPrint() {
                   );
                 }
               })}
-              <div key={f.user_id}>
+
+              <div>
                 <p>{f.name}</p>
                 <div className="footprint-info">
                   <p>{f.age}歳</p>
                   <p>{location ? location.name : f.current_location_id}</p>
                 </div>
               </div>
+
               {/* いいねボタン */}
-              <Likes footprintId={f.user_id} />
+              <Likes footprintId={f.user_id} disabled={isLiked} />
             </div>
           );
         })
       ) : (
         <div>
-          <p className="no-footprints">足あとがありません</p>
+          <p className="no-footprints">足あとがありません。</p>
         </div>
       )}
       <ToMypageButton />
