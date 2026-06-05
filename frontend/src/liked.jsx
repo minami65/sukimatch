@@ -2,6 +2,7 @@ import PageFooter from "./components/footer";
 import "./styles/liked.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ToMypageButton from "./components/toMypageButton";
 
 export default function Liked() {
   const navigate = useNavigate();
@@ -114,6 +115,7 @@ export default function Liked() {
             );
           })}
       </div>
+      <ToMypageButton />
       <PageFooter />
     </div>
   );

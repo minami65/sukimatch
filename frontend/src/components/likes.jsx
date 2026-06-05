@@ -6,7 +6,6 @@ export default function Likes({ footprintId }) {
   console.log("footprintId:", footprintId);
 
   const handleLikeCreate = async () => {
-    console.log("いいね！", footprintId);
     const token = localStorage.getItem("token");
     if (!token) {
       window.location.assign("/");
