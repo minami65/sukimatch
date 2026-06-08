@@ -11,8 +11,9 @@ import UserDetails from "./userDetails.jsx";
 import MatchComplete from "./match.jsx";
 import Mypage from "./mypage.jsx";
 import Profile from "./profile.jsx";
-import FootPrint from "./footPrint.jsx";
+import FootPrint from "./footprint.jsx";
 import Liked from "./liked.jsx";
+import Setting from "./setting.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -28,6 +29,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/profile/:userId" element={<Profile />} />
       <Route path="/footprint" element={<FootPrint />} />
       <Route path="/liked" element={<Liked />} />
+      <Route path="/setting" element={<Setting />} />
     </Routes>
   </BrowserRouter>,
 );
