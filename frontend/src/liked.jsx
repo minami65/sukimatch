@@ -88,33 +88,38 @@ export default function Liked() {
     <div>
       <p className="liked-title">あなたが送ったいいね！</p>
       {/* 写真 */}
-      <div className="likedUserCard">
-        {profile &&
-          profile.map((p) => {
-            const location = locations.find(
-              (l) => l.id === p.current_location_id,
-            );
-            return (
-              <div className="likedUser">
-                {images.map((i) => {
-                  if (i.userId === p.user_id) {
-                    return (
-                      <img
-                        src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
-                        alt="Profile"
-                        className="LikedUserImg"
-                      />
-                    );
-                  }
-                })}
-                <div className="likedUserInfo">
-                  <p>{p.age}歳</p>
-                  <p>{location ? location.name : "未選択"}</p>
+      {profile && profile.length > 0 ? (
+        <div className="likedUserCard">
+          {profile &&
+            profile.map((p) => {
+              const location = locations.find(
+                (l) => l.id === p.current_location_id,
+              );
+              return (
+                <div className="likedUser">
+                  {images.map((i) => {
+                    if (i.userId === p.user_id) {
+                      return (
+                        <img
+                          src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
+                          alt="Profile"
+                          className="LikedUserImg"
+                        />
+                      );
+                    }
+                  })}
+                  <div className="likedUserInfo">
+                    <p>{p.age}歳</p>
+                    <p>{location ? location.name : "未選択"}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-      </div>
+              );
+            })}
+        </div>
+      ) : (
+        <div className="no-likes">送ったいいね！がありません。</div>
+      )}
+
       <ToMypageButton />
       <PageFooter />
     </div>
