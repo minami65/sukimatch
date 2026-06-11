@@ -1,0 +1,33 @@
+.liked-title {
+  font-size: 25px;
+  font-family: "Klee One", sans-serif;
+  padding: 80px 20px 0px 20px;
+}
+.LikedUserImg {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid #2f3d6b;
+  object-fit: cover;
+  margin: 20px;
+}
+.likedUser {
+  width: 50%;
+}
+.likedUserCard {
+  display: flex;
+  flex-wrap: wrap;
+}
+.likedUserInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+}
+.likedUserInfo p {
+  margin: 0px;
+  text-align: center;
+}
+.no-likes {
+  padding: 50px;
+}

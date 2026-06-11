@@ -28,7 +28,7 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     name:Optional[str] = None
     age:Optional[int] = None
-    birthday :Optional[int] = None
+    birthday :Optional[date] = None
     mail_address: Optional[str] = None
     password: Optional[str] = None
     bio:Optional[str] = None
