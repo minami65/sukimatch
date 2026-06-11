@@ -54,7 +54,7 @@ function Pay() {
               />
             </div>
             <div className="field">
-              <label htmlFor="">名義人指名</label>
+              <label htmlFor="">名義人氏名</label>
               <input
                 type="text"
                 id="cardholder_name"
@@ -63,7 +63,7 @@ function Pay() {
               />
             </div>
           </div>
-          <Link to="/userList" className="pay_button">
+          <Link to="/welcome" className="pay_button">
             登録
           </Link>
           <Airplane />

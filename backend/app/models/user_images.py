@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String ,ForeignKey
 from app.db import Base
+from sqlalchemy.orm import relationship
 
 class UserImages(Base):
   __tablename__ = "user_images"
@@ -7,3 +8,4 @@ class UserImages(Base):
   user_id = Column(Integer, ForeignKey("users.user_id"),nullable=False)
   image_url = Column(String)
   sort_order= Column(Integer,nullable=False)
+  user = relationship("User", back_populates="images")

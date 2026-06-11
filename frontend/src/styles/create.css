@@ -3,8 +3,7 @@
   margin: 0 auto;
   padding: 20px;
 }
-
-h1 {
+.create-page h1 {
   font-size: 20px;
   margin: 40px 0 20px 10px;
 }
@@ -46,10 +45,16 @@ h1 {
   width: 100%;
 }
 
+.email_error {
+  margin: 8px 0 0;
+  color: #d93025;
+  font-size: 14px;
+}
+
 .create_button {
   display: flex;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 40px;
 }
 
 .register {
