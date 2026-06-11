@@ -18,6 +18,7 @@ from app.models.matches import Matches
 from app.models.likes import Likes
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 app.add_middleware(
@@ -52,3 +53,10 @@ app.include_router(meeting.router)
 app.include_router(auth.router)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(user_images.router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

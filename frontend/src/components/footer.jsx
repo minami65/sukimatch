@@ -9,7 +9,7 @@ function PageFooter() {
   return (
     <footer>
       <div className="img_search">
-        <Link to="/search" className="link">
+        <Link to="/userList" className="link">
           <img src={search} className="search" alt="logo" />
           さがす
         </Link>
