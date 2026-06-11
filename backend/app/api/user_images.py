@@ -9,7 +9,16 @@ from app.models.user_images import UserImages
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.models.user_images import UserImages
+from pydantic import BaseModel
 
+class UserImageResponse(BaseModel):
+    id: int
+    image_url: str
+    sort_order: int
+
+    class Config:
+        from_attributes = True
+        
 router = APIRouter()
 
 def get_db():

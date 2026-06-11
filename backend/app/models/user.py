@@ -1,19 +1,21 @@
 from sqlalchemy import Column, Integer, String,ForeignKey ,Date
 from sqlalchemy.orm import relationship
 from app.db import Base
+from typing import List
+from app.schemas.user_image import UserImageResponse
 
 class User(Base):
     __tablename__ = "users"
     user_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String,nullable=False)
-    age = Column(Integer,nullable=False)
-    birthday = Column(Date,nullable=False)
+    name = Column(String,nullable=True)
+    age = Column(Integer,nullable=True)
+    birthday = Column(Date,nullable=True)
     gender_id = Column(Integer,ForeignKey("gender.gender_id"))
     gender = relationship("Gender")
-    mail_address = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
-    bio = Column(String,nullable=False)
-    height = Column(Integer,nullable=False)
+    mail_address = Column(String, unique=True, nullable=True)
+    password = Column(String, nullable=True)
+    bio = Column(String,nullable=True)
+    height = Column(Integer,nullable=True)
     current_location_id = Column(Integer, ForeignKey("locations.id"))
     birth_location_id = Column(Integer,ForeignKey("locations.id"))
     birth_location = relationship(
@@ -53,6 +55,5 @@ class User(Base):
     meeting_preference_id = Column(Integer,ForeignKey("meeting_preference.meeting_preference_id"))
     meeting = relationship("Meeting")
 
-    
 
-    
+    images = relationship("UserImages", back_populates="user")

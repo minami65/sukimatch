@@ -3,10 +3,9 @@ import PageFooter from "./components/footer";
 import close from "./assets/close.png";
 import likeIcon from "./assets/like.png";
 import likedIcon from "./assets/liked.png";
-import users from "../src/data/users.json";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   PREFECTURES,
@@ -22,12 +21,57 @@ import {
   MEETING,
 } from "./data/base.jsx";
 
+const API_URL = "http://localhost:8000";
+
 function UserDetails() {
   const { id } = useParams();
-  const user = users.find((u) => Number(u.id) === Number(id));
-  const images = user.images;
+  const [user, setUser] = useState(null);
+  const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        const userRes = await fetch(`${API_URL}/users/${id}`);
+        if (!userRes.ok) {
+          throw new Error("User not found");
+        }
+        const userData = await userRes.json();
+        setUser(userData);
+
+        const imagesRes = await fetch(`${API_URL}/users/${id}/images`);
+        if (imagesRes.ok) {
+          const imagesData = await imagesRes.json();
+          const sortedImages = imagesData
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map((img) => `${API_URL}${img.image_url}`);
+          setImages(sortedImages);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [id]);
+
+  if (loading) {
+    return <div className="loading">読み込み中...</div>;
+  }
+
+  if (error) {
+    return <div className="error">エラー: {error}</div>;
+  }
+
+  if (!user) {
+    return <div className="error">ユーザーが見つかりません</div>;
+  }
   return (
     <>
       <div className="main_img">
@@ -72,10 +116,14 @@ function UserDetails() {
         <div className="main_profile">
           <h2>
             {user.name} <span className="age">{user.age}歳</span>{" "}
-            <span className="location">{user.location}</span>
+            <span className="location">
+              {PREFECTURES[user.current_location_id]}
+            </span>
           </h2>
           <div className="profile">
-            <p className="bio">{user.bio}</p>
+            <p className="bio">
+              {user.bio ? user.bio : "自己紹介文がありません"}
+            </p>
           </div>
         </div>
       </div>
