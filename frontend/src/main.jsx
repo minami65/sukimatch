@@ -15,6 +15,7 @@ import Profile from "./profile.jsx";
 import FootPrint from "./footprint.jsx";
 import Liked from "./liked.jsx";
 import Setting from "./setting.jsx";
+import Talk from "./talk.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -32,6 +33,7 @@ createRoot(document.getElementById("root")).render(
       <Route path="/footprint" element={<FootPrint />} />
       <Route path="/liked" element={<Liked />} />
       <Route path="/setting" element={<Setting />} />
+      <Route path="/talk" element={<Talk />} />
     </Routes>
   </BrowserRouter>,
 );
