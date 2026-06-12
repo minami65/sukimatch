@@ -97,17 +97,18 @@ export default function Liked() {
               );
               return (
                 <div className="likedUser">
-                  {images.map((i) => {
-                    if (i.userId === p.user_id) {
-                      return (
-                        <img
-                          src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
-                          alt="Profile"
-                          className="LikedUserImg"
-                        />
-                      );
-                    }
-                  })}
+                  {images &&
+                    images.map((i) => {
+                      if (i.userId === p.user_id) {
+                        return (
+                          <img
+                            src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
+                            alt="Profile"
+                            className="LikedUserImg"
+                          />
+                        );
+                      }
+                    })}
                   <div className="likedUserInfo">
                     <p>{p.age}歳</p>
                     <p>{location ? location.name : "未選択"}</p>
