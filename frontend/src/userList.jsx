@@ -4,6 +4,7 @@ import PageFooter from "./components/footer";
 import search from "./assets/search_logo.png";
 import { Link } from "react-router-dom";
 import ReactSlider from "react-slider";
+import { API_BASE } from "@/config";
 
 import {
   PREFECTURES,
@@ -40,7 +41,7 @@ function UserList() {
   const loginUserId = Number(localStorage.getItem("loginUserId") ?? 1);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/users")
+    fetch(`${API_BASE}/users`)
       .then((res) => res.json())
       .then((data) => {
         // 自分を除外
@@ -114,7 +115,7 @@ function UserList() {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8000/users?${params.toString()}`,
+      `${API_BASE}/users?${params.toString()}`,
     );
 
     const data = await response.json();
@@ -141,7 +142,7 @@ function UserList() {
     setMeeting(0);
     setMarriage(0);
 
-    const response = await fetch("http://127.0.0.1:8000/users");
+    const response = await fetch(`${API_BASE}/users`);
 
     const data = await response.json();
 
@@ -394,7 +395,7 @@ function UserList() {
                     <img
                       src={
                         user.images?.[0]
-                          ? `http://127.0.0.1:8000${user.images[0].image_url}`
+                          ? `${API_BASE}${user.images[0].image_url}`
                           : "/default.png"
                       }
                       alt="user"
