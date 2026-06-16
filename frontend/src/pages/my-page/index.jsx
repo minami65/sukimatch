@@ -1,11 +1,12 @@
-import "./styles/myPage.css";
-import PageFooter from "./components/footer";
-import footprint from "./assets/footprint.png";
-import likes from "./assets/likes.png";
-import setting from "./assets/setting.png";
+import PageFooter from "../../components/footer";
+import footprint from "@/assets/footprint.png";
+import likes from "@/assets/likes.png";
+import setting from "@/assets/setting.png";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config";
+import styles from "./index.module.css";
 
 export default function Mypage() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function Mypage() {
       navigate("/");
       return;
     }
-    fetch("http://127.0.0.1:8000/user/me", {
+    fetch(`${API_BASE}/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -34,7 +35,7 @@ export default function Mypage() {
   useEffect(() => {
     if (!userId) return;
 
-    fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+    fetch(`${API_BASE}/users/${userId}/images`, {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     })
       .then((res) => res.json())
@@ -47,36 +48,36 @@ export default function Mypage() {
 
   return (
     <div>
-      <div className="profile">
+      <div className={styles.profile}>
         {mainImages && (
           <img
-            src={`http://127.0.0.1:8000${mainImages.image_url}`}
+            src={`${API_BASE}${mainImages.image_url}`}
             alt="プロフィール画像"
-            className="mainImage"
+            className={styles.mainImage}
           />
         )}
         {/* 遷移先にuser_idを渡す */}
-        <Link to={`/profile/${userId}`} className="mypageLink">
+        <Link to={`/profile/${userId}`} className={styles.mypageLink}>
           <p>プロフィール確認・編集</p>
         </Link>
       </div>
 
-      <div className="menu">
-        <div className="img_footprint">
-          <Link to="/footprint" className="mypageLink">
-            <img src={footprint} alt="足跡" className="footprint" />
+      <div className={styles.menu}>
+        <div className={styles.img_footprint}>
+          <Link to="/footprint" className={styles.mypageLink}>
+            <img src={footprint} alt="足跡" className={styles.footprint} />
             足あと
           </Link>
         </div>
-        <div className="img_likes">
-          <Link to="/liked" className="mypageLink">
-            <img src={likes} alt="自分から" className="likes" />
+        <div className={styles.img_likes}>
+          <Link to="/liked" className={styles.mypageLink}>
+            <img src={likes} alt="自分から" className={styles.likes} />
             自分から
           </Link>
         </div>
-        <div className="img_setting">
-          <Link to="/setting" className="mypageLink">
-            <img src={setting} alt="設定" className="setting" />
+        <div className={styles.img_setting}>
+          <Link to="/setting" className={styles.mypageLink}>
+            <img src={setting} alt="設定" className={styles.setting} />
             <p>登録情報確認</p>
           </Link>
         </div>
