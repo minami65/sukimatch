@@ -1,7 +1,7 @@
 .bio {
   white-space: pre-wrap;
   font-size: 18px;
-  background-color: #f8f4e6;
+  background-color: var(--color-bg-base);
   padding: 20px;
   margin: 20px 0;
   line-height: 1.6;
@@ -104,7 +104,7 @@
 
 .active_thumb {
   opacity: 1;
-  border: 2px solid #000;
+  border: 2px solid var(--color-text-main);
 }
 
 .like_button {

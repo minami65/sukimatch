@@ -7,7 +7,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 1px solid #2f3d6b;
+  border: 1px solid var(--color-secondary);
   object-fit: cover;
   margin: 20px;
 }

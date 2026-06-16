@@ -23,8 +23,8 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  border: 1px solid #7a7a9d;
-  background-color: #f8f8f8;
+  border: 1px solid var(--color-neutral);
+  background-color: var(--color-bg-surface);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +36,7 @@
 
 .heart {
   font-size: 35px;
-  color: #e86b6b;
+  color: var(--color-danger);
 }
 
 .message {
