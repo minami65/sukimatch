@@ -24,8 +24,8 @@
   height: 42px;
   margin: 0 auto 12px;
   border-radius: 50%;
-  background-color: #abe8db;
-  color: #2a3455;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
   font-size: 24px;
   font-weight: 700;
   display: flex;
@@ -44,7 +44,7 @@
 
 .highlight {
   display: inline;
-  background: linear-gradient(transparent 30%, #abe8db 80%);
+  background: linear-gradient(transparent 30%, var(--color-primary) 80%);
 }
 
 .welcome-message {
@@ -53,7 +53,7 @@
   font-size: 14px;
   line-height: 1.8;
   text-align: center;
-  background-color: #fff;
+  background-color: var(--color-bg-surface);
 }
 
 .start_button {
@@ -64,8 +64,8 @@
   padding: 15px;
   border: none;
   border-radius: 10px;
-  background-color: #2a3455;
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--color-bg-surface);
   font-size: 16px;
   text-decoration: none;
 }
