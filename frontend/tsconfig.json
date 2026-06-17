@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "target": "ES2020",
+      "useDefineForClassFields": true,
+      "lib": ["DOM", "DOM.Iterable", "ES2020"],
+      "module": "ESNext",
+      "skipLibCheck": true,
+  
+      "allowJs": true,          /* JSファイルのインポートを許可 */
+      "checkJs": false,         /* 既存のJSファイル自体の型エラーは一旦無視する */
+      "jsx": "react-jsx",       /* ReactのJSXをサポート */
+  
+      /* 便利な基本設定 */
+      "moduleResolution": "bundler",
+      "allowImportingTsExtensions": true,
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+  
+      /* 厳格モード */
+      "strict": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true
+    },
+    "include": ["src"]
+  }

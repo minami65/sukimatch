@@ -8,3 +8,4 @@ backend/venev/
 **/__pycache__/
 
 .env.local
+node_modules/
