@@ -21,7 +21,7 @@ function PageFooter() {
         </Link>
       </div>
       <div className="img_talk">
-        <Link to="/talk" className="link">
+        <Link to="/talkList" className="link">
           <img src={talk} className="talk" alt="logo" />
           トーク
         </Link>
