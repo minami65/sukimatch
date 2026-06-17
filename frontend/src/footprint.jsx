@@ -1,10 +1,10 @@
-import PageFooter from "./components/footer";
-import "./styles/footprint.css";
-import "./assets/default-profile.png";
-import { useState, useEffect } from "react";
-import Likes from "./components/likes";
-import { useNavigate } from "react-router-dom";
-import ToMypageButton from "./components/toMypageButton";
+import PageFooter from './components/footer';
+import './styles/footprint.css';
+import './assets/default-profile.png';
+import { useState, useEffect } from 'react';
+import Likes from './components/likes';
+import { useNavigate } from 'react-router-dom';
+import ToMypageButton from './components/toMypageButton';
 
 export default function FootPrint() {
   const navigate = useNavigate();
@@ -12,18 +12,18 @@ export default function FootPrint() {
   const [locations, setLocations] = useState([]);
   const [images, setImages] = useState([]);
   const [likesUser, setLikesUser] = useState([]);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // 足あと取得
   useEffect(() => {
     const fetchFootprints = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
         const response = await fetch(
-          "http://127.0.0.1:8000/users/me/footprint",
+          'http://127.0.0.1:8000/users/me/footprint',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export default function FootPrint() {
     const fetchUserImages = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
 
@@ -87,7 +87,7 @@ export default function FootPrint() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const locationsRes = await fetch("http://127.0.0.1:8000/locations");
+        const locationsRes = await fetch('http://127.0.0.1:8000/locations');
         const locationsData = await locationsRes.json();
         setLocations(locationsData);
       } catch (error) {
@@ -101,12 +101,12 @@ export default function FootPrint() {
   useEffect(() => {
     const fetchLikesUser = async () => {
       if (!token) {
-        navigate("/");
+        navigate('/');
         return;
       }
       try {
         const likesUserRes = await fetch(
-          "http://127.0.0.1:8000/users/me/likes",
+          'http://127.0.0.1:8000/users/me/likes',
           {
             headers: {
               Authorization: `Bearer ${token}`,

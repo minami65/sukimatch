@@ -1,6 +1,6 @@
-import "./styles/welcome.css";
-import Airplane from "./components/airplane";
-import { Link } from "react-router-dom";
+import './styles/welcome.css';
+import Airplane from './components/airplane';
+import { Link } from 'react-router-dom';
 
 function Welcome() {
   return (

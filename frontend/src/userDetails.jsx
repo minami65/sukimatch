@@ -1,11 +1,11 @@
-import "./styles/userDetails.css";
-import PageFooter from "./components/footer";
-import close from "./assets/close.png";
-import likeIcon from "./assets/like.png";
-import likedIcon from "./assets/liked.png";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import './styles/userDetails.css';
+import PageFooter from './components/footer';
+import close from './assets/close.png';
+import likeIcon from './assets/like.png';
+import likedIcon from './assets/liked.png';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import {
   PREFECTURES,
@@ -19,9 +19,9 @@ import {
   LIVING,
   MARRIAGE,
   MEETING,
-} from "./data/base.jsx";
+} from './data/base.jsx';
 
-const API_URL = "http://localhost:8000";
+const API_URL = 'http://localhost:8000';
 
 function UserDetails() {
   const { id } = useParams();
@@ -38,7 +38,7 @@ function UserDetails() {
         setLoading(true);
         const userRes = await fetch(`${API_URL}/users/${id}`);
         if (!userRes.ok) {
-          throw new Error("User not found");
+          throw new Error('User not found');
         }
         const userData = await userRes.json();
         setUser(userData);
@@ -95,7 +95,7 @@ function UserDetails() {
         >
           ›
         </div>
-        <Link to={`/userList`} className="link">
+        <Link to={'/userList'} className="link">
           <img src={close} className="close" alt="close" />
         </Link>
       </div>
@@ -105,7 +105,7 @@ function UserDetails() {
           <img
             key={i}
             src={img}
-            className={i === currentIndex ? "active_thumb" : ""}
+            className={i === currentIndex ? 'active_thumb' : ''}
             onClick={() => setCurrentIndex(i)}
             alt="thumb"
           />
@@ -115,14 +115,14 @@ function UserDetails() {
       <div className="user_info">
         <div className="main_profile">
           <h2>
-            {user.name} <span className="age">{user.age}歳</span>{" "}
+            {user.name} <span className="age">{user.age}歳</span>{' '}
             <span className="location">
               {PREFECTURES[user.current_location_id]}
             </span>
           </h2>
           <div className="profile">
             <p className="bio">
-              {user.bio ? user.bio : "自己紹介文がありません"}
+              {user.bio ? user.bio : '自己紹介文がありません'}
             </p>
           </div>
         </div>

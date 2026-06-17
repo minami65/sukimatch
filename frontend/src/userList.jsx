@@ -1,10 +1,10 @@
-import "./styles/userList.css";
-import { useState, useEffect } from "react";
-import PageFooter from "./components/footer";
-import search from "./assets/search_logo.png";
-import { Link } from "react-router-dom";
-import ReactSlider from "react-slider";
-import { API_BASE } from "@/config";
+import './styles/userList.css';
+import { useState, useEffect } from 'react';
+import PageFooter from './components/footer';
+import search from './assets/search_logo.png';
+import { Link } from 'react-router-dom';
+import ReactSlider from 'react-slider';
+import { API_BASE } from '@/config';
 
 import {
   PREFECTURES,
@@ -17,7 +17,7 @@ import {
   LIVING,
   MEETING,
   MARRIAGE,
-} from "./data/base.jsx";
+} from './data/base.jsx';
 
 function UserList() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -38,7 +38,7 @@ function UserList() {
 
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  const loginUserId = Number(localStorage.getItem("loginUserId") ?? 1);
+  const loginUserId = Number(localStorage.getItem('loginUserId') ?? 1);
 
   useEffect(() => {
     fetch(`${API_BASE}/users`)
@@ -63,55 +63,55 @@ function UserList() {
   const handleFilterSearch = async () => {
     const params = new URLSearchParams();
 
-    params.append("min_age", ageRange[0]);
-    params.append("max_age", ageRange[1]);
+    params.append('min_age', ageRange[0]);
+    params.append('max_age', ageRange[1]);
 
     if (heightRange[0] !== 100) {
-      params.append("min_height", heightRange[0]);
+      params.append('min_height', heightRange[0]);
     }
 
     if (heightRange[1] !== 200) {
-      params.append("max_height", heightRange[1]);
+      params.append('max_height', heightRange[1]);
     }
 
     if (prefecture !== 0) {
-      params.append("current_location_id", prefecture);
+      params.append('current_location_id', prefecture);
     }
 
     if (job !== 0) {
-      params.append("job_id", job);
+      params.append('job_id', job);
     }
 
     if (education !== 0) {
-      params.append("education_id", education);
+      params.append('education_id', education);
     }
 
     if (income !== 0) {
-      params.append("income_id", income);
+      params.append('income_id', income);
     }
 
     if (holidays !== 0) {
-      params.append("holiday_id", holidays);
+      params.append('holiday_id', holidays);
     }
 
     if (alcohol !== 0) {
-      params.append("alcohol_id", alcohol);
+      params.append('alcohol_id', alcohol);
     }
 
     if (smoking !== 0) {
-      params.append("smoking_id", smoking);
+      params.append('smoking_id', smoking);
     }
 
     if (living !== 0) {
-      params.append("living_arrangement_id", living);
+      params.append('living_arrangement_id', living);
     }
 
     if (meeting !== 0) {
-      params.append("meeting_preference_id", meeting);
+      params.append('meeting_preference_id', meeting);
     }
 
     if (marriage !== 0) {
-      params.append("marriage_intention_id", marriage);
+      params.append('marriage_intention_id', marriage);
     }
 
     const response = await fetch(
@@ -396,7 +396,7 @@ function UserList() {
                       src={
                         user.images?.[0]
                           ? `${API_BASE}${user.images[0].image_url}`
-                          : "/default.png"
+                          : '/default.png'
                       }
                       alt="user"
                     />
@@ -404,7 +404,7 @@ function UserList() {
                 </div>
 
                 <p className="info">
-                  {user.age}歳 {user.current_location?.name ?? ""}
+                  {user.age}歳 {user.current_location?.name ?? ''}
                 </p>
               </div>
             );
