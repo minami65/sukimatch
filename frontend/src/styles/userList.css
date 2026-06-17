@@ -11,8 +11,8 @@
 }
 
 .search_icon {
-  border-top: 1px solid rgb(207, 207, 207);
-  border-bottom: 1px solid rgb(207, 207, 207);
+  border-top: 1px solid var(--color-neutral);
+  border-bottom: 1px solid var(--color-neutral);
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -47,7 +47,7 @@
   border-radius: 50%;
   border: 2px solid #333;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--color-bg-surface);
 }
 
 .avatar a {
@@ -76,7 +76,7 @@
 .search_conditions select {
   border-radius: 10px;
   margin-left: 20px;
-  background-color: #dedbd0;
+  background-color: var(--color-neutral);
   height: 25px;
   font-size: 16px;
 }
@@ -101,13 +101,13 @@
 }
 
 .reset {
-  background-color: rgba(171, 232, 219, 0.5);
+  background-color: var(--color-primary);
   margin-right: 20px;
 }
 
 .filter_search {
   white-space: nowrap;
-  background-color: #abe8db;
+  background-color: var(--color-primary);
 }
 
 .slider {
@@ -121,19 +121,19 @@
 .track {
   top: 12px;
   height: 6px;
-  background: #ddd;
+  background: var(--color-neutral);
   border-radius: 999px;
 }
 
 .track.track-1 {
-  background: #9fe8dc;
+  background: var(--color-primary);
 }
 
 .thumb {
   width: 22px;
   height: 22px;
-  background: white;
-  border: 2px solid #9fe8dc;
+  background: var(--color-bg-base);
+  border: 2px solid var(--color-primary);
   border-radius: 50%;
   cursor: pointer;
   position: absolute;

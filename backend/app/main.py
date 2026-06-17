@@ -15,7 +15,6 @@ from app.models.meeting_preference import Meeting
 from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
-from app.models.likes import Likes
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

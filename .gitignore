@@ -1,2 +1,11 @@
 __pycache__/
 *.pyc
+
+# Pythonの仮想環境を除外
+backend/venv/
+backend/venev/
+**/venv/
+**/__pycache__/
+
+.env.local
+node_modules/

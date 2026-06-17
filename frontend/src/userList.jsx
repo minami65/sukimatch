@@ -4,6 +4,7 @@ import PageFooter from "./components/footer";
 import search from "./assets/search_logo.png";
 import { Link } from "react-router-dom";
 import ReactSlider from "react-slider";
+import { API_BASE } from "@/config";
 
 import {
   PREFECTURES,
@@ -40,7 +41,7 @@ function UserList() {
   const loginUserId = Number(localStorage.getItem("loginUserId") ?? 1);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/users")
+    fetch(`${API_BASE}/users`)
       .then((res) => res.json())
       .then((data) => {
         // 自分を除外
@@ -114,7 +115,7 @@ function UserList() {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8000/users?${params.toString()}`,
+      `${API_BASE}/users?${params.toString()}`,
     );
 
     const data = await response.json();
@@ -141,7 +142,7 @@ function UserList() {
     setMeeting(0);
     setMarriage(0);
 
-    const response = await fetch("http://127.0.0.1:8000/users");
+    const response = await fetch(`${API_BASE}/users`);
 
     const data = await response.json();
 
@@ -211,6 +212,8 @@ function UserList() {
               <select
                 value={job}
                 onChange={(e) => setJob(Number(e.target.value))}
+                value={job}
+                onChange={(e) => setJob(Number(e.target.value))}
               >
                 {Object.entries(JOB).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -227,6 +230,8 @@ function UserList() {
               <select
                 value={education}
                 onChange={(e) => setEducation(Number(e.target.value))}
+                value={education}
+                onChange={(e) => setEducation(Number(e.target.value))}
               >
                 {Object.entries(EDUCATION).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -241,6 +246,8 @@ function UserList() {
               <p>年収</p>
 
               <select
+                value={income}
+                onChange={(e) => setIncome(Number(e.target.value))}
                 value={income}
                 onChange={(e) => setIncome(Number(e.target.value))}
               >
@@ -278,6 +285,8 @@ function UserList() {
               <select
                 value={holidays}
                 onChange={(e) => setHolidays(Number(e.target.value))}
+                value={holidays}
+                onChange={(e) => setHolidays(Number(e.target.value))}
               >
                 {Object.entries(HOLIDAY).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -292,6 +301,8 @@ function UserList() {
               <p>お酒</p>
 
               <select
+                value={alcohol}
+                onChange={(e) => setAlcohol(Number(e.target.value))}
                 value={alcohol}
                 onChange={(e) => setAlcohol(Number(e.target.value))}
               >
@@ -310,6 +321,8 @@ function UserList() {
               <select
                 value={smoking}
                 onChange={(e) => setSmoking(Number(e.target.value))}
+                value={smoking}
+                onChange={(e) => setSmoking(Number(e.target.value))}
               >
                 {Object.entries(SMOKING).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -324,6 +337,8 @@ function UserList() {
               <p>暮らし</p>
 
               <select
+                value={living}
+                onChange={(e) => setLiving(Number(e.target.value))}
                 value={living}
                 onChange={(e) => setLiving(Number(e.target.value))}
               >
@@ -342,6 +357,8 @@ function UserList() {
               <select
                 value={marriage}
                 onChange={(e) => setMarriage(Number(e.target.value))}
+                value={marriage}
+                onChange={(e) => setMarriage(Number(e.target.value))}
               >
                 {Object.entries(MARRIAGE).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -358,6 +375,8 @@ function UserList() {
               <select
                 value={meeting}
                 onChange={(e) => setMeeting(Number(e.target.value))}
+                value={meeting}
+                onChange={(e) => setMeeting(Number(e.target.value))}
               >
                 {Object.entries(MEETING).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -367,9 +386,10 @@ function UserList() {
               </select>
             </div>
           </div>
+          
 
           {/* ボタン */}
-          <div className="search_buttons">
+          <div className="search_buttons">        
             <button className="reset" onClick={handleReset}>
               リセット
             </button>
@@ -394,7 +414,7 @@ function UserList() {
                     <img
                       src={
                         user.images?.[0]
-                          ? `http://127.0.0.1:8000${user.images[0].image_url}`
+                          ? `${API_BASE}${user.images[0].image_url}`
                           : "/default.png"
                       }
                       alt="user"
@@ -410,7 +430,6 @@ function UserList() {
           })
         )}
       </div>
-
       <PageFooter />
     </div>
   );
