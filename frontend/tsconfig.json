@@ -21,7 +21,11 @@
       "strict": true,
       "noUnusedLocals": true,
       "noUnusedParameters": true,
-      "noImplicitReturns": true
+      "noImplicitReturns": true,
+
+      "plugins": [
+        { "name": "typescript-plugin-css-modules" }
+      ]
     },
     "include": ["src"]
   }
