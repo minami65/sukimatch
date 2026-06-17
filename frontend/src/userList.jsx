@@ -212,6 +212,8 @@ function UserList() {
               <select
                 value={job}
                 onChange={(e) => setJob(Number(e.target.value))}
+                value={job}
+                onChange={(e) => setJob(Number(e.target.value))}
               >
                 {Object.entries(JOB).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -228,6 +230,8 @@ function UserList() {
               <select
                 value={education}
                 onChange={(e) => setEducation(Number(e.target.value))}
+                value={education}
+                onChange={(e) => setEducation(Number(e.target.value))}
               >
                 {Object.entries(EDUCATION).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -242,6 +246,8 @@ function UserList() {
               <p>年収</p>
 
               <select
+                value={income}
+                onChange={(e) => setIncome(Number(e.target.value))}
                 value={income}
                 onChange={(e) => setIncome(Number(e.target.value))}
               >
@@ -279,6 +285,8 @@ function UserList() {
               <select
                 value={holidays}
                 onChange={(e) => setHolidays(Number(e.target.value))}
+                value={holidays}
+                onChange={(e) => setHolidays(Number(e.target.value))}
               >
                 {Object.entries(HOLIDAY).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -293,6 +301,8 @@ function UserList() {
               <p>お酒</p>
 
               <select
+                value={alcohol}
+                onChange={(e) => setAlcohol(Number(e.target.value))}
                 value={alcohol}
                 onChange={(e) => setAlcohol(Number(e.target.value))}
               >
@@ -311,6 +321,8 @@ function UserList() {
               <select
                 value={smoking}
                 onChange={(e) => setSmoking(Number(e.target.value))}
+                value={smoking}
+                onChange={(e) => setSmoking(Number(e.target.value))}
               >
                 {Object.entries(SMOKING).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -325,6 +337,8 @@ function UserList() {
               <p>暮らし</p>
 
               <select
+                value={living}
+                onChange={(e) => setLiving(Number(e.target.value))}
                 value={living}
                 onChange={(e) => setLiving(Number(e.target.value))}
               >
@@ -343,6 +357,8 @@ function UserList() {
               <select
                 value={marriage}
                 onChange={(e) => setMarriage(Number(e.target.value))}
+                value={marriage}
+                onChange={(e) => setMarriage(Number(e.target.value))}
               >
                 {Object.entries(MARRIAGE).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -359,6 +375,8 @@ function UserList() {
               <select
                 value={meeting}
                 onChange={(e) => setMeeting(Number(e.target.value))}
+                value={meeting}
+                onChange={(e) => setMeeting(Number(e.target.value))}
               >
                 {Object.entries(MEETING).map(([key, value]) => (
                   <option key={key} value={key}>
@@ -368,9 +386,10 @@ function UserList() {
               </select>
             </div>
           </div>
+          
 
           {/* ボタン */}
-          <div className="search_buttons">
+          <div className="search_buttons">        
             <button className="reset" onClick={handleReset}>
               リセット
             </button>
@@ -411,7 +430,6 @@ function UserList() {
           })
         )}
       </div>
-
       <PageFooter />
     </div>
   );
