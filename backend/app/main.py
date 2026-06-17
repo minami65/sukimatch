@@ -17,6 +17,7 @@ from app.models.likes import Likes
 from app.models.matches import Matches
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 app.add_middleware(

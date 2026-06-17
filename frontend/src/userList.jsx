@@ -1,5 +1,6 @@
 import "./styles/userList.css";
 import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PageFooter from "./components/footer";
 import search from "./assets/search_logo.png";
 import { Link } from "react-router-dom";
@@ -160,6 +161,7 @@ function UserList() {
       </div>
 
       {/* 虫眼鏡 */}
+      {/* 虫眼鏡 */}
       <div className="search_set" onClick={handleSearchToggle}>
         <div className="search_icon">
           <img src={search} alt="search_logo" />
@@ -170,6 +172,7 @@ function UserList() {
       {isSearchOpen && (
         <>
           <div className="search_conditions">
+            {/* 年齢 */}
             {/* 年齢 */}
             <div className="condition_item">
               <p>
@@ -193,6 +196,11 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>居住地</p>
 
+
+            {/* 居住地 */}
+            <div className="condition_item inline_select">
+              <p>居住地</p>
+
               <select
                 value={prefecture}
                 onChange={(e) => setPrefecture(Number(e.target.value))}
@@ -209,7 +217,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>職種</p>
 
+            </div>
+
+            {/* 職種 */}
+            <div className="condition_item inline_select">
+              <p>職種</p>
+
               <select
+                value={job}
+                onChange={(e) => setJob(Number(e.target.value))}
                 value={job}
                 onChange={(e) => setJob(Number(e.target.value))}
               >
@@ -225,7 +241,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>学歴</p>
 
+            </div>
+
+            {/* 学歴 */}
+            <div className="condition_item inline_select">
+              <p>学歴</p>
+
               <select
+                value={education}
+                onChange={(e) => setEducation(Number(e.target.value))}
                 value={education}
                 onChange={(e) => setEducation(Number(e.target.value))}
               >
@@ -241,7 +265,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>年収</p>
 
+            </div>
+
+            {/* 年収 */}
+            <div className="condition_item inline_select">
+              <p>年収</p>
+
               <select
+                value={income}
+                onChange={(e) => setIncome(Number(e.target.value))}
                 value={income}
                 onChange={(e) => setIncome(Number(e.target.value))}
               >
@@ -276,7 +308,34 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>休日</p>
 
+            </div>
+
+            {/* 身長 */}
+            <div className="condition_item">
+              <p>
+                身長：{heightRange[0]}cm 〜 {heightRange[1]}cm
+              </p>
+
+              <ReactSlider
+                className="slider"
+                thumbClassName="thumb"
+                trackClassName="track"
+                value={heightRange}
+                onChange={setHeightRange}
+                min={100}
+                max={200}
+                pearling
+                minDistance={1}
+              />
+            </div>
+
+            {/* 休日 */}
+            <div className="condition_item inline_select">
+              <p>休日</p>
+
               <select
+                value={holidays}
+                onChange={(e) => setHolidays(Number(e.target.value))}
                 value={holidays}
                 onChange={(e) => setHolidays(Number(e.target.value))}
               >
@@ -292,7 +351,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>お酒</p>
 
+            </div>
+
+            {/* お酒 */}
+            <div className="condition_item inline_select">
+              <p>お酒</p>
+
               <select
+                value={alcohol}
+                onChange={(e) => setAlcohol(Number(e.target.value))}
                 value={alcohol}
                 onChange={(e) => setAlcohol(Number(e.target.value))}
               >
@@ -308,7 +375,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>タバコ</p>
 
+            </div>
+
+            {/* タバコ */}
+            <div className="condition_item inline_select">
+              <p>タバコ</p>
+
               <select
+                value={smoking}
+                onChange={(e) => setSmoking(Number(e.target.value))}
                 value={smoking}
                 onChange={(e) => setSmoking(Number(e.target.value))}
               >
@@ -324,7 +399,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>暮らし</p>
 
+            </div>
+
+            {/* 暮らし */}
+            <div className="condition_item inline_select">
+              <p>暮らし</p>
+
               <select
+                value={living}
+                onChange={(e) => setLiving(Number(e.target.value))}
                 value={living}
                 onChange={(e) => setLiving(Number(e.target.value))}
               >
@@ -340,7 +423,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>結婚について</p>
 
+            </div>
+
+            {/* 結婚 */}
+            <div className="condition_item inline_select">
+              <p>結婚について</p>
+
               <select
+                value={marriage}
+                onChange={(e) => setMarriage(Number(e.target.value))}
                 value={marriage}
                 onChange={(e) => setMarriage(Number(e.target.value))}
               >
@@ -356,7 +447,15 @@ function UserList() {
             <div className="condition_item inline_select">
               <p>会うまでの希望</p>
 
+            </div>
+
+            {/* 会うまで */}
+            <div className="condition_item inline_select">
+              <p>会うまでの希望</p>
+
               <select
+                value={meeting}
+                onChange={(e) => setMeeting(Number(e.target.value))}
                 value={meeting}
                 onChange={(e) => setMeeting(Number(e.target.value))}
               >
@@ -367,14 +466,19 @@ function UserList() {
                 ))}
               </select>
             </div>
+            </div>
           </div>
+
+          {/* ボタン */}
 
           {/* ボタン */}
           <div className="search_buttons">
             <button className="reset" onClick={handleReset}>
+            <button className="reset" onClick={handleReset}>
               リセット
             </button>
 
+            <button className="filter_search" onClick={handleFilterSearch}>
             <button className="filter_search" onClick={handleFilterSearch}>
               この条件で検索🔍
             </button>
@@ -403,6 +507,13 @@ function UserList() {
                   </Link>
                 </div>
 
+                <p className="info">
+                  {user.age}歳 {user.current_location?.name ?? ""}
+                </p>
+              </div>
+            );
+          })
+        )}
                 <p className="info">
                   {user.age}歳 {user.current_location?.name ?? ""}
                 </p>
