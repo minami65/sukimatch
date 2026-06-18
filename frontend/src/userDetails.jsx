@@ -1,11 +1,12 @@
-import './styles/userDetails.css';
-import PageFooter from './components/footer';
-import close from './assets/close.png';
-import likeIcon from './assets/like.png';
-import likedIcon from './assets/liked.png';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import "./styles/userDetails.css";
+import PageFooter from "./components/footer";
+import close from "./assets/close.png";
+import likeIcon from "./assets/like.png";
+import likedIcon from "./assets/liked.png";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { API_BASE } from "./config.js";
 
 import {
   PREFECTURES,
@@ -19,11 +20,7 @@ import {
   LIVING,
   MARRIAGE,
   MEETING,
-} from './data/base.jsx';
-
-const API_URL = 'http://localhost:8000';
-
-const API_URL = "http://localhost:8000";
+} from "./data/base.jsx";
 
 function UserDetails() {
   const { id } = useParams();
@@ -38,19 +35,19 @@ function UserDetails() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const userRes = await fetch(`${API_URL}/users/${id}`);
+        const userRes = await fetch(`${API_BASE}/users/${id}`);
         if (!userRes.ok) {
-          throw new Error('User not found');
+          throw new Error("User not found");
         }
         const userData = await userRes.json();
         setUser(userData);
 
-        const imagesRes = await fetch(`${API_URL}/users/${id}/images`);
+        const imagesRes = await fetch(`${API_BASE}/users/${id}/images`);
         if (imagesRes.ok) {
           const imagesData = await imagesRes.json();
           const sortedImages = imagesData
             .sort((a, b) => a.sort_order - b.sort_order)
-            .map((img) => `${API_URL}${img.image_url}`);
+            .map((img) => `${API_BASE}${img.image_url}`);
           setImages(sortedImages);
         }
       } catch (err) {
@@ -97,7 +94,7 @@ function UserDetails() {
         >
           ›
         </div>
-        <Link to={'/userList'} className="link">
+        <Link to={"/userList"} className="link">
           <img src={close} className="close" alt="close" />
         </Link>
       </div>
@@ -107,7 +104,7 @@ function UserDetails() {
           <img
             key={i}
             src={img}
-            className={i === currentIndex ? 'active_thumb' : ''}
+            className={i === currentIndex ? "active_thumb" : ""}
             onClick={() => setCurrentIndex(i)}
             alt="thumb"
           />
@@ -117,14 +114,14 @@ function UserDetails() {
       <div className="user_info">
         <div className="main_profile">
           <h2>
-            {user.name} <span className="age">{user.age}歳</span>{' '}
+            {user.name} <span className="age">{user.age}歳</span>{" "}
             <span className="location">
               {PREFECTURES[user.current_location_id]}
             </span>
           </h2>
           <div className="profile">
             <p className="bio">
-              {user.bio ? user.bio : '自己紹介文がありません'}
+              {user.bio ? user.bio : "自己紹介文がありません"}
             </p>
           </div>
         </div>
