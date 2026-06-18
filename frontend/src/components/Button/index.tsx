@@ -24,15 +24,13 @@ const Button = ({
     styles[`custom-btn-${variant}`],
     styles[`custom-btn-${size}`],
     fullWidth ? styles['custom-btn-full'] : '',
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <button 
-      className={buttonClass} 
-      disabled={disabled} 
-      {...props}
-    >
+    <button className={buttonClass} disabled={disabled} {...props}>
       {children}
     </button>
   );
