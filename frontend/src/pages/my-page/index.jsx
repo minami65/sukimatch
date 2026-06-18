@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE } from '../../config';
-import styles from './index.module.css';
+import styles from './myPage.module.css';
 
 export default function Mypage() {
   const navigate = useNavigate();
