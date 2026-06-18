@@ -32,7 +32,7 @@ export default function TalkList() {
         <h1>トーク</h1>
       </header>
 
-      <Link to="/talk">
+      <Link to="/talk" className="toChat">
         <main className="talkListBody">
           {talks.map((talk, index) => (
             <div className="talkItem" key={index}>
