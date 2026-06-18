@@ -1,10 +1,10 @@
-import styles from "./footprint.module.css";
-import "@/assets/default-profile.png";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Likes from "@/components/likes";
-import PageFooter from "@/components/footer";
-import ToMyPageButton from "@/components/shared/buttons/ToMyPageButton";
+import styles from './footprint.module.css';
+import '@/assets/default-profile.png';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Likes from '@/components/likes';
+import PageFooter from '@/components/footer';
+import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 export default function FootPrint() {
   const navigate = useNavigate();
@@ -12,24 +12,21 @@ export default function FootPrint() {
   const [locations, setLocations] = useState([]);
   const [images, setImages] = useState([]);
   const [likesUser, setLikesUser] = useState([]);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // 足あと取得
   useEffect(() => {
     const fetchFootprints = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
-        const response = await fetch(
-          "http://127.0.0.1:8000/users/me/footprint",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch('http://127.0.0.1:8000/users/me/footprint', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const data = await response.json();
         console.log(data);
         setFootprints(data);
@@ -47,7 +44,7 @@ export default function FootPrint() {
     const fetchUserImages = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
 
@@ -55,14 +52,11 @@ export default function FootPrint() {
           footprints.map(async (f) => {
             // 足あとで取得したユーザーのid
             const userId = f.user_id;
-            const response = await fetch(
-              `http://127.0.0.1:8000/users/${userId}/images`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
+            const response = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
               },
-            );
+            });
 
             const data = await response.json();
 
@@ -87,7 +81,7 @@ export default function FootPrint() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const locationsRes = await fetch("http://127.0.0.1:8000/locations");
+        const locationsRes = await fetch('http://127.0.0.1:8000/locations');
         const locationsData = await locationsRes.json();
         setLocations(locationsData);
       } catch (error) {
@@ -101,18 +95,15 @@ export default function FootPrint() {
   useEffect(() => {
     const fetchLikesUser = async () => {
       if (!token) {
-        navigate("/");
+        navigate('/');
         return;
       }
       try {
-        const likesUserRes = await fetch(
-          "http://127.0.0.1:8000/users/me/likes",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const likesUserRes = await fetch('http://127.0.0.1:8000/users/me/likes', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const likesUserData = await likesUserRes.json();
         setLikesUser(likesUserData);
       } catch (error) {
@@ -130,14 +121,10 @@ export default function FootPrint() {
         {/* 名前 */}
         {footprints.length > 0 ? (
           footprints.map((f) => {
-            const location = locations.find(
-              (l) => l.id === f.current_location_id,
-            );
+            const location = locations.find((l) => l.id === f.current_location_id);
 
             // いいね済み判定
-            const isLiked = likesUser.some(
-              (user) => user.user_id === f.user_id,
-            );
+            const isLiked = likesUser.some((user) => user.user_id === f.user_id);
             return (
               <div className={styles.footprint - card} key={f.user_id}>
                 {images.map((i) => {

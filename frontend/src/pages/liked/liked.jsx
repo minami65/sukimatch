@@ -1,32 +1,29 @@
-import PageFooter from "@/components/footer";
-import styles from "./liked.module.css";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import ToMyPageButton from "@/components/shared/buttons/ToMyPageButton";
+import PageFooter from '@/components/footer';
+import styles from './liked.module.css';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 export default function Liked() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [images, setImages] = useState([]);
   const [locations, setLocations] = useState([]);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // いいね履歴取得
   useEffect(() => {
     const fetchLikedProfiles = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
-        const likedResponse = await fetch(
-          "http://127.0.0.1:8000/users/me/likes",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const likedData = await likedResponse.json();
         console.log(likedData);
         setProfile(likedData);
@@ -44,20 +41,17 @@ export default function Liked() {
     const fetchUserImages = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
         const imageData = await Promise.all(
           profile.map(async (p) => {
             const userId = p.user_id;
-            const imageResponse = await fetch(
-              `http://127.0.0.1:8000/users/${userId}/images`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
+            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
               },
-            );
+            });
             const imageData = await imageResponse.json();
             console.log(imageData);
             return { userId, imageData };
@@ -75,7 +69,7 @@ export default function Liked() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const locationResponse = await fetch("http://127.0.0.1:8000/locations");
+        const locationResponse = await fetch('http://127.0.0.1:8000/locations');
         const locationData = await locationResponse.json();
         setLocations(locationData);
       } catch (error) {
@@ -93,9 +87,7 @@ export default function Liked() {
           <div className={styles.likedUserCard}>
             {profile &&
               profile.map((p) => {
-                const location = locations.find(
-                  (l) => l.id === p.current_location_id,
-                );
+                const location = locations.find((l) => l.id === p.current_location_id);
                 return (
                   <div className={styles.likedUser}>
                     {images &&
@@ -112,7 +104,7 @@ export default function Liked() {
                       })}
                     <div className={styles.likedUserInfo}>
                       <p>{p.age}歳</p>
-                      <p>{location ? location.name : "未選択"}</p>
+                      <p>{location ? location.name : '未選択'}</p>
                     </div>
                   </div>
                 );

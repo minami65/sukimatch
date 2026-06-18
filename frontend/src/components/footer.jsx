@@ -1,9 +1,9 @@
-import "./styles/footer.css";
-import search from "../assets/search.png";
-import receive from "../assets/receive.png";
-import talk from "../assets/talk.png";
-import mypage from "../assets/mypage.png";
-import { Link } from "react-router-dom";
+import './styles/footer.css';
+import search from '../assets/search.png';
+import receive from '../assets/receive.png';
+import talk from '../assets/talk.png';
+import mypage from '../assets/mypage.png';
+import { Link } from 'react-router-dom';
 
 function PageFooter() {
   return (

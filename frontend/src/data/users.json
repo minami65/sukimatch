@@ -44,11 +44,7 @@
     "smoking_id": 2,
     "living_arrangement_id": 1,
     "meeting_preference_id": 1,
-    "images": [
-      "/images/user2-1.png",
-      "/images/user2-2.png",
-      "/images/user2-3.png"
-    ]
+    "images": ["/images/user2-1.png", "/images/user2-2.png", "/images/user2-3.png"]
   },
   {
     "id": 3,
@@ -69,11 +65,7 @@
     "smoking_id": 1,
     "living_arrangement_id": 2,
     "meeting_preference_id": 2,
-    "images": [
-      "/images/user3-1.png",
-      "/images/user3-2.png",
-      "/images/user3-3.png"
-    ]
+    "images": ["/images/user3-1.png", "/images/user3-2.png", "/images/user3-3.png"]
   },
   {
     "id": 4,
@@ -94,11 +86,7 @@
     "smoking_id": 1,
     "living_arrangement_id": 1,
     "meeting_preference_id": 1,
-    "images": [
-      "/images/user4-1.png",
-      "/images/user4-2.png",
-      "/images/user4-3.png"
-    ]
+    "images": ["/images/user4-1.png", "/images/user4-2.png", "/images/user4-3.png"]
   },
   {
     "id": 5,
@@ -119,11 +107,7 @@
     "smoking_id": 2,
     "living_arrangement_id": 1,
     "meeting_preference_id": 2,
-    "images": [
-      "/images/user5-1.png",
-      "/images/user5-2.png",
-      "/images/user5-3.png"
-    ]
+    "images": ["/images/user5-1.png", "/images/user5-2.png", "/images/user5-3.png"]
   },
   {
     "id": 6,
@@ -144,11 +128,7 @@
     "smoking_id": 2,
     "living_arrangement_id": 2,
     "meeting_preference_id": 2,
-    "images": [
-      "/images/user6-1.png",
-      "/images/user6-2.png",
-      "/images/user6-3.png"
-    ]
+    "images": ["/images/user6-1.png", "/images/user6-2.png", "/images/user6-3.png"]
   },
   {
     "id": 7,
@@ -169,11 +149,7 @@
     "smoking_id": 2,
     "living_arrangement_id": 1,
     "meeting_preference_id": 1,
-    "images": [
-      "/images/user7-1.png",
-      "/images/user7-2.png",
-      "/images/user7-3.png"
-    ]
+    "images": ["/images/user7-1.png", "/images/user7-2.png", "/images/user7-3.png"]
   },
   {
     "id": 8,
@@ -194,11 +170,7 @@
     "smoking_id": 1,
     "living_arrangement_id": 2,
     "meeting_preference_id": 2,
-    "images": [
-      "/images/user8-1.png",
-      "/images/user8-2.png",
-      "/images/user8-3.png"
-    ]
+    "images": ["/images/user8-1.png", "/images/user8-2.png", "/images/user8-3.png"]
   },
   {
     "id": 9,
@@ -219,11 +191,7 @@
     "smoking_id": 2,
     "living_arrangement_id": 1,
     "meeting_preference_id": 1,
-    "images": [
-      "/images/user9-1.png",
-      "/images/user9-2.png",
-      "/images/user9-3.png"
-    ]
+    "images": ["/images/user9-1.png", "/images/user9-2.png", "/images/user9-3.png"]
   },
   {
     "id": 10,
@@ -244,10 +212,6 @@
     "smoking_id": 2,
     "living_arrangement_id": 2,
     "meeting_preference_id": 2,
-    "images": [
-      "/images/user10-1.png",
-      "/images/user10-2.png",
-      "/images/user10-3.png"
-    ]
+    "images": ["/images/user10-1.png", "/images/user10-2.png", "/images/user10-3.png"]
   }
 ]

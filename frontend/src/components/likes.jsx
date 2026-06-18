@@ -1,14 +1,14 @@
-import "./styles/likes.css";
-import like from "../assets/likes-button.png";
-import axios from "axios";
+import './styles/likes.css';
+import like from '../assets/likes-button.png';
+import axios from 'axios';
 
 export default function Likes({ footprintId, disabled }) {
-  console.log("footprintId:", footprintId);
+  console.log('footprintId:', footprintId);
 
   const handleLikeCreate = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      window.location.assign("/");
+      window.location.assign('/');
       return;
     }
     try {
@@ -28,7 +28,7 @@ export default function Likes({ footprintId, disabled }) {
   };
 
   return (
-    <div className={`like ${disabled ? "disabled" : ""}`}>
+    <div className={`like ${disabled ? 'disabled' : ''}`}>
       <img
         src={like}
         alt="いいね"

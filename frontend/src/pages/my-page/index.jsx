@@ -1,23 +1,23 @@
-import PageFooter from "../../components/footer";
-import footprint from "@/assets/footprint.png";
-import likes from "@/assets/likes.png";
-import setting from "@/assets/setting.png";
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { API_BASE } from "../../config";
-import styles from "./index.module.css";
+import PageFooter from '../../components/footer';
+import footprint from '@/assets/footprint.png';
+import likes from '@/assets/likes.png';
+import setting from '@/assets/setting.png';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../../config';
+import styles from './index.module.css';
 
 export default function Mypage() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [mainImages, setImages] = useState(null);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // ユーザーID取得
   useEffect(() => {
     if (!token) {
-      navigate("/");
+      navigate('/');
       return;
     }
     fetch(`${API_BASE}/user/me`, {
