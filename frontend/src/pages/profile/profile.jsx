@@ -1,11 +1,12 @@
-import PageFooter from "./components/footer";
-import "./styles/profile.css";
-import "./assets/default-profile.png";
+import PageFooter from "@/components/footer";
+import styles from "./profile.module.css";
+import "@/assets/default-profile.png";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ToMypageButton from "./components/toMypageButton";
+import Button from "@/components/Button";
+import ToMyPageButton from "@/components/shared/buttons/ToMyPageButton";
 
 export default function Profile() {
   const { userId } = useParams();
@@ -310,9 +311,9 @@ export default function Profile() {
   };
   return (
     <div>
-      <div className="imageSection">
+      <div className={styles.imageSection}>
         {/* メイン画像 */}
-        <div className="mainProfileImage">
+        <div className={styles.mainProfileImage}>
           {images?.[0] && (
             <img
               src={
@@ -321,10 +322,10 @@ export default function Profile() {
                   : images[0].preview
               }
               alt="プロフィール画像"
-              className="profileImage"
+              className={styles.profileImage}
             />
           )}
-          <label htmlFor="imageUpload" className="plusButton">
+          <label htmlFor="imageUpload" className={styles.plusButton}>
             ＋
           </label>
 
@@ -339,13 +340,13 @@ export default function Profile() {
         </div>
 
         {/* サブ画像一覧 */}
-        <div className="subImages">
+        <div className={styles.subImages}>
           {images.length > 1 &&
             images.slice(1).map((m) => (
               <div key={m.id || m.tempId} style={{ position: "relative" }}>
                 <button
                   type="button"
-                  className="deleteButton"
+                  className={styles.deleteButton}
                   onClick={() => handleImageDelete(m.id || m.tempId)}
                 >
                   ×
@@ -358,14 +359,14 @@ export default function Profile() {
                       : m.preview
                   }
                   alt="サブプロフィール"
-                  className="subImage"
+                  className={styles.subImage}
                 />
               </div>
             ))}
         </div>
       </div>
 
-      <div className="introductionText">
+      <div className={styles.introductionText}>
         <input
           type="text"
           name="bio"
@@ -374,10 +375,10 @@ export default function Profile() {
         />
       </div>
 
-      <div className="profileDetail">
+      <div className={styles.profileDetail}>
         <p>プロフィール</p>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>出身地</p>
           <select
             name="birth_location_id"
@@ -393,7 +394,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>居住地</p>
           <select
             name="current_location_id"
@@ -409,7 +410,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>学歴</p>
           <select
             name="education_id"
@@ -425,7 +426,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>職種</p>
           <select name="job_id" value={form.job_id} onChange={handleChange}>
             <option value="">選択してください</option>
@@ -437,7 +438,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>年収</p>
           <select
             name="income_id"
@@ -454,7 +455,7 @@ export default function Profile() {
         </div>
 
         {/* TODO:身長の入力欄 */}
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>身長</p>
           <input
             type="text"
@@ -465,7 +466,7 @@ export default function Profile() {
           &nbsp;cm
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>結婚に対する意思</p>
           <select
             name="marriage_intention_id"
@@ -484,7 +485,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>休日</p>
           <select
             name="holiday_id"
@@ -500,7 +501,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>お酒</p>
           <select
             name="alcohol_id"
@@ -516,7 +517,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>タバコ</p>
           <select
             name="smoking_id"
@@ -532,7 +533,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>同居人</p>
           <select
             name="living_arrangement_id"
@@ -551,7 +552,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>出会うまでの希望</p>
           <select
             name="meeting_preference_id"
@@ -571,11 +572,11 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className="buttonGroup">
-        <button onClick={handleSubmit} className="button">
+      <div className={styles.buttonGroup}>
+        <Button fullWidth size="lg" variant="secondary" onClick={handleSubmit}>
           登録
-        </button>
-        <ToMypageButton />
+        </Button>
+        <ToMyPageButton />
       </div>
       <PageFooter />
     </div>
