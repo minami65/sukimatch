@@ -1,0 +1,49 @@
+/* 1. スライダー全体（Root） */
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  touch-action: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+/* 2. ベースの線（Track） */
+.track {
+  background-color: var(--color-neutral);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 8px;
+}
+
+/* 3. 選択された部分の線（Range） */
+.range {
+  position: absolute;
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+  height: 100%;
+}
+
+/* 4. 丸いつまみ（Thumb） */
+.thumb {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-bg-base);
+  border: 3px solid var(--color-primary);
+  border-radius: 50%;
+  box-sizing: border-box;
+  outline: none;
+  transition: transform 0.1s ease;
+}
+
+.thumb:hover {
+  transform: scale(1.1);
+}
+
+.thumb:active {
+  transform: scale(0.95);
+}

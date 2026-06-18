@@ -1,9 +1,9 @@
-import "./styles/MatchComplete.css";
-import maleIcon from "./assets/male.png";
-import femaleIcon from "./assets/female.png";
-import balloon from "./assets/balloon.png";
-import PageFooter from "./components/footer";
-import { Link } from "react-router-dom";
+import './styles/MatchComplete.css';
+import maleIcon from './assets/male.png';
+import femaleIcon from './assets/female.png';
+import balloon from './assets/balloon.png';
+import PageFooter from './components/footer';
+import { Link } from 'react-router-dom';
 
 function MatchComplete() {
   return (

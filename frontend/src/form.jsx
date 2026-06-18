@@ -1,33 +1,33 @@
-import { useState } from "react";
-import axios from "axios";
-import couple from "./assets/image2.png";
-import "./styles/form.css";
-import { Link, useNavigate } from "react-router-dom";
-import Airplane from "./components/airplane";
+import { useState } from 'react';
+import axios from 'axios';
+import couple from './assets/image2.png';
+import './styles/form.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Airplane from './components/airplane';
 
 const Form = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:8000/login", {
+      const res = await axios.post('http://localhost:8000/login', {
         mail_address: email,
         password: password,
       });
-      localStorage.setItem("token", res.data.access_token);
-      navigate("/userList");
+      localStorage.setItem('token', res.data.access_token);
+      navigate('/userList');
     } catch (err) {
       if (err.response?.status === 401) {
-        setError("メールアドレスかパスワードが間違っています。");
+        setError('メールアドレスかパスワードが間違っています。');
       } else {
-        setError("ログインに失敗しました。もう一度お試しください。");
+        setError('ログインに失敗しました。もう一度お試しください。');
       }
     } finally {
       setLoading(false);
@@ -63,12 +63,12 @@ const Form = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {error && <p style={{ color: "red", textAlign: "center", margin: "8px 0" }}>{error}</p>}
+        {error && <p style={{ color: 'red', textAlign: 'center', margin: '8px 0' }}>{error}</p>}
         <div className="form_button">
           <input
             type="submit"
             className="login"
-            value={loading ? "ログイン中..." : "ログイン"}
+            value={loading ? 'ログイン中...' : 'ログイン'}
             disabled={loading}
           />
           <Link to="/create" className="new_registration">

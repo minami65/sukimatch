@@ -1,22 +1,23 @@
 .custom-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px;
-    font-family: var(--font-family-base);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    border: 1px solid transparent;
-    outline: none;
-    width: max-content;
-    box-sizing: border-box; 
-    align-self: center; 
-    height: auto !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  outline: none;
+  width: max-content;
+  box-sizing: border-box;
+  align-self: center;
+  height: auto !important;
+  white-space: nowrap;
 }
 
 .custom-btn:focus-visible {
-  outline: 3px solid var(--color-primary); 
+  outline: 3px solid var(--color-primary);
   outline-offset: 3px;
 }
 
@@ -24,12 +25,12 @@
   opacity: 1 !important;
   filter: none !important;
 }
-  
+
 .custom-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-  
+
 /* ============================
     サイズ (Size)
     ============================ */
@@ -38,11 +39,11 @@
   font-size: 16px;
 }
 .custom-btn-md {
-  padding: 10px 42px;
+  padding: 10px 24px;
   font-size: 18px;
 }
 .custom-btn-lg {
-  padding: 14px 64px;
+  padding: 14px 32px;
   font-size: 24px;
 }
 .custom-btn-full {

@@ -88,7 +88,6 @@
   width: 80%;
   max-width: 800px;
   margin: 30px auto;
-  padding: 40px;
   border-top: var(--color-primary) solid 2px;
   border-bottom: var(--color-primary) solid 2px;
 }
@@ -131,21 +130,10 @@
   outline: none;
 }
 
-button {
-  display: block;
-  width: 250px;
-  height: 60px;
-  margin: 20px auto 10px auto;
-  border: none;
-  border-radius: 30px;
-  background-color: var(--color-secondary);
-  color: white;
-  font-size: 20px;
-}
-
 .buttonGroup {
-  margin-bottom: 120px;
-}
-button:hover {
-  opacity: 0.8;
+  margin: 0 40px 120px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

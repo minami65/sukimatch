@@ -1,6 +1,9 @@
+.container {
+  padding: 0 40px;
+}
 .title {
   font-size: 25px;
-  font-family: "Klee One", sans-serif;
+  font-family: 'Klee One', sans-serif;
   padding: 80px 20px 0px 20px;
 }
 .footprint-info {
@@ -22,5 +25,5 @@
   object-fit: cover;
 }
 .no-footprints {
-  padding: 50px;
+  margin: 20px 0;
 }
