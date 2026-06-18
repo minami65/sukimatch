@@ -2,6 +2,7 @@ import PageFooter from "./components/footer";
 import "./styles/talk.css";
 import sendButton from "./assets/send-button.png";
 import picture from "./assets/picture.png";
+import { Link } from "react-router-dom";
 
 export default function Talk() {
   const messages = [
@@ -26,7 +27,9 @@ export default function Talk() {
   return (
     <div className="talkPage">
       <header className="talkHeader">
-        <button className="backButton">&lt;</button>
+        <Link to="/talkList">
+          <button className="backButton">&lt;</button>
+        </Link>
         <div className="talkTitle">Y</div>
       </header>
 
