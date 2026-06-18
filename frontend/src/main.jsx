@@ -8,14 +8,14 @@ import Form from "./form.jsx";
 import Create from "./create.jsx";
 import Pay from "./pay.jsx";
 import Welcome from "./welcome.jsx";
-import UserList from "./userList.jsx";
+import UserList from "./pages/user-list/userList.jsx";
 import UserDetails from "./userDetails.jsx";
 import MatchComplete from "./match.jsx";
-import MyPage from "@/pages/my-page/index.jsx"
-import Profile from "./profile.jsx";
-import FootPrint from "./footprint.jsx";
-import Liked from "./liked.jsx";
-import Setting from "./setting.jsx";
+import MyPage from "@/pages/my-page/index.jsx";
+import Profile from "./pages/profile/profile.jsx";
+import FootPrint from "./pages/footprint/footprint.jsx";
+import Liked from "./pages/liked/liked.jsx";
+import Setting from "./pages/setting/setting.jsx";
 import Talk from "./talk.jsx";
 import TalkList from "./talkList.jsx";
 
