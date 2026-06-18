@@ -23,6 +23,8 @@ import {
 
 const API_URL = 'http://localhost:8000';
 
+const API_URL = "http://localhost:8000";
+
 function UserDetails() {
   const { id } = useParams();
   const [user, setUser] = useState(null);

@@ -34,6 +34,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/liked" element={<Liked />} />
       <Route path="/setting" element={<Setting />} />
       <Route path="/talk" element={<Talk />} />
+      <Route path="/talkList" element={<TalkList />} />
     </Routes>
   </BrowserRouter>,
 );

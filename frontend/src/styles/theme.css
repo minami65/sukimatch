@@ -20,9 +20,11 @@
        ========================================================================== */
     /* メインのアクセント色 */
     --color-primary: #ABE8DB;
+    --color-primary-light: #ABE8DB66;
     
     /* サブのアクセント色 */
     --color-secondary: #2A3455;
+    --color-secondary-light: #2A3455E6;
 
     /* エラー時の色 */
     --color-danger: #d93025;

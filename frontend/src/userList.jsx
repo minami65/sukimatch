@@ -411,7 +411,6 @@ function UserList() {
           })
         )}
       </div>
-
       <PageFooter />
     </div>
   );
