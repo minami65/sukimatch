@@ -1,8 +1,8 @@
-import PageFooter from './components/footer';
-import './styles/liked.css';
+import PageFooter from '@/components/footer';
+import styles from './liked.module.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ToMypageButton from './components/toMypageButton';
+import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 export default function Liked() {
   const navigate = useNavigate();
@@ -19,14 +19,11 @@ export default function Liked() {
           navigate('/');
           return;
         }
-        const likedResponse = await fetch(
-          'http://127.0.0.1:8000/users/me/likes',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const likedData = await likedResponse.json();
         console.log(likedData);
         setProfile(likedData);
@@ -50,14 +47,11 @@ export default function Liked() {
         const imageData = await Promise.all(
           profile.map(async (p) => {
             const userId = p.user_id;
-            const imageResponse = await fetch(
-              `http://127.0.0.1:8000/users/${userId}/images`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
+            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
               },
-            );
+            });
             const imageData = await imageResponse.json();
             console.log(imageData);
             return { userId, imageData };
@@ -85,44 +79,43 @@ export default function Liked() {
     fetchLocations();
   }, []);
   return (
-    <div>
-      <p className="liked-title">あなたが送ったいいね！</p>
-      {/* 写真 */}
-      {profile && profile.length > 0 ? (
-        <div className="likedUserCard">
-          {profile &&
-            profile.map((p) => {
-              const location = locations.find(
-                (l) => l.id === p.current_location_id,
-              );
-              return (
-                <div className="likedUser">
-                  {images &&
-                    images.map((i) => {
-                      if (i.userId === p.user_id) {
-                        return (
-                          <img
-                            src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
-                            alt="Profile"
-                            className="LikedUserImg"
-                          />
-                        );
-                      }
-                    })}
-                  <div className="likedUserInfo">
-                    <p>{p.age}歳</p>
-                    <p>{location ? location.name : '未選択'}</p>
+    <>
+      <p className={styles.likedTitle}>あなたが送ったいいね！</p>
+      <div className={styles.container}>
+        {/* 写真 */}
+        {profile && profile.length > 0 ? (
+          <div className={styles.likedUserCard}>
+            {profile &&
+              profile.map((p) => {
+                const location = locations.find((l) => l.id === p.current_location_id);
+                return (
+                  <div className={styles.likedUser}>
+                    {images &&
+                      images.map((i) => {
+                        if (i.userId === p.user_id) {
+                          return (
+                            <img
+                              src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
+                              alt="Profile"
+                              className={styles.LikedUserImg}
+                            />
+                          );
+                        }
+                      })}
+                    <div className={styles.likedUserInfo}>
+                      <p>{p.age}歳</p>
+                      <p>{location ? location.name : '未選択'}</p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-        </div>
-      ) : (
-        <div className="no-likes">送ったいいね！がありません。</div>
-      )}
-
-      <ToMypageButton />
+                );
+              })}
+          </div>
+        ) : (
+          <div className={styles.noLikes}>送ったいいね！がありません。</div>
+        )}
+        <ToMyPageButton />
+      </div>
       <PageFooter />
-    </div>
+    </>
   );
 }

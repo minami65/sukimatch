@@ -13,6 +13,7 @@
   box-sizing: border-box;
   align-self: center;
   height: auto !important;
+  white-space: nowrap;
 }
 
 .custom-btn:focus-visible {
@@ -38,11 +39,11 @@
   font-size: 16px;
 }
 .custom-btn-md {
-  padding: 10px 42px;
+  padding: 10px 24px;
   font-size: 18px;
 }
 .custom-btn-lg {
-  padding: 14px 64px;
+  padding: 14px 32px;
   font-size: 24px;
 }
 .custom-btn-full {

@@ -1,10 +1,10 @@
-import PageFooter from './components/footer';
-import './styles/footprint.css';
-import './assets/default-profile.png';
+import styles from './footprint.module.css';
+import '@/assets/default-profile.png';
 import { useState, useEffect } from 'react';
-import Likes from './components/likes';
 import { useNavigate } from 'react-router-dom';
-import ToMypageButton from './components/toMypageButton';
+import Likes from '@/components/likes';
+import PageFooter from '@/components/footer';
+import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 export default function FootPrint() {
   const navigate = useNavigate();
@@ -22,14 +22,11 @@ export default function FootPrint() {
           navigate('/');
           return;
         }
-        const response = await fetch(
-          'http://127.0.0.1:8000/users/me/footprint',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch('http://127.0.0.1:8000/users/me/footprint', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const data = await response.json();
         console.log(data);
         setFootprints(data);
@@ -55,14 +52,11 @@ export default function FootPrint() {
           footprints.map(async (f) => {
             // 足あとで取得したユーザーのid
             const userId = f.user_id;
-            const response = await fetch(
-              `http://127.0.0.1:8000/users/${userId}/images`,
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
+            const response = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
               },
-            );
+            });
 
             const data = await response.json();
 
@@ -105,14 +99,11 @@ export default function FootPrint() {
         return;
       }
       try {
-        const likesUserRes = await fetch(
-          'http://127.0.0.1:8000/users/me/likes',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const likesUserRes = await fetch('http://127.0.0.1:8000/users/me/likes', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const likesUserData = await likesUserRes.json();
         setLikesUser(likesUserData);
       } catch (error) {
@@ -124,50 +115,51 @@ export default function FootPrint() {
 
   return (
     <div>
-      <p className="title">あしあと</p>
-      {/* 名前 */}
-      {footprints.length > 0 ? (
-        footprints.map((f) => {
-          const location = locations.find(
-            (l) => l.id === f.current_location_id,
-          );
+      <p className={styles.title}>あしあと</p>
 
-          // いいね済み判定
-          const isLiked = likesUser.some((user) => user.user_id === f.user_id);
-          return (
-            <div className="footprint-card" key={f.user_id}>
-              {images.map((i) => {
-                if (i.user_id === f.user_id) {
-                  return (
-                    <img
-                      key={i.user_id}
-                      src={`http://127.0.0.1:8000${i.images[0].image_url}`}
-                      alt="Profile"
-                      className="profileImg"
-                    />
-                  );
-                }
-              })}
+      <div className={styles.container}>
+        {/* 名前 */}
+        {footprints.length > 0 ? (
+          footprints.map((f) => {
+            const location = locations.find((l) => l.id === f.current_location_id);
 
-              <div>
-                <p>{f.name}</p>
-                <div className="footprint-info">
-                  <p>{f.age}歳</p>
-                  <p>{location ? location.name : f.current_location_id}</p>
+            // いいね済み判定
+            const isLiked = likesUser.some((user) => user.user_id === f.user_id);
+            return (
+              <div className={styles.footprint - card} key={f.user_id}>
+                {images.map((i) => {
+                  if (i.user_id === f.user_id) {
+                    return (
+                      <img
+                        key={i.user_id}
+                        src={`http://127.0.0.1:8000${i.images[0].image_url}`}
+                        alt="Profile"
+                        className={styles.profileImg}
+                      />
+                    );
+                  }
+                })}
+
+                <div>
+                  <p>{f.name}</p>
+                  <div className={styles.footprint - info}>
+                    <p>{f.age}歳</p>
+                    <p>{location ? location.name : f.current_location_id}</p>
+                  </div>
                 </div>
-              </div>
 
-              {/* いいねボタン */}
-              <Likes footprintId={f.user_id} disabled={isLiked} />
-            </div>
-          );
-        })
-      ) : (
-        <div>
-          <p className="no-footprints">足あとがありません。</p>
-        </div>
-      )}
-      <ToMypageButton />
+                {/* いいねボタン */}
+                <Likes footprintId={f.user_id} disabled={isLiked} />
+              </div>
+            );
+          })
+        ) : (
+          <div>
+            <p className={styles.noFootprints}>足あとがありません。</p>
+          </div>
+        )}
+        <ToMyPageButton className={styles.toMyPage} />
+      </div>
       <PageFooter />
     </div>
   );

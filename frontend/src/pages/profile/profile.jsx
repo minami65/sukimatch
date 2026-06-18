@@ -1,11 +1,12 @@
-import PageFooter from './components/footer';
-import './styles/profile.css';
-import './assets/default-profile.png';
+import PageFooter from '@/components/footer';
+import styles from './profile.module.css';
+import '@/assets/default-profile.png';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import ToMypageButton from './components/toMypageButton';
+import Button from '@/components/Button';
+import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 export default function Profile() {
   const { userId } = useParams();
@@ -70,14 +71,11 @@ export default function Profile() {
           navigate('/');
           return;
         }
-        const userImage = await fetch(
-          `http://127.0.0.1:8000/users/${userId}/images`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const userImage = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         const userImageData = await userImage.json();
         setImages(userImageData);
         console.log(userImageData);
@@ -107,9 +105,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchEducations = async () => {
       try {
-        const educationResponse = await fetch(
-          'http://127.0.0.1:8000/education',
-        );
+        const educationResponse = await fetch('http://127.0.0.1:8000/education');
         const educationData = await educationResponse.json();
         setEducation(educationData);
       } catch (error) {
@@ -254,9 +250,7 @@ export default function Profile() {
 
   const handleImageDelete = (imageId) => {
     setImages((prev) => {
-      const remaining = prev.filter(
-        (image) => image.id !== imageId && image.tempId !== imageId,
-      );
+      const remaining = prev.filter((image) => image.id !== imageId && image.tempId !== imageId);
 
       const removed = prev.find((image) => image.id === imageId);
       if (removed && removed.id) {
@@ -310,9 +304,9 @@ export default function Profile() {
   };
   return (
     <div>
-      <div className="imageSection">
+      <div className={styles.imageSection}>
         {/* メイン画像 */}
-        <div className="mainProfileImage">
+        <div className={styles.mainProfileImage}>
           {images?.[0] && (
             <img
               src={
@@ -321,10 +315,10 @@ export default function Profile() {
                   : images[0].preview
               }
               alt="プロフィール画像"
-              className="profileImage"
+              className={styles.profileImage}
             />
           )}
-          <label htmlFor="imageUpload" className="plusButton">
+          <label htmlFor="imageUpload" className={styles.plusButton}>
             ＋
           </label>
 
@@ -339,51 +333,38 @@ export default function Profile() {
         </div>
 
         {/* サブ画像一覧 */}
-        <div className="subImages">
+        <div className={styles.subImages}>
           {images.length > 1 &&
             images.slice(1).map((m) => (
               <div key={m.id || m.tempId} style={{ position: 'relative' }}>
                 <button
                   type="button"
-                  className="deleteButton"
+                  className={styles.deleteButton}
                   onClick={() => handleImageDelete(m.id || m.tempId)}
                 >
                   ×
                 </button>
 
                 <img
-                  src={
-                    m.image_url
-                      ? `http://127.0.0.1:8000${m.image_url}`
-                      : m.preview
-                  }
+                  src={m.image_url ? `http://127.0.0.1:8000${m.image_url}` : m.preview}
                   alt="サブプロフィール"
-                  className="subImage"
+                  className={styles.subImage}
                 />
               </div>
             ))}
         </div>
       </div>
 
-      <div className="introductionText">
-        <input
-          type="text"
-          name="bio"
-          value={form.bio || ''}
-          onChange={handleChange}
-        />
+      <div className={styles.introductionText}>
+        <input type="text" name="bio" value={form.bio || ''} onChange={handleChange} />
       </div>
 
-      <div className="profileDetail">
+      <div className={styles.profileDetail}>
         <p>プロフィール</p>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>出身地</p>
-          <select
-            name="birth_location_id"
-            value={form.birth_location_id}
-            onChange={handleChange}
-          >
+          <select name="birth_location_id" value={form.birth_location_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {locations.map((location) => (
               <option key={location.id} value={location.id}>
@@ -393,7 +374,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>居住地</p>
           <select
             name="current_location_id"
@@ -409,13 +390,9 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>学歴</p>
-          <select
-            name="education_id"
-            value={form.education_id}
-            onChange={handleChange}
-          >
+          <select name="education_id" value={form.education_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {education.map((edu) => (
               <option key={edu.education_id} value={edu.education_id}>
@@ -425,7 +402,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>職種</p>
           <select name="job_id" value={form.job_id} onChange={handleChange}>
             <option value="">選択してください</option>
@@ -437,13 +414,9 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>年収</p>
-          <select
-            name="income_id"
-            value={form.income_id}
-            onChange={handleChange}
-          >
+          <select name="income_id" value={form.income_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {income.map((i) => (
               <option key={i.income_id} value={i.income_id}>
@@ -454,18 +427,13 @@ export default function Profile() {
         </div>
 
         {/* TODO:身長の入力欄 */}
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>身長</p>
-          <input
-            type="text"
-            name="height"
-            value={form.height}
-            onChange={handleChange}
-          />
+          <input type="text" name="height" value={form.height} onChange={handleChange} />
           &nbsp;cm
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>結婚に対する意思</p>
           <select
             name="marriage_intention_id"
@@ -474,23 +442,16 @@ export default function Profile() {
           >
             <option value="">選択してください</option>
             {marriage.map((m) => (
-              <option
-                key={m.marriage_intention_id}
-                value={m.marriage_intention_id}
-              >
+              <option key={m.marriage_intention_id} value={m.marriage_intention_id}>
                 {m.marriage_intention_name}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>休日</p>
-          <select
-            name="holiday_id"
-            value={form.holiday_id}
-            onChange={handleChange}
-          >
+          <select name="holiday_id" value={form.holiday_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {holiday.map((h) => (
               <option key={h.holiday_id} value={h.holiday_id}>
@@ -500,13 +461,9 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>お酒</p>
-          <select
-            name="alcohol_id"
-            value={form.alcohol_id}
-            onChange={handleChange}
-          >
+          <select name="alcohol_id" value={form.alcohol_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {alcohol.map((a) => (
               <option key={a.alcohol_id} value={a.alcohol_id}>
@@ -516,13 +473,9 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>タバコ</p>
-          <select
-            name="smoking_id"
-            value={form.smoking_id}
-            onChange={handleChange}
-          >
+          <select name="smoking_id" value={form.smoking_id} onChange={handleChange}>
             <option value="">選択してください</option>
             {smoking.map((s) => (
               <option key={s.smoking_id} value={s.smoking_id}>
@@ -532,7 +485,7 @@ export default function Profile() {
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>同居人</p>
           <select
             name="living_arrangement_id"
@@ -541,17 +494,14 @@ export default function Profile() {
           >
             <option value="">選択してください</option>
             {living.map((l) => (
-              <option
-                key={l.living_arrangement_id}
-                value={l.living_arrangement_id}
-              >
+              <option key={l.living_arrangement_id} value={l.living_arrangement_id}>
                 {l.living_arrangement_name}
               </option>
             ))}
           </select>
         </div>
 
-        <div className="profileInput">
+        <div className={styles.profileInput}>
           <p>出会うまでの希望</p>
           <select
             name="meeting_preference_id"
@@ -560,10 +510,7 @@ export default function Profile() {
           >
             <option value="">選択してください</option>
             {meeting.map((m) => (
-              <option
-                key={m.meeting_preference_id}
-                value={m.meeting_preference_id}
-              >
+              <option key={m.meeting_preference_id} value={m.meeting_preference_id}>
                 {m.meeting_preference_name}
               </option>
             ))}
@@ -571,11 +518,11 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className="buttonGroup">
-        <button onClick={handleSubmit} className="button">
+      <div className={styles.buttonGroup}>
+        <Button fullWidth size="lg" variant="secondary" onClick={handleSubmit}>
           登録
-        </button>
-        <ToMypageButton />
+        </Button>
+        <ToMyPageButton />
       </div>
       <PageFooter />
     </div>

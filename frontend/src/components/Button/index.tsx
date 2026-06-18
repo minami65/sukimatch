@@ -1,14 +1,23 @@
 import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
 import styles from './Button.module.css';
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'outline';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface BaseButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;
 }
+
+export type ButtonProps = BaseButtonProps &
+  (
+    | ({
+        to?: typeof undefined;
+      } & React.ButtonHTMLAttributes<HTMLButtonElement>)
+    | ({ to: string } & Omit<LinkProps, 'to'>)
+  );
 
 const Button = ({
   children,
@@ -16,7 +25,6 @@ const Button = ({
   size = 'md',
   fullWidth = false,
   className = '',
-  disabled,
   ...props
 }: ButtonProps) => {
   const buttonClass = [
@@ -29,8 +37,17 @@ const Button = ({
     .filter(Boolean)
     .join(' ');
 
+  if ('to' in props && props.to) {
+    const { to, ...linkProps } = props;
+    return (
+      <Link to={to} className={buttonClass} {...(linkProps as any)}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
-    <button className={buttonClass} disabled={disabled} {...props}>
+    <button className={buttonClass} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}>
       {children}
     </button>
   );
