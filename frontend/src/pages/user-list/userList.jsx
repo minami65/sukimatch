@@ -1,10 +1,11 @@
-import "./styles/userList.css";
+import styles from "./userList.module.css";
 import { useState, useEffect } from "react";
-import PageFooter from "./components/footer";
-import search from "./assets/search_logo.png";
+import PageFooter from "@/components/footer.jsx";
+import search from "@/assets/search_logo.png";
 import { Link } from "react-router-dom";
-import ReactSlider from "react-slider";
 import { API_BASE } from "@/config";
+import { Root, Track, Range, Thumb } from "@radix-ui/react-slider";
+import DoubleSlider from "@/components/DoubleSlider/index.js";
 
 import {
   PREFECTURES,
@@ -17,7 +18,8 @@ import {
   LIVING,
   MEETING,
   MARRIAGE,
-} from "./data/base.jsx";
+} from "../../data/base.jsx";
+import Button from "../../components/Button/index.js";
 
 function UserList() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -114,9 +116,7 @@ function UserList() {
       params.append("marriage_intention_id", marriage);
     }
 
-    const response = await fetch(
-      `${API_BASE}/users?${params.toString()}`,
-    );
+    const response = await fetch(`${API_BASE}/users?${params.toString()}`);
 
     const data = await response.json();
 
@@ -152,45 +152,42 @@ function UserList() {
     setFilteredUsers(otherUsers);
   };
 
+  const [value, setValue] = useState(0);
+
   return (
-    <div className="search_page">
+    <div className={styles.searchPage}>
       {/* ヘッダー */}
-      <div className="header">
+      <div className={styles.header}>
         <h2>さがす</h2>
       </div>
 
       {/* 虫眼鏡 */}
-      <div className="search_set" onClick={handleSearchToggle}>
-        <div className="search_icon">
+      <div className={styles.searchSet} onClick={handleSearchToggle}>
+        <div className={styles.searchIcon}>
           <img src={search} alt="search_logo" />
         </div>
       </div>
 
       {/* 検索条件 */}
       {isSearchOpen && (
-        <>
-          <div className="search_conditions">
+        <div className={styles.searchContainer}>
+          <div className={styles.searchConditions}>
             {/* 年齢 */}
-            <div className="condition_item">
+            <div className={`${styles.conditionItem} ${styles.slider_item}`}>
               <p>
                 年齢：{ageRange[0]}歳 〜 {ageRange[1]}歳
               </p>
 
-              <ReactSlider
-                className="slider"
-                thumbClassName="thumb"
-                trackClassName="track"
+              <DoubleSlider
                 value={ageRange}
-                onChange={setAgeRange}
+                onValueChange={setAgeRange}
                 min={18}
                 max={60}
-                pearling
-                minDistance={1}
               />
             </div>
 
             {/* 居住地 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>居住地</p>
 
               <select
@@ -206,7 +203,7 @@ function UserList() {
             </div>
 
             {/* 職種 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>職種</p>
 
               <select
@@ -224,7 +221,7 @@ function UserList() {
             </div>
 
             {/* 学歴 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>学歴</p>
 
               <select
@@ -242,7 +239,7 @@ function UserList() {
             </div>
 
             {/* 年収 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>年収</p>
 
               <select
@@ -260,26 +257,21 @@ function UserList() {
             </div>
 
             {/* 身長 */}
-            <div className="condition_item">
+            <div className={`${styles.conditionItem} ${styles.sliderItem}`}>
               <p>
                 身長：{heightRange[0]}cm 〜 {heightRange[1]}cm
               </p>
 
-              <ReactSlider
-                className="slider"
-                thumbClassName="thumb"
-                trackClassName="track"
+              <DoubleSlider
                 value={heightRange}
-                onChange={setHeightRange}
+                onValueChange={setHeightRange}
                 min={100}
                 max={200}
-                pearling
-                minDistance={1}
               />
             </div>
 
             {/* 休日 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>休日</p>
 
               <select
@@ -297,7 +289,7 @@ function UserList() {
             </div>
 
             {/* お酒 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>お酒</p>
 
               <select
@@ -315,7 +307,7 @@ function UserList() {
             </div>
 
             {/* タバコ */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>タバコ</p>
 
               <select
@@ -333,7 +325,7 @@ function UserList() {
             </div>
 
             {/* 暮らし */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>暮らし</p>
 
               <select
@@ -351,7 +343,7 @@ function UserList() {
             </div>
 
             {/* 結婚 */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>結婚について</p>
 
               <select
@@ -369,7 +361,7 @@ function UserList() {
             </div>
 
             {/* 会うまで */}
-            <div className="condition_item inline_select">
+            <div className={`${styles.conditionItem} ${styles.inlineSelect}`}>
               <p>会うまでの希望</p>
 
               <select
@@ -386,31 +378,45 @@ function UserList() {
               </select>
             </div>
           </div>
-          
 
           {/* ボタン */}
-          <div className="search_buttons">        
-            <button className="reset" onClick={handleReset}>
+          <div className={styles.searchButtons}>
+            <Button
+              variant="tertiary"
+              size="md"
+              fullWidth
+              className={styles.reset}
+              onClick={handleReset}
+            >
               リセット
-            </button>
+            </Button>
 
-            <button className="filter_search" onClick={handleFilterSearch}>
+            <Button
+              variant="primary"
+              size="md"
+              fullWidth
+              className={styles.filterSearch}
+              onClick={handleFilterSearch}
+            >
               この条件で検索🔍
-            </button>
+            </Button>
           </div>
-        </>
+        </div>
       )}
 
       {/* ユーザー一覧 */}
-      <div className="user_grid">
+      <div className={styles.userGrid}>
         {filteredUsers.length === 0 ? (
-          <p className="no_results">条件に一致するユーザーがいません</p>
+          <p className={styles.noResults}>条件に一致するユーザーがいません</p>
         ) : (
           filteredUsers.map((user) => {
             return (
-              <div key={user.user_id} className="user_card">
-                <div className="avatar">
-                  <Link to={`/userDetail/${user.user_id}`} className="link">
+              <div key={user.user_id} className={styles.userCard}>
+                <div className={styles.avatar}>
+                  <Link
+                    to={`/userDetail/${user.user_id}`}
+                    className={styles.link}
+                  >
                     <img
                       src={
                         user.images?.[0]
@@ -422,7 +428,7 @@ function UserList() {
                   </Link>
                 </div>
 
-                <p className="info">
+                <p className={styles.info}>
                   {user.age}歳 {user.current_location?.name ?? ""}
                 </p>
               </div>
