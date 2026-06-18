@@ -1,27 +1,27 @@
-const baseURL = "http://localhost:5173/api";
+const baseURL = 'http://localhost:5173/api';
 
 const loginUser = async (formData) => {
-  const response = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email: formData.email,
       password: formData.password,
     }),
-    credentials: "include",
+    credentials: 'include',
   });
 
   if (!response.ok) {
-    throw new Error("Login failed");
+    throw new Error('Login failed');
   }
 
   return await response.json();
 };
 
 const createUser = async (formData) => {
-  const response = await fetch("/api/auth/logon", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('/api/auth/logon', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email: formData.email,
       password: formData.password,
@@ -36,9 +36,9 @@ const createUser = async (formData) => {
 };
 
 const updateUser = async (formData, id) => {
-  const response = await fetch("/api/auth/update", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('/api/auth/update', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       id,
       nickName: formData.nickName,
@@ -57,7 +57,7 @@ const updateUser = async (formData, id) => {
 
 const signIn = async ({ email, password }) => {
   try {
-    const response = await fetch(baseURL + "/users");
+    const response = await fetch(baseURL + '/users');
     const data = await response.json();
     const user = data.filter(
       (element) => element.email === email && element.password === password,
@@ -65,7 +65,7 @@ const signIn = async ({ email, password }) => {
     if (user.length === 1) {
       return user[0].id;
     } else {
-      throw new Error("Not Found is User");
+      throw new Error('Not Found is User');
     }
   } catch (error) {
     console.error(error);
@@ -75,10 +75,10 @@ const signIn = async ({ email, password }) => {
 
 const signOn = async ({ email, password }) => {
   try {
-    await fetch(baseURL + "/users", {
-      method: "POST",
+    await fetch(baseURL + '/users', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         email,
@@ -93,9 +93,9 @@ const signOn = async ({ email, password }) => {
 const update = async ({ id, nickName, email, password, age }) => {
   try {
     await fetch(baseURL + `/users/${id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         id,
@@ -119,11 +119,11 @@ const getUserInfo = async (id) => {
 
 const findUserByEmail = async (email) => {
   try {
-    const response = await fetch(baseURL + "/users?email=" + email);
+    const response = await fetch(baseURL + '/users?email=' + email);
     const user = await response.json();
 
     if (!response.ok || !user[0].email) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     return user[0];

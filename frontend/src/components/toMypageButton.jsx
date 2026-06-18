@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import "./styles/toMypageButton.css";
+import { Link } from 'react-router-dom';
+import './styles/toMypageButton.css';
 
 export default function ToMypageButton() {
   return (

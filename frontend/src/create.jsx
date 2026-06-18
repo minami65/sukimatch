@@ -1,42 +1,42 @@
-import "./styles/create.css";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Airplane from "./components/airplane";
+import './styles/create.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Airplane from './components/airplane';
 
 function Create() {
   const navigate = useNavigate();
 
   // state
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState('');
 
-  const [year, setYear] = useState("");
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [day, setDay] = useState('');
 
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState('');
 
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState('');
 
-  const [email, setEmail] = useState("");
-  const [emailConfirmation, setEmailConfirmation] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [email, setEmail] = useState('');
+  const [emailConfirmation, setEmailConfirmation] = useState('');
+  const [emailError, setEmailError] = useState('');
 
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
   // 登録処理
   const handleRegister = async () => {
-    setEmailError("");
+    setEmailError('');
 
     // メール確認
     if (email !== emailConfirmation) {
-      setEmailError("メールアドレスが一致しません");
+      setEmailError('メールアドレスが一致しません');
       return;
     }
 
     // パスワード確認
     if (password !== passwordConfirmation) {
-      alert("パスワードが一致しません");
+      alert('パスワードが一致しません');
       return;
     }
 
@@ -48,24 +48,24 @@ function Create() {
 
       birthday: `${year}-${String(month).padStart(
         2,
-        "0",
-      )}-${String(day).padStart(2, "0")}`,
+        '0',
+      )}-${String(day).padStart(2, '0')}`,
 
       mail_address: email,
 
       password: password,
 
-      bio: "",
+      bio: '',
 
       gender_id: Number(gender),
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/user", {
-        method: "POST",
+      const response = await fetch('http://127.0.0.1:8000/user', {
+        method: 'POST',
 
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
 
         body: JSON.stringify(newUser),
@@ -74,22 +74,22 @@ function Create() {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        const message = data?.detail ?? "登録失敗";
+        const message = data?.detail ?? '登録失敗';
         setEmailError(message);
         return;
       }
 
       console.log(data);
       if (data?.user_id) {
-        localStorage.setItem("loginUserId", String(data.user_id));
+        localStorage.setItem('loginUserId', String(data.user_id));
       }
 
       // 支払い画面へ
-      navigate("/pay");
+      navigate('/pay');
     } catch (error) {
       console.error(error);
 
-      alert("登録失敗");
+      alert('登録失敗');
     }
   };
 
@@ -183,7 +183,7 @@ function Create() {
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setEmailError("");
+                  setEmailError('');
                 }}
                 required
               />
@@ -197,7 +197,7 @@ function Create() {
                 value={emailConfirmation}
                 onChange={(e) => {
                   setEmailConfirmation(e.target.value);
-                  setEmailError("");
+                  setEmailError('');
                 }}
                 required
               />

@@ -1,5 +1,5 @@
-import PageFooter from "./components/footer";
-import ToMypageButton from "./components/toMypageButton";
+import PageFooter from './components/footer';
+import ToMypageButton from './components/toMypageButton';
 
 export default function Setting() {
   return (

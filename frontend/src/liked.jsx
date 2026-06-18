@@ -1,26 +1,26 @@
-import PageFooter from "./components/footer";
-import "./styles/liked.css";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import ToMypageButton from "./components/toMypageButton";
+import PageFooter from './components/footer';
+import './styles/liked.css';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ToMypageButton from './components/toMypageButton';
 
 export default function Liked() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [images, setImages] = useState([]);
   const [locations, setLocations] = useState([]);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // いいね履歴取得
   useEffect(() => {
     const fetchLikedProfiles = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
         const likedResponse = await fetch(
-          "http://127.0.0.1:8000/users/me/likes",
+          'http://127.0.0.1:8000/users/me/likes',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ export default function Liked() {
     const fetchUserImages = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
         const imageData = await Promise.all(
@@ -75,7 +75,7 @@ export default function Liked() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const locationResponse = await fetch("http://127.0.0.1:8000/locations");
+        const locationResponse = await fetch('http://127.0.0.1:8000/locations');
         const locationData = await locationResponse.json();
         setLocations(locationData);
       } catch (error) {
@@ -111,7 +111,7 @@ export default function Liked() {
                     })}
                   <div className="likedUserInfo">
                     <p>{p.age}歳</p>
-                    <p>{location ? location.name : "未選択"}</p>
+                    <p>{location ? location.name : '未選択'}</p>
                   </div>
                 </div>
               );

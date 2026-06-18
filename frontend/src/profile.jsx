@@ -1,30 +1,30 @@
-import PageFooter from "./components/footer";
-import "./styles/profile.css";
-import "./assets/default-profile.png";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import ToMypageButton from "./components/toMypageButton";
+import PageFooter from './components/footer';
+import './styles/profile.css';
+import './assets/default-profile.png';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import ToMypageButton from './components/toMypageButton';
 
 export default function Profile() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   const [form, setForm] = useState({
-    birth_location_id: "",
-    current_location_id: "",
-    education_id: "",
-    job_id: "",
-    income_id: "",
-    height: "",
-    marriage_intention_id: "",
-    holiday_id: "",
-    alcohol_id: "",
-    smoking_id: "",
-    living_arrangement_id: "",
-    meeting_preference_id: "",
+    birth_location_id: '',
+    current_location_id: '',
+    education_id: '',
+    job_id: '',
+    income_id: '',
+    height: '',
+    marriage_intention_id: '',
+    holiday_id: '',
+    alcohol_id: '',
+    smoking_id: '',
+    living_arrangement_id: '',
+    meeting_preference_id: '',
   });
 
   const [locations, setLocations] = useState([]);
@@ -44,11 +44,11 @@ export default function Profile() {
     const fetchUserInfo = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
 
-        const userInfo = await fetch("http://127.0.0.1:8000/user/me", {
+        const userInfo = await fetch('http://127.0.0.1:8000/user/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -67,7 +67,7 @@ export default function Profile() {
     const fetchUserImage = async () => {
       try {
         if (!token) {
-          navigate("/");
+          navigate('/');
           return;
         }
         const userImage = await fetch(
@@ -92,11 +92,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/locations");
+        const res = await fetch('http://127.0.0.1:8000/locations');
         const data = await res.json();
         setLocations(data);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
 
@@ -108,12 +108,12 @@ export default function Profile() {
     const fetchEducations = async () => {
       try {
         const educationResponse = await fetch(
-          "http://127.0.0.1:8000/education",
+          'http://127.0.0.1:8000/education',
         );
         const educationData = await educationResponse.json();
         setEducation(educationData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchEducations();
@@ -123,11 +123,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const jobResponse = await fetch("http://127.0.0.1:8000/job");
+        const jobResponse = await fetch('http://127.0.0.1:8000/job');
         const jobData = await jobResponse.json();
         setJob(jobData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchJob();
@@ -137,11 +137,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchIncome = async () => {
       try {
-        const incomeResponse = await fetch("http://127.0.0.1:8000/income");
+        const incomeResponse = await fetch('http://127.0.0.1:8000/income');
         const incomeData = await incomeResponse.json();
         setIncome(incomeData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchIncome();
@@ -151,11 +151,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchMarriage = async () => {
       try {
-        const marriageResponse = await fetch("http://127.0.0.1:8000/marriage");
+        const marriageResponse = await fetch('http://127.0.0.1:8000/marriage');
         const marriageData = await marriageResponse.json();
         setMarriage(marriageData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchMarriage();
@@ -164,11 +164,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchHoliday = async () => {
       try {
-        const holidayResponse = await fetch("http://127.0.0.1:8000/holiday");
+        const holidayResponse = await fetch('http://127.0.0.1:8000/holiday');
         const holidayData = await holidayResponse.json();
         setHoliday(holidayData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchHoliday();
@@ -178,11 +178,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchAlcohol = async () => {
       try {
-        const alcoholResponse = await fetch("http://127.0.0.1:8000/alcohol");
+        const alcoholResponse = await fetch('http://127.0.0.1:8000/alcohol');
         const alcoholData = await alcoholResponse.json();
         setAlcohol(alcoholData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchAlcohol();
@@ -192,11 +192,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchSmoking = async () => {
       try {
-        const smokingResponse = await fetch("http://127.0.0.1:8000/smoking");
+        const smokingResponse = await fetch('http://127.0.0.1:8000/smoking');
         const smokingData = await smokingResponse.json();
         setSmoking(smokingData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchSmoking();
@@ -206,11 +206,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchLiving = async () => {
       try {
-        const livingResponse = await fetch("http://127.0.0.1:8000/living");
+        const livingResponse = await fetch('http://127.0.0.1:8000/living');
         const livingData = await livingResponse.json();
         setLiving(livingData);
       } catch (error) {
-        console.error("エラー", error);
+        console.error('エラー', error);
       }
     };
     fetchLiving();
@@ -219,11 +219,11 @@ export default function Profile() {
   useEffect(() => {
     const fetchMeeting = async () => {
       try {
-        const meetingResponse = await fetch("http://127.0.0.1:8000/meeting");
+        const meetingResponse = await fetch('http://127.0.0.1:8000/meeting');
         const meetingData = await meetingResponse.json();
         setMeeting(meetingData);
       } catch (error) {
-        console.error("エラー:", error);
+        console.error('エラー:', error);
       }
     };
     fetchMeeting();
@@ -265,12 +265,12 @@ export default function Profile() {
 
       return remaining;
     });
-    console.log("setImages", images);
+    console.log('setImages', images);
   };
   // 登録
   const handleSubmit = async () => {
     if (!token) {
-      navigate("/");
+      navigate('/');
       return;
     }
 
@@ -289,21 +289,21 @@ export default function Profile() {
         if (!image.file) continue;
 
         const formData = new FormData();
-        formData.append("file", image.file);
+        formData.append('file', image.file);
 
-        await axios.post("http://127.0.0.1:8000/users/me/images", formData, {
+        await axios.post('http://127.0.0.1:8000/users/me/images', formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
       }
 
-      await axios.put("http://127.0.0.1:8000/users/me", form, {
+      await axios.put('http://127.0.0.1:8000/users/me', form, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      navigate("/mypage");
+      navigate('/mypage');
     } catch (error) {
       console.error(error);
     }
@@ -342,7 +342,7 @@ export default function Profile() {
         <div className="subImages">
           {images.length > 1 &&
             images.slice(1).map((m) => (
-              <div key={m.id || m.tempId} style={{ position: "relative" }}>
+              <div key={m.id || m.tempId} style={{ position: 'relative' }}>
                 <button
                   type="button"
                   className="deleteButton"
@@ -369,7 +369,7 @@ export default function Profile() {
         <input
           type="text"
           name="bio"
-          value={form.bio || ""}
+          value={form.bio || ''}
           onChange={handleChange}
         />
       </div>
