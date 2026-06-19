@@ -12,7 +12,6 @@ import {
   PREFECTURES,
   JOB,
   EDUCATION,
-  BODY_TYPE,
   INCOME,
   HOLIDAY,
   ALCOHOL,
