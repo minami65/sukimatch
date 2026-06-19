@@ -1,5 +1,5 @@
-import { Root, Track, Range, Thumb } from "@radix-ui/react-slider";
-import styles from "./DoubleSlider.module.css";
+import { Root, Track, Range, Thumb } from '@radix-ui/react-slider';
+import styles from './DoubleSlider.module.css';
 
 interface DoubleSliderProps {
   value: [number, number] | number[];
@@ -9,13 +9,7 @@ interface DoubleSliderProps {
   step?: number;
 }
 
-const DoubleSlider = ({
-  value,
-  onValueChange,
-  min,
-  max,
-  step = 1,
-}: DoubleSliderProps) => {
+const DoubleSlider = ({ value, onValueChange, min, max, step = 1 }: DoubleSliderProps) => {
   return (
     <Root
       className={styles.slider}

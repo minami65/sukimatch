@@ -12,15 +12,11 @@ export default function Likes({ footprintId, disabled }) {
       return;
     }
     try {
-      await axios.post(
-        `http://127.0.0.1:8000/users/${footprintId}/like`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await axios.post(`http://127.0.0.1:8000/users/${footprintId}/like`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       console.log(`userId${footprintId}にいいねしました`);
     } catch (error) {
       console.error(error);

@@ -1,15 +1,15 @@
-import PageFooter from "./components/footer";
-import "./styles/talkList.css";
-import { useEffect, useState } from "react";
+import PageFooter from './components/footer';
+import './styles/talkList.css';
+import { useEffect, useState } from 'react';
 
 export default function TalkList() {
   const talks = [
-    { name: "テスト", message: "こんにちは。", time: "17:00", unread: true },
-    { name: "テスト", message: "ど〜も〜", time: "昨日" },
-    { name: "テスト", message: "送信済み", time: "2026/6/1" },
+    { name: 'テスト', message: 'こんにちは。', time: '17:00', unread: true },
+    { name: 'テスト', message: 'ど〜も〜', time: '昨日' },
+    { name: 'テスト', message: '送信済み', time: '2026/6/1' },
   ];
   const [mainImages, setImages] = useState(null);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   // プロフィール画像取得
   useEffect(() => {
