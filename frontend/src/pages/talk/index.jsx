@@ -1,8 +1,8 @@
-import PageFooter from "./components/footer";
-import "./styles/talk.css";
-import sendButton from "./assets/send-button.png";
-import picture from "./assets/picture.png";
-import { Link } from "react-router-dom";
+import PageFooter from '../../components/footer';
+import styles from '../talk/talk.module.css';
+import sendButton from '../../assets/send-button.png';
+import picture from '../../assets/picture.png';
+import { Link } from 'react-router-dom';
 
 export default function Talk() {
   const messages = [
@@ -25,42 +25,42 @@ export default function Talk() {
   ];
 
   return (
-    <div className="talkPage">
-      <header className="talkHeader">
+    <div className={styles.talkPage}>
+      <header className={styles.talkHeader}>
         <Link to="/talkList">
-          <button className="backButton">&lt;</button>
+          <button className={styles.backButton}>&lt;</button>
         </Link>
-        <div className="talkTitle">Y</div>
+        <div className={styles.talkTitle}>Y</div>
       </header>
 
-      <main className="talkBody">
-        <div className="heartBg">♡ ♡ ♡ ♡ ♡</div>
+      <main className={styles.talkBody}>
+        <div className={styles.heartBg}>♡ ♡ ♡ ♡ ♡</div>
 
         {messages.map((group, groupIndex) => (
           <div key={groupIndex}>
-            <div className="dateDivider">
+            <div className={styles.dateDivider}>
               <span>{group.date}</span>
             </div>
 
             {group.items.map((message, index) => (
-              <div key={index} className={`messageRow ${message.type}`}>
+              <div key={index} className={`${styles.messageRow} ${styles[message.type]}`}>
                 {message.type === 'other' && (
-                  <div className="avatar">
+                  <div className={styles.avatar}>
                     <span>👤</span>
                   </div>
                 )}
 
                 <div className="messageContent">
-                  <div className="bubbleList">
+                  <div className={styles.bubbleList}>
                     {message.bubbles.map((size, bubbleIndex) => (
                       <div
                         key={bubbleIndex}
-                        className={`messageBubble ${message.type}Bubble ${size}`}
+                        className={`${styles.messageBubble} ${styles[`${message.type}Bubble`]} ${styles[size]}`}
                       />
                     ))}
                   </div>
 
-                  <span className="messageTime">{message.time}</span>
+                  <span className={styles.messageTime}>{message.time}</span>
                 </div>
               </div>
             ))}
@@ -68,18 +68,18 @@ export default function Talk() {
         ))}
       </main>
 
-      <div className="messageInputArea">
-        <button className="imageSendButton">
+      <div className={styles.messageInputArea}>
+        <button className={styles.imageSendButton}>
           <img src={picture} alt="" />
         </button>
 
         <input placeholder="メッセージを入力" />
 
-        <button className="sendButton">
+        <button className={styles.sendButton}>
           <img src={sendButton} alt="送信ボタン" />
         </button>
       </div>
-      <div className="pageFooter">
+      <div className={styles.pageFooter}>
         <PageFooter />
       </div>
     </div>

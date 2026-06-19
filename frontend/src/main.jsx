@@ -15,7 +15,7 @@ import MyPage from '@/pages/my-page/index.jsx';
 import Profile from '@/pages/profile/index.jsx';
 import Setting from '@/pages/setting/index.tsx';
 import UserList from '@/pages/user-list/index.jsx';
-import Talk from './talk.jsx';
+import Talk from './pages/talk/index.jsx';
 import TalkList from './talkList.jsx';
 
 createRoot(document.getElementById('root')).render(
