@@ -1,6 +1,6 @@
 .talkPage {
   min-height: 100vh;
-  background: #f7f1e3;
+  background: var(--color-bg-base);
   position: relative;
   padding-bottom: 105px;
   overflow: hidden;
@@ -21,7 +21,7 @@
   bottom: 18px;
   border: none;
   background: transparent;
-  color: #23325c;
+  color: var(--color-secondary);
   font-size: 30px;
   font-weight: 300;
 }
@@ -47,8 +47,8 @@
 .dateDivider span {
   width: 150px;
   height: 30px;
-  background: #eeeeee;
-  color: #666;
+  background: var(--color-neutral-light);
+  color: var(--color-text-sub);
   font-size: 15px;
   display: flex;
   align-items: center;
@@ -71,13 +71,13 @@
 .avatar {
   width: 70px;
   height: 70px;
-  border: 1.5px solid #27335c;
+  border: 1.5px solid var(--color-secondary);
   border-radius: 50%;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #27335c;
+  color: var(--color-secondary);
   flex-shrink: 0;
   margin-right: 10px;
   margin-left: -15px;
@@ -112,7 +112,7 @@
 }
 
 .meBubble {
-  background: #aee7db;
+  background: var(--color-primary);
 }
 
 .messageBubble.large {
@@ -136,12 +136,12 @@
 
 .messageTime {
   font-size: 15px;
-  color: #666;
+  color: var(--color-text-sub);
   margin-top: 8px;
 }
 
 .messageRow.me .messageTime {
-  color: #91e4d8;
+  color: var(--color-primary);
   margin-right: 18px;
 }
 
@@ -156,7 +156,7 @@
   bottom: 100px;
   font-size: 130px;
   line-height: 0.8;
-  color: rgba(220, 216, 203, 0.35);
+  color: var(--color-bg-base);
   z-index: -1;
   letter-spacing: 8px;
   transform: rotate(-8deg);
@@ -187,7 +187,7 @@
   height: 54px;
   border: none;
   border-radius: 10px;
-  background: #ddd8cc;
+  background: var(--color-bg-base);
   padding: 0 24px;
   font-size: 16px;
   outline: none;

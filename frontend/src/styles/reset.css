@@ -1,0 +1,57 @@
+/* 1. すべての要素のサイズ計算を直感的にする (超重要) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. ブラウザ固有の邪魔な外枠・内枠の余白をゼロにする */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. bodyの基本設定（文字を滑らかに、行間を適切に） */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 4. 画像などのメディア要素が親要素からはみ出さないようにする */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 5. フォーム要素（ボタンや入力欄）のブラウザ特有の変なデザインを初期化 */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* 6. ボタンをデフォルトでポインター（指マーク）にする */
+button {
+  cursor: pointer;
+}
+
+/* 7. リストの「・」を消す */
+ol,
+ul {
+  list-style: none;
+}
+
+/* 8. リンクの下線と青文字をリセットし、テキストとして扱えるようにする */
+a {
+  text-decoration: none;
+  color: inherit;
+}

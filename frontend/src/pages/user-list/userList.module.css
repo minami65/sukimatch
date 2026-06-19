@@ -6,13 +6,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 16px 0 16px;
+  padding: 16px;
   font-size: 18px;
 }
 
 .search_icon {
-  border-top: 1px solid rgb(207, 207, 207);
-  border-bottom: 1px solid rgb(207, 207, 207);
+  border-top: 1px solid var(--color-neutral);
+  border-bottom: 1px solid var(--color-neutral);
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -47,7 +47,7 @@
   border-radius: 50%;
   border: 2px solid #333;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--color-bg-surface);
 }
 
 .avatar a {
@@ -67,16 +67,20 @@
   font-size: 14px;
 }
 
+.searchContainer {
+  padding: 40px;
+}
+
 .search_conditions {
-  padding: 5px 20px;
-  margin: 16px;
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .search_conditions select {
   border-radius: 10px;
-  margin-left: 20px;
-  background-color: #dedbd0;
+  background-color: var(--color-neutral);
   height: 25px;
   font-size: 16px;
 }
@@ -86,14 +90,15 @@
 }
 
 .search_buttons {
-  height: 80px;
-  text-align: center;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
 }
 
 .reset,
 .filter_search {
   border-radius: 15px;
-  padding: 10px;
   font-size: 16px;
   cursor: pointer;
   text-align: center;
@@ -101,50 +106,18 @@
 }
 
 .reset {
-  background-color: rgba(171, 232, 219, 0.5);
-  margin-right: 20px;
+  background-color: var(--color-primary);
 }
 
 .filter_search {
   white-space: nowrap;
-  background-color: #abe8db;
-}
-
-.slider {
-  width: 100%;
-  height: 30px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  position: relative;
-}
-
-.track {
-  top: 12px;
-  height: 6px;
-  background: #ddd;
-  border-radius: 999px;
-}
-
-.track.track-1 {
-  background: #9fe8dc;
-}
-
-.thumb {
-  width: 22px;
-  height: 22px;
-  background: white;
-  border: 2px solid #9fe8dc;
-  border-radius: 50%;
-  cursor: pointer;
-  position: absolute;
-  top: 4px;
+  background-color: var(--color-primary);
 }
 
 .inline_select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
 }
 
 .inline_select p {
@@ -155,9 +128,14 @@
   width: 180px;
 }
 
+.slider_item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .no_results {
   text-align: center;
-  /* background-color: #fff; */
   border-radius: 5px;
   width: 100%;
 }

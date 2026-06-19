@@ -1,5 +1,5 @@
-import "../styles/confirmPassword.css";
-import airplane from "../assets/image1.png";
+import '../styles/confirmPassword.css';
+import airplane from '../assets/image1.png';
 
 function ConfirmPassword() {
   return (

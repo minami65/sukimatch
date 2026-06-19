@@ -6,6 +6,7 @@ import likedIcon from "./assets/liked.png";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { API_BASE } from "./config.js";
 
 import {
   PREFECTURES,
@@ -21,8 +22,6 @@ import {
   MEETING,
 } from "./data/base.jsx";
 
-const API_URL = "http://localhost:8000";
-
 function UserDetails() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
@@ -36,19 +35,19 @@ function UserDetails() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const userRes = await fetch(`${API_URL}/users/${id}`);
+        const userRes = await fetch(`${API_BASE}/users/${id}`);
         if (!userRes.ok) {
           throw new Error("User not found");
         }
         const userData = await userRes.json();
         setUser(userData);
 
-        const imagesRes = await fetch(`${API_URL}/users/${id}/images`);
+        const imagesRes = await fetch(`${API_BASE}/users/${id}/images`);
         if (imagesRes.ok) {
           const imagesData = await imagesRes.json();
           const sortedImages = imagesData
             .sort((a, b) => a.sort_order - b.sort_order)
-            .map((img) => `${API_URL}${img.image_url}`);
+            .map((img) => `${API_BASE}${img.image_url}`);
           setImages(sortedImages);
         }
       } catch (err) {
@@ -95,7 +94,7 @@ function UserDetails() {
         >
           ›
         </div>
-        <Link to={`/userList`} className="link">
+        <Link to={"/userList"} className="link">
           <img src={close} className="close" alt="close" />
         </Link>
       </div>

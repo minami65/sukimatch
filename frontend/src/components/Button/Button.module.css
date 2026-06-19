@@ -1,0 +1,92 @@
+.custom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  outline: none;
+  width: max-content;
+  box-sizing: border-box;
+  align-self: center;
+  height: auto !important;
+  white-space: nowrap;
+}
+
+.custom-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.custom-btn:hover:not(:disabled) {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.custom-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================
+    サイズ (Size)
+    ============================ */
+.custom-btn-sm {
+  padding: 6px 12px;
+  font-size: 16px;
+}
+.custom-btn-md {
+  padding: 10px 24px;
+  font-size: 18px;
+}
+.custom-btn-lg {
+  padding: 14px 32px;
+  font-size: 24px;
+}
+.custom-btn-full {
+  width: 100%;
+}
+
+/* ============================
+    種類 (Variant)
+    ============================ */
+/* 1. Primary */
+.custom-btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+.custom-btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-light);
+}
+
+/* 2. Secondary */
+.custom-btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-bg-base);
+}
+.custom-btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-light);
+}
+
+/* 3. Tertiary */
+.custom-btn-tertiary {
+  background-color: var(--color-primary-light);
+  color: var(--color-secondary);
+}
+.custom-btn-tertiary:hover:not(:disabled) {
+  background-color: var(--color-primary);
+}
+
+/* 4. Outline */
+.custom-btn-outline {
+  background-color: var(--color-bg-base);
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.custom-btn-outline:hover:not(:disabled) {
+  box-shadow: 0 0 0 1px var(--color-secondary);
+}

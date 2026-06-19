@@ -3,7 +3,7 @@
   align-items: center;
   gap: 20px;
   padding: 30px 55px 20px 55px;
-  border-bottom: #abe8db solid 2px;
+  border-bottom: var(--color-primary) solid 2px;
 }
 
 .profile img {

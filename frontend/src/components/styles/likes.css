@@ -4,7 +4,7 @@
   width: 80px;
   height: 80px;
   position: relative;
-  background-color: #abe8db;
+  background-color: var(--color-primary);
 }
 .like-button {
   width: 25px;
@@ -12,7 +12,7 @@
   position: absolute;
   top: 10px;
   left: 25px;
-  background-color: #abe8db;
+  background-color: var(--color-primary);
 }
 .like p {
   font-size: 10px;
@@ -20,7 +20,7 @@
   position: absolute;
   top: 55px;
   left: 23px;
-  background-color: #abe8db;
+  background-color: var(--color-primary);
 }
 .disabled {
   opacity: 0.4;
