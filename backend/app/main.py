@@ -15,6 +15,10 @@ from app.models.meeting_preference import Meeting
 from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
+from app.models.chats import Chats
+from app.models.chat_participants import ChatParticipants
+from app.models.message import Message
+from app.models.files import Files
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

@@ -25,7 +25,7 @@ function MatchComplete() {
       </div>
       {/* ボタン */}
       <div className="buttons">
-        <Link to="/talk" className="talk_button">
+        <Link to="/talkList" className="talk_button">
           さっそくトークをはじめる！
         </Link>
         <Link to="/userList" className="close_button">

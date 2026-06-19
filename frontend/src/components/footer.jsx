@@ -22,6 +22,9 @@ function PageFooter() {
       </div>
       <div className="img_talk">
         <Link to="/talkList" className="link">
+          {" "}
+          {/* {talk.unread && <span className="unreadFooterDot" />} */}
+          <span className="unreadFooterDot" />
           <img src={talk} className="talk" alt="logo" />
           トーク
         </Link>

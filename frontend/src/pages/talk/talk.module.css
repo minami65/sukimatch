@@ -171,8 +171,8 @@
   padding: 0 32px;
   display: flex;
   align-items: center;
-  gap: 12px;
   z-index: 10;
+  background-color: var(--color-bg-base);
 }
 .pageFooter {
   position: fixed;
@@ -185,12 +185,13 @@
 .messageInputArea input {
   flex: 1;
   height: 54px;
-  border: none;
+  border-color: var(--color-secondary);
   border-radius: 10px;
   background: var(--color-bg-base);
   padding: 0 24px;
   font-size: 16px;
   outline: none;
+  margin: 15px 25px 15px 20px;
 }
 
 .imageSendButton,
@@ -201,8 +202,8 @@
 }
 
 .imageSendButton img {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
 }
 
 .sendButton img {

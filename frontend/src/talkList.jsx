@@ -1,6 +1,7 @@
 import PageFooter from "./components/footer";
 import "./styles/talkList.css";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function TalkList() {
   const talks = [
@@ -31,32 +32,33 @@ export default function TalkList() {
         <h1>トーク</h1>
       </header>
 
-      <main className="talkListBody">
-        {talks.map((talk, index) => (
-          <div className="talkItem" key={index}>
-            <div className="talkAvatar">
-              {mainImages && (
-                <img
-                  src={`http://127.0.0.1:8000${mainImages.image_url}`}
-                  alt="プロフィール画像"
-                  className="profileImage"
-                />
-              )}
-            </div>
+      <Link to="/talk" className="toChat">
+        <main className="talkListBody">
+          {talks.map((talk, index) => (
+            <div className="talkItem" key={index}>
+              <div className="talkAvatar">
+                {mainImages && (
+                  <img
+                    src={`http://127.0.0.1:8000${mainImages.image_url}`}
+                    alt="プロフィール画像"
+                    className="profileImage"
+                  />
+                )}
+              </div>
 
-            <div className="talkInfo">
-              <p className="talkName">{talk.name}</p>
-              <p className="talkMessage">{talk.message}</p>
-            </div>
+              <div className="talkInfo">
+                <p className="talkName">{talk.name}</p>
+                <p className="talkMessage">{talk.message}</p>
+              </div>
 
-            <div className="talkMeta">
-              {talk.unread && <span className="unreadDot" />}
-              <span className="talkTime">{talk.time}</span>
+              <div className="talkMeta">
+                {talk.unread && <span className="unreadDot" />}
+                <span className="talkTime">{talk.time}</span>
+              </div>
             </div>
-          </div>
-        ))}
-      </main>
-
+          ))}
+        </main>
+      </Link>
       <PageFooter />
     </div>
   );
