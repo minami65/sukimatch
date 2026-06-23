@@ -1,6 +1,5 @@
 import picture from './assets/picture.png';
 import sendButton from './assets/send-button.png';
-import PageFooter from './components/footer';
 import './styles/talk.css';
 
 export default function Talk() {
@@ -75,9 +74,6 @@ export default function Talk() {
         <button className="sendButton">
           <img src={sendButton} alt="送信ボタン" />
         </button>
-      </div>
-      <div className="pageFooter">
-        <PageFooter />
       </div>
     </div>
   );

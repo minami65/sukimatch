@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import PageFooter from './components/footer';
 import './styles/talkList.css';
 
 export default function TalkList() {
@@ -57,8 +56,6 @@ export default function TalkList() {
           </div>
         ))}
       </main>
-
-      <PageFooter />
     </div>
   );
 }

@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/Button';
-import PageFooter from '@/components/footer';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 import '@/assets/default-profile.png';
@@ -307,7 +305,7 @@ export default function Profile() {
     }
   };
   return (
-    <div>
+    <>
       <div className={styles.imageSection}>
         {/* メイン画像 */}
         <div className={styles.mainProfileImage}>
@@ -528,7 +526,6 @@ export default function Profile() {
         </Button>
         <ToMyPageButton />
       </div>
-      <PageFooter />
-    </div>
+    </>
   );
 }

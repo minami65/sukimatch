@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import PageFooter from '@/components/footer';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 import styles from './liked.module.css';
@@ -118,7 +117,6 @@ export default function Liked() {
         )}
         <ToMyPageButton />
       </div>
-      <PageFooter />
     </>
   );
 }
