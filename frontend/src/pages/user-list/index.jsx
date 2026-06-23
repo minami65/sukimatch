@@ -1,24 +1,27 @@
-import styles from './userList.module.css';
-import { useState, useEffect } from 'react';
-import PageFooter from '@/components/footer.jsx';
-import search from '@/assets/search_logo.png';
-import { Link } from 'react-router-dom';
-import { API_BASE } from '@/config';
-import DoubleSlider from '@/components/DoubleSlider/index.js';
-import Button from '../../components/Button/index.js';
+import { useEffect, useState } from 'react';
 
+import { Link } from 'react-router-dom';
+
+import DoubleSlider from '@/components/DoubleSlider/index.js';
+import PageFooter from '@/components/footer.jsx';
+
+import search from '@/assets/search_logo.png';
+import { API_BASE } from '@/config';
+
+import Button from '../../components/Button/index.js';
 import {
-  PREFECTURES,
-  JOB,
-  EDUCATION,
-  INCOME,
-  HOLIDAY,
   ALCOHOL,
-  SMOKING,
+  EDUCATION,
+  HOLIDAY,
+  INCOME,
+  JOB,
   LIVING,
-  MEETING,
   MARRIAGE,
+  MEETING,
+  PREFECTURES,
+  SMOKING,
 } from '../../data/base.jsx';
+import styles from './userList.module.css';
 
 function UserList() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);

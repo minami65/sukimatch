@@ -1,6 +1,7 @@
-import './styles/likes.css';
-import like from '../assets/likes-button.png';
 import axios from 'axios';
+
+import like from '../assets/likes-button.png';
+import './styles/likes.css';
 
 export default function Likes({ footprintId, disabled }) {
   console.log('footprintId:', footprintId);

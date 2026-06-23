@@ -1,7 +1,9 @@
-import './styles/create.css';
 import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+
 import Airplane from './components/airplane';
+import './styles/create.css';
 
 function Create() {
   const navigate = useNavigate();

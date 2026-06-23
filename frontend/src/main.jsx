@@ -1,21 +1,24 @@
 import React from 'react';
+
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './login.jsx';
-import Form from './form.jsx';
-import Create from './create.jsx';
-import Pay from './pay.jsx';
-import Welcome from './welcome.jsx';
-import UserDetails from './userDetails.jsx';
-import MatchComplete from './match.jsx';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import FootPrint from '@/pages/footprint/index.jsx';
 import Liked from '@/pages/liked/index.jsx';
 import MyPage from '@/pages/my-page/index.jsx';
 import Profile from '@/pages/profile/index.jsx';
 import Setting from '@/pages/setting/index.tsx';
 import UserList from '@/pages/user-list/index.jsx';
+
+import Create from './create.jsx';
+import Form from './form.jsx';
+import Login from './login.jsx';
+import MatchComplete from './match.jsx';
+import Pay from './pay.jsx';
 import Talk from './talk.jsx';
 import TalkList from './talkList.jsx';
+import UserDetails from './userDetails.jsx';
+import Welcome from './welcome.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>

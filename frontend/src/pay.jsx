@@ -1,6 +1,7 @@
-import './styles/pay.css';
-import Airplane from './components/airplane';
 import { Link } from 'react-router-dom';
+
+import Airplane from './components/airplane';
+import './styles/pay.css';
 
 function Pay() {
   return (

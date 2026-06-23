@@ -1,10 +1,10 @@
-import './styles/index.css';
 // import { useState } from "react";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "./assets/vite.svg";
-
 // import ConfirmPassword from "./components/confirmPassword.jsx";
 import Form from './form';
+import './styles/index.css';
+
 // import Pay from "./components/pay.jsx";
 // import PageFooter from "./components/footer";
 // import Create from "./create.jsx";

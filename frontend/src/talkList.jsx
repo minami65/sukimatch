@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import PageFooter from './components/footer';
 import './styles/talkList.css';
-import { useEffect, useState } from 'react';
 
 export default function TalkList() {
   const talks = [

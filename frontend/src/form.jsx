@@ -1,9 +1,11 @@
 import { useState } from 'react';
+
 import axios from 'axios';
-import couple from './assets/image2.png';
-import './styles/form.css';
 import { Link, useNavigate } from 'react-router-dom';
+
+import couple from './assets/image2.png';
 import Airplane from './components/airplane';
+import './styles/form.css';
 
 const Form = () => {
   const navigate = useNavigate();

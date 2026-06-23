@@ -1,7 +1,7 @@
+import picture from './assets/picture.png';
+import sendButton from './assets/send-button.png';
 import PageFooter from './components/footer';
 import './styles/talk.css';
-import sendButton from './assets/send-button.png';
-import picture from './assets/picture.png';
 
 export default function Talk() {
   const messages = [
