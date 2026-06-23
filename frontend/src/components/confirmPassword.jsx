@@ -14,12 +14,7 @@ function ConfirmPassword() {
             </div>
             <div className="field">
               <label htmlFor="">新しいパスワード</label>
-              <input
-                type="password"
-                id="new_password"
-                name="new_password"
-                required
-              />
+              <input type="password" id="new_password" name="new_password" required />
             </div>
             <div className="field">
               <label htmlFor="">新しいパスワード(確認用)</label>

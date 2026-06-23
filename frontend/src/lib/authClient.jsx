@@ -59,9 +59,7 @@ const signIn = async ({ email, password }) => {
   try {
     const response = await fetch(baseURL + '/users');
     const data = await response.json();
-    const user = data.filter(
-      (element) => element.email === email && element.password === password,
-    );
+    const user = data.filter((element) => element.email === email && element.password === password);
     if (user.length === 1) {
       return user[0].id;
     } else {
@@ -133,13 +131,4 @@ const findUserByEmail = async (email) => {
   }
 };
 
-export {
-  loginUser,
-  createUser,
-  updateUser,
-  signIn,
-  signOn,
-  update,
-  getUserInfo,
-  findUserByEmail,
-};
+export { loginUser, createUser, updateUser, signIn, signOn, update, getUserInfo, findUserByEmail };

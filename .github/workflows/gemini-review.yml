@@ -44,6 +44,7 @@ jobs:
 
       - name: Ask Gemini for Review
         uses: actions/github-script@v7
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         with:

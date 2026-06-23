@@ -4,7 +4,6 @@ import PageFooter from '@/components/footer.jsx';
 import search from '@/assets/search_logo.png';
 import { Link } from 'react-router-dom';
 import { API_BASE } from '@/config';
-import { Root, Track, Range, Thumb } from '@radix-ui/react-slider';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
 import Button from '../../components/Button/index.js';
 
@@ -151,8 +150,6 @@ function UserList() {
 
     setFilteredUsers(otherUsers);
   };
-
-  const [value, setValue] = useState(0);
 
   return (
     <div className={styles.searchPage}>

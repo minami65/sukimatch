@@ -126,7 +126,7 @@ export default function FootPrint() {
             // いいね済み判定
             const isLiked = likesUser.some((user) => user.user_id === f.user_id);
             return (
-              <div className={styles.footprint - card} key={f.user_id}>
+              <div className={styles.footprintCard} key={f.user_id}>
                 {images.map((i) => {
                   if (i.user_id === f.user_id) {
                     return (
@@ -142,7 +142,7 @@ export default function FootPrint() {
 
                 <div>
                   <p>{f.name}</p>
-                  <div className={styles.footprint - info}>
+                  <div className={styles.footprintInfo}>
                     <p>{f.age}歳</p>
                     <p>{location ? location.name : f.current_location_id}</p>
                   </div>

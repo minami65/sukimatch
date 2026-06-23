@@ -46,10 +46,7 @@ function Create() {
 
       age: Number(age),
 
-      birthday: `${year}-${String(month).padStart(
-        2,
-        '0',
-      )}-${String(day).padStart(2, '0')}`,
+      birthday: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
 
       mail_address: email,
 
@@ -151,11 +148,7 @@ function Create() {
             <div className="field">
               <label>性別</label>
 
-              <select
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                required
-              >
+              <select value={gender} onChange={(e) => setGender(e.target.value)} required>
                 <option value="">--選択してください--</option>
 
                 <option value={1}>男性</option>
@@ -167,12 +160,7 @@ function Create() {
             <div className="field">
               <label>年齢</label>
 
-              <input
-                type="number"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                required
-              />
+              <input type="number" value={age} onChange={(e) => setAge(e.target.value)} required />
             </div>
             {/* メール */}
             <div className="field">
