@@ -1,4 +1,4 @@
-name: Gemini Code Review
+name: Gemini Code Review & Summary
 
 on:
   pull_request:
@@ -7,14 +7,14 @@ on:
     types: [created]
 
 jobs:
-  ai-review:
+  # ==========================================
+  # 1. PR作成・プッシュ時にサマリーだけを作るジョブ
+  # ==========================================
+  ai-summary:
+    # dependabotを除外 ＆ PRイベント（作成・更新）の時だけ実行
     if: |
-      github.actor != 'dependabot[bot]' && (
-        github.event_name == 'pull_request' ||
-        (github.event_name == 'issue_comment' && 
-         github.event.issue.pull_request && 
-         contains(github.event.comment.body, '@gemini'))
-      )
+      github.actor != 'dependabot[bot]' && 
+      github.event_name == 'pull_request'
 
     runs-on: ubuntu-latest
     permissions:
@@ -25,62 +25,125 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/merge', github.event.issue.number) }}
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Get PR Diff
         id: get_diff
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin ${{ github.event.pull_request.base.ref }}
-            git diff origin/${{ github.event.pull_request.base.ref }}...HEAD > pr_diff.txt
-          else
-            PR_NUM=${{ github.event.issue.number }}
-            URL="https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUM}"
-            BASE_REF=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $URL | jq -r .base.ref)
-            git fetch origin ${BASE_REF}
-            git diff origin/${BASE_REF}...HEAD > pr_diff.txt
-          fi
+          git fetch origin ${{ github.event.pull_request.base.ref }}
+          git diff origin/${{ github.event.pull_request.base.ref }}...HEAD > pr_diff.txt
 
-      - name: Ask Gemini for Review
+      - name: Ask Gemini for Summary
         uses: actions/github-script@v7
+        continue-on-error: true # 503エラー対策
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         with:
           script: |
             const fs = require('fs');
-
             let diff = "";
-            try {
-              diff = fs.readFileSync('pr_diff.txt', 'utf8');
-            } catch (err) {
-              console.log("差分ファイルの読み込みに失敗しました。");
-              return;
-            }
+            try { diff = fs.readFileSync('pr_diff.txt', 'utf8'); } catch (err) { return; }
+            if (!diff.trim()) return;
 
-            if (!diff.trim()) {
-              console.log("レビューする変更差分がありません。");
-              return;
-            }
-
-            const promptLines = [
-              "あなたはWebアプリケーション開発に精通した超一流のシニアフルスタックエンジニアです。提供されたGitの差分（diff）を深く分析し、以下の構成で日本語のレビューコメントを作成してください。",
+            const prompt = [
+              "あなたは優秀なシニアエンジニアです。提供されたGitの差分（diff）を分析し、以下の構成で日本語のサマリーを作成してください。",
               "",
               "## 📝 PRサマリー",
-              "まず、コードを読まない人でも概要がわかるように以下の項目を箇条書きで出力してください。",
+              "コードを読まない人でも概要がわかるように以下の項目を箇流書きで出力してください。",
               "- **変更の目的**: (コードから推測される目的)",
               "- **主な変更点**: (簡潔に)",
               "- **影響範囲**: (どの機能、またはフロント/バックエンドのどちらに影響しそうか)",
               "",
-              "---",
+              "対象の差分：",
+              diff
+            ].join('\n');
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+            // リトライ機能付きフェッチ
+            async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
+              for (let i = 0; i < retries; i++) {
+                try {
+                  const res = await fetch(url, options);
+                  if (res.ok) return res;
+                } catch (e) {}
+                await new Promise(r => setTimeout(r, delay * (i + 1)));
+              }
+              throw new Error("APIリクエストが失敗しました。");
+            }
+
+            const response = await fetchWithRetry(url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+
+            const data = await response.json();
+            if (!data.candidates || data.candidates.length === 0) return;
+
+            const summaryResult = data.candidates[0].content.parts[0].text;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: `### 🤖 Gemini AI PRサマリー\n\n${summaryResult}`
+            });
+
+  # ==========================================
+  # 2. @gemini コメント時に詳細レビューをするジョブ
+  # ==========================================
+  ai-review:
+    # PR内のコメント ＆ コメント本文に「@gemini」が含まれる時だけ実行
+    if: |
+      github.actor != 'dependabot[bot]' &&
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@gemini')
+
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/merge
+          fetch-depth: 0
+
+      - name: Get PR Diff
+        id: get_diff
+        run: |
+          PR_NUM=${{ github.event.issue.number }}
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${PR_NUM}"
+          BASE_REF=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" $URL | jq -r .base.ref)
+          git fetch origin ${BASE_REF}
+          git diff origin/${BASE_REF}...HEAD > pr_diff.txt
+
+      - name: Ask Gemini for Detailed Review
+        uses: actions/github-script@v7
+        continue-on-error: true # 503エラー対策
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        with:
+          script: |
+            const fs = require('fs');
+            let diff = "";
+            try { diff = fs.readFileSync('pr_diff.txt', 'utf8'); } catch (err) { return; }
+            if (!diff.trim()) return;
+
+            const prompt = [
+              "あなたはWebアプリケーション開発に精通した超一流のシニアフルスタックエンジニアです。提供されたGitの差分（diff）を深く分析し、重要度（Severity）に分けて具体的かつ優しく、開発者がやる気になるようなトーンで日本語のコードレビューをしてください。",
               "",
               "## 🔍 コードレビュー",
-              "次に、以下の重要度（Severity）に分けて具体的かつ優しく、開発者がやる気になるようなトーンで指摘してください。",
               "【重要度の定義】",
               "🚨 CRITICAL (バグ・脆弱性): アプリがクラッシュする致命的なバグ、セキュリティリスク、本番環境の破壊につながる実装。絶対直すべき箇所。",
-              "⚠️ MAJOR (改善・規約違反): パフォーマンスの低下、ESLint/Prettierのルール違反、Pythonの不適切な記述、予期せぬ動作を引き起こす可能性のある実装。",
+              "⚠️ MAJOR (改善・規約違反): パフォーマンスの低下、ESLint/Prettierのルール違反、不適切な記述、予期せぬ動作を引き起こす可能性のある実装。",
               "💡 MINOR (提案・リファクタ): 可読性の向上、よりモダンでスッキリした書き方の提案など。",
-              "✨ GOOD (称賛): 綺麗に書けている部分や、良いアプローチ、パフォーマンスへの配慮。良いところは積極的に褒めてください！",
+              "✨ GOOD (称賛): 綺麗に書けている部分や、良いアプローチ。良いところは積極的に褒めてください！",
               "",
               "【出力ルール】",
               "- マークダウン形式で見出しを使って、重要度ごとに箇条書きで出力してください。",
@@ -90,32 +153,35 @@ jobs:
               "",
               "対象の差分：",
               diff
-            ];
-
-            const prompt = promptLines.join('\n');
+            ].join('\n');
 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
-            const response = await fetch(url, {
+            async function fetchWithRetry(url, options, retries = 3, delay = 2000) {
+              for (let i = 0; i < retries; i++) {
+                try {
+                  const res = await fetch(url, options);
+                  if (res.ok) return res;
+                } catch (e) {}
+                await new Promise(r => setTimeout(r, delay * (i + 1)));
+              }
+              throw new Error("APIリクエストが失敗しました。");
+            }
+
+            const response = await fetchWithRetry(url, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
-              })
+              body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
 
             const data = await response.json();
-
-            if (!data.candidates || data.candidates.length === 0) {
-              throw new Error("Geminiからの応答が空でした: " + JSON.stringify(data));
-            }
+            if (!data.candidates || data.candidates.length === 0) return;
 
             const reviewResult = data.candidates[0].content.parts[0].text;
-            const prNumber = context.issue.number || context.payload.pull_request.number;
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: prNumber,
-              body: `### 🤖 Gemini AI コードレビュー\n\n${reviewResult}`
+              issue_number: context.issue.number,
+              body: `### 🤖 Gemini AI 詳細コードレビュー\n\n${reviewResult}`
             });
