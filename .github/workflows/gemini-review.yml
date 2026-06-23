@@ -94,20 +94,40 @@ jobs:
             ];
 
             const prompt = promptLines.join('\n');
-
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
-            const response = await fetch(url, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
-              })
-            });
+            // 💡 高負荷対応（リトライ処理）
+            const MAX_RETRIES = 3;
+            let attempt = 0;
+            let data = null;
 
-            const data = await response.json();
+            while (attempt < MAX_RETRIES) {
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  contents: [{ parts: [{ text: prompt }] }]
+                })
+              });
 
-            if (!data.candidates || data.candidates.length === 0) {
+              if (response.ok) {
+                data = await response.json();
+                break; // 成功したらループを抜ける
+              } else if (response.status === 429 || response.status >= 500) {
+                attempt++;
+                console.log(`APIが高負荷またはエラーです (Status: ${response.status})。${attempt}回目のリトライを待機中...`);
+                if (attempt >= MAX_RETRIES) {
+                  throw new Error("APIのリトライ上限に達しました。時間をおいて再実行してください。");
+                }
+                // 待機時間を徐々に伸ばす（2秒, 4秒, 8秒...）
+                await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+              } else {
+                const errText = await response.text();
+                throw new Error(`予期せぬAPIエラー: Status ${response.status} - ${errText}`);
+              }
+            }
+
+            if (!data || !data.candidates || data.candidates.length === 0) {
               throw new Error("Geminiからの応答が空でした: " + JSON.stringify(data));
             }
 
