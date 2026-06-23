@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import balloon from './assets/balloon.png';
 import femaleIcon from './assets/female.png';
 import maleIcon from './assets/male.png';
-import PageFooter from './components/footer';
 import './styles/MatchComplete.css';
 
 function MatchComplete() {
@@ -33,7 +32,6 @@ function MatchComplete() {
           とじる
         </Link>
       </div>
-      <PageFooter />
     </div>
   );
 }

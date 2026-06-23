@@ -12,6 +12,7 @@ import UserList from '@/pages/user-list/index.jsx';
 
 import Create from './create.jsx';
 import Form from './form.jsx';
+import BottomNavLayout from './layouts/BottomNav/BottomNavLayout.js';
 import Login from './login.jsx';
 import MatchComplete from './match.jsx';
 import Pay from './pay.jsx';
@@ -28,16 +29,19 @@ createRoot(document.getElementById('root')).render(
       <Route path="/create" element={<Create />} />
       <Route path="/pay" element={<Pay />} />
       <Route path="/welcome" element={<Welcome />} />
-      <Route path="/userList" element={<UserList />} />
-      <Route path="/userDetail/:id" element={<UserDetails />} />
-      <Route path="/match" element={<MatchComplete />} />
-      <Route path="/mypage" element={<MyPage />} />
-      <Route path="/profile/:userId" element={<Profile />} />
-      <Route path="/footprint" element={<FootPrint />} />
-      <Route path="/liked" element={<Liked />} />
-      <Route path="/setting" element={<Setting />} />
-      <Route path="/talk" element={<Talk />} />
-      <Route path="/talkList" element={<TalkList />} />
+
+      <Route element={<BottomNavLayout />}>
+        <Route path="/userList" element={<UserList />} />
+        <Route path="/userDetail/:id" element={<UserDetails />} />
+        <Route path="/match" element={<MatchComplete />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/footprint" element={<FootPrint />} />
+        <Route path="/liked" element={<Liked />} />
+        <Route path="/setting" element={<Setting />} />
+        <Route path="/talk" element={<Talk />} />
+        <Route path="/talkList" element={<TalkList />} />
+      </Route>
     </Routes>
   </BrowserRouter>,
 );

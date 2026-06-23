@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import DoubleSlider from '@/components/DoubleSlider/index.js';
-import PageFooter from '@/components/footer.jsx';
 
 import search from '@/assets/search_logo.png';
 import { API_BASE } from '@/config';
@@ -378,7 +377,6 @@ function UserList() {
           })
         )}
       </div>
-      <PageFooter />
     </div>
   );
 }

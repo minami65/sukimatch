@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import footprint from '@/assets/footprint.png';
 import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
 
-import PageFooter from '../../components/footer';
 import { API_BASE } from '../../config';
 import styles from './myPage.module.css';
 
@@ -50,7 +48,7 @@ export default function Mypage() {
   }, [userId, token]);
 
   return (
-    <div>
+    <>
       <div className={styles.profile}>
         {mainImages && (
           <img
@@ -85,8 +83,6 @@ export default function Mypage() {
           </Link>
         </div>
       </div>
-
-      <PageFooter />
-    </div>
+    </>
   );
 }

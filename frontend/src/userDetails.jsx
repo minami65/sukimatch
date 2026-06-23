@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import close from './assets/close.png';
 import likeIcon from './assets/like.png';
 import likedIcon from './assets/liked.png';
-import PageFooter from './components/footer';
 import { API_BASE } from './config.js';
 import {
   ALCOHOL,
@@ -189,8 +187,6 @@ function UserDetails() {
           }
         }}
       />
-
-      <PageFooter />
     </>
   );
 }
