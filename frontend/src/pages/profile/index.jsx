@@ -1,12 +1,16 @@
-import PageFooter from '@/components/footer';
-import styles from './profile.module.css';
-import '@/assets/default-profile.png';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
 import Button from '@/components/Button';
+import PageFooter from '@/components/footer';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
+
+import '@/assets/default-profile.png';
+
+import styles from './profile.module.css';
 
 export default function Profile() {
   const { userId } = useParams();

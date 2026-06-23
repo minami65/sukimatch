@@ -1,4 +1,5 @@
-import { Root, Track, Range, Thumb } from '@radix-ui/react-slider';
+import { Range, Root, Thumb, Track } from '@radix-ui/react-slider';
+
 import styles from './DoubleSlider.module.css';
 
 interface DoubleSliderProps {

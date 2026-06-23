@@ -1,10 +1,14 @@
-import styles from './footprint.module.css';
-import '@/assets/default-profile.png';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import Likes from '@/components/likes';
+
 import PageFooter from '@/components/footer';
+import Likes from '@/components/likes';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
+
+import '@/assets/default-profile.png';
+
+import styles from './footprint.module.css';
 
 export default function FootPrint() {
   const navigate = useNavigate();

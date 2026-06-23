@@ -1,25 +1,26 @@
-import './styles/userDetails.css';
-import PageFooter from './components/footer';
+import { useEffect, useState } from 'react';
+
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import close from './assets/close.png';
 import likeIcon from './assets/like.png';
 import likedIcon from './assets/liked.png';
-import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import PageFooter from './components/footer';
 import { API_BASE } from './config.js';
-
 import {
-  PREFECTURES,
-  JOB,
-  EDUCATION,
-  INCOME,
-  HOLIDAY,
   ALCOHOL,
-  SMOKING,
+  EDUCATION,
+  HOLIDAY,
+  INCOME,
+  JOB,
   LIVING,
   MARRIAGE,
   MEETING,
+  PREFECTURES,
+  SMOKING,
 } from './data/base.jsx';
+import './styles/userDetails.css';
 
 function UserDetails() {
   const { id } = useParams();

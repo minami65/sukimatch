@@ -1,10 +1,13 @@
-import PageFooter from '../../components/footer';
+import { useEffect, useState } from 'react';
+
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 import footprint from '@/assets/footprint.png';
 import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
+import PageFooter from '../../components/footer';
 import { API_BASE } from '../../config';
 import styles from './myPage.module.css';
 

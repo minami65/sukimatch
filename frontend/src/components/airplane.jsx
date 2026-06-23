@@ -1,5 +1,5 @@
-import './styles/airplane.css';
 import airplane from '../assets/image1.png';
+import './styles/airplane.css';
 
 function Airplane() {
   return (
