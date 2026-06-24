@@ -1,11 +1,11 @@
 module.exports = {
-    'sukimatch-api': {
-      input: `${__dirname}/../backend/openapi.json`,
-      output: {
-        mode: 'tags-split',
-        target: './src/api/generated/client.ts',
-        schemas: './src/api/generated/models',
-        client: 'react-query',
-      },
+  'sukimatch-api': {
+    input: `${__dirname}/../backend/openapi.json`,
+    output: {
+      mode: 'tags-split',
+      target: './src/api/generated/client.ts',
+      schemas: './src/api/generated/models',
+      client: 'react-query',
     },
-  };
+  },
+};
