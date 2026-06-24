@@ -37,5 +37,6 @@ export default defineConfig([
       '@typescript-eslint/no-unused-vars': ['error'],
       quotes: ['error', 'single', { avoidEscape: true }],
     },
+    ignores: ['src/api/generated/**/*', 'orval.config.js'],
   },
 ]);

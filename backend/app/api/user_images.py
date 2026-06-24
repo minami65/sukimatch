@@ -65,7 +65,7 @@ def upload_image(
     return user_image
 
 # 一覧取得
-@router.get("/users/{user_id}/images")
+@router.get("/users/{user_id}/images", response_model=list[UserImageResponse])
 def get_images(user_id:int,db:Session = Depends(get_db)):
     return db.query(UserImages).filter(UserImages.user_id == user_id).all()
 

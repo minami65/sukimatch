@@ -1,0 +1,37 @@
+name: API Type Check
+
+on:
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  check-types:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Node.js のセットアップ
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: パッケージのインストール
+        run: npm ci
+
+      # 💡 コミットされた backend/openapi.json を読み込んで、フロントの型を再生成します
+      - name: 型を再生成してみる
+        run: npm run gen-types
+
+      - name: 差分チェック
+        run: |
+          if [ -n "$(git status --porcelain ./src/api/generated)" ]; then
+            echo "❌ エラー: バックエンドの変更に対して、フロントエンドの自動生成ファイルが古いです。"
+            echo "ローカルで 'npm run gen-types' を実行して、更新されたファイルをコミットしてください。"
+            exit 1
+          fi

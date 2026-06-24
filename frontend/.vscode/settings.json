@@ -1,8 +1,8 @@
 {
-    "editor.defaultFormatter": null,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "always"
-    },
-    "eslint.useFlatConfig": true,
-    "editor.formatOnSave": false
-  }
+  "editor.defaultFormatter": null,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "eslint.useFlatConfig": true,
+  "editor.formatOnSave": false
+}

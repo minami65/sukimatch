@@ -6,13 +6,14 @@ import footprint from '@/assets/footprint.png';
 import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
 
+import { UserImageResponse } from '../../api/generated/models/userImageResponse';
 import { API_BASE } from '../../config';
 import styles from './myPage.module.css';
 
 export default function Mypage() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState(null);
-  const [mainImages, setImages] = useState(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [mainImages, setImages] = useState<UserImageResponse | null>(null);
   const token = localStorage.getItem('token');
 
   // ユーザーID取得
@@ -40,10 +41,10 @@ export default function Mypage() {
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     })
       .then((res) => res.json())
-      .then((json) => {
+      .then((json: UserImageResponse[]) => {
         const mainImages = json.find((image) => image.sort_order === 1);
         console.log(mainImages);
-        setImages(mainImages);
+        setImages(mainImages ?? null);
       });
   }, [userId, token]);
 
