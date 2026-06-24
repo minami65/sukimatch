@@ -1,6 +1,6 @@
 module.exports = {
     'sukimatch-api': {
-      input: 'http://localhost:8000/openapi.json',
+      input: `${__dirname}/../backend/openapi.json`,
       output: {
         mode: 'tags-split',
         target: './src/api/generated/client.ts',
