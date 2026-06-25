@@ -161,7 +161,7 @@ def delete(
 
 
 # プロフィール取得
-@router.get("/user/me")
+@router.get("/user/me", response_model=UserResponse)
 def get_me(
     current_user: User = Depends(get_current_user)
 ):
@@ -169,7 +169,7 @@ def get_me(
 
 
 # プロフィール更新
-@router.put("/users/me")
+@router.put("/users/me", response_model=UserResponse)
 def update(
     user_data: UserUpdate,
     db: Session = Depends(get_db),
