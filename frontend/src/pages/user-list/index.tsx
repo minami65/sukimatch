@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
+import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
 
+import api from '@/api/axios';
 import search from '@/assets/search_logo.png';
 import { API_BASE } from '@/config';
 
-import Button from '../../components/Button/index.js';
 import {
   ALCOHOL,
   EDUCATION,
@@ -44,17 +45,13 @@ function UserList() {
   const loginUserId = Number(localStorage.getItem('loginUserId') ?? 1);
 
   useEffect(() => {
-    fetch(`${API_BASE}/users`)
-      .then((res) => res.json())
-      .then((data) => {
-        // 自分を除外
-        const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
+    api
+      .get('/users')
+      .then((res) => {
+        const otherUsers = res.data.filter((user) => user.user_id !== loginUserId);
         setFilteredUsers(otherUsers);
       })
-      .catch((err) => {
-        console.error(err);
-      });
+      .catch((err) => console.error(err));
   }, [loginUserId]);
 
   // 検索開閉
@@ -64,66 +61,26 @@ function UserList() {
 
   // 検索処理
   const handleFilterSearch = async () => {
-    const params = new URLSearchParams();
+    const searchParams: Record<string, any> = {
+      min_age: ageRange[0],
+      max_age: ageRange[1],
+    };
 
-    params.append('min_age', ageRange[0]);
-    params.append('max_age', ageRange[1]);
+    if (heightRange[0] !== 100) searchParams.min_height = heightRange[0];
+    if (heightRange[1] !== 200) searchParams.max_height = heightRange[1];
+    if (prefecture !== 0) searchParams.current_location_id = prefecture;
+    if (job !== 0) searchParams.job_id = job;
+    if (education !== 0) searchParams.education_id = education;
+    if (income !== 0) searchParams.income_id = income;
+    if (holidays !== 0) searchParams.holiday_id = holidays;
+    if (alcohol !== 0) searchParams.alcohol_id = alcohol;
+    if (smoking !== 0) searchParams.smoking_id = smoking;
+    if (living !== 0) searchParams.living_arrangement_id = living;
+    if (meeting !== 0) searchParams.meeting_preference_id = meeting;
+    if (marriage !== 0) searchParams.marriage_intention_id = marriage;
 
-    if (heightRange[0] !== 100) {
-      params.append('min_height', heightRange[0]);
-    }
-
-    if (heightRange[1] !== 200) {
-      params.append('max_height', heightRange[1]);
-    }
-
-    if (prefecture !== 0) {
-      params.append('current_location_id', prefecture);
-    }
-
-    if (job !== 0) {
-      params.append('job_id', job);
-    }
-
-    if (education !== 0) {
-      params.append('education_id', education);
-    }
-
-    if (income !== 0) {
-      params.append('income_id', income);
-    }
-
-    if (holidays !== 0) {
-      params.append('holiday_id', holidays);
-    }
-
-    if (alcohol !== 0) {
-      params.append('alcohol_id', alcohol);
-    }
-
-    if (smoking !== 0) {
-      params.append('smoking_id', smoking);
-    }
-
-    if (living !== 0) {
-      params.append('living_arrangement_id', living);
-    }
-
-    if (meeting !== 0) {
-      params.append('meeting_preference_id', meeting);
-    }
-
-    if (marriage !== 0) {
-      params.append('marriage_intention_id', marriage);
-    }
-
-    const response = await fetch(`${API_BASE}/users?${params.toString()}`);
-
-    const data = await response.json();
-
-    // 自分を除外
-    const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
+    const response = await api.get('/users', { params: searchParams });
+    const otherUsers = response.data.filter((user) => user.user_id !== loginUserId);
     setFilteredUsers(otherUsers);
     setIsSearchOpen(false);
   };

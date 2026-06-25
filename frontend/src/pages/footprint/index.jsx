@@ -10,26 +10,16 @@ import '@/assets/default-profile.png';
 import styles from './footprint.module.css';
 
 export default function FootPrint() {
-  const navigate = useNavigate();
   const [footprints, setFootprints] = useState([]);
   const [locations, setLocations] = useState([]);
   const [images, setImages] = useState([]);
   const [likesUser, setLikesUser] = useState([]);
-  const token = localStorage.getItem('token');
 
   // 足あと取得
   useEffect(() => {
     const fetchFootprints = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-        const response = await fetch('http://127.0.0.1:8000/users/me/footprint', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch('http://127.0.0.1:8000/users/me/footprint');
         const data = await response.json();
         console.log(data);
         setFootprints(data);
@@ -38,7 +28,7 @@ export default function FootPrint() {
       }
     };
     fetchFootprints();
-  }, [navigate, token]);
+  }, []);
 
   // 画像取得
   useEffect(() => {
@@ -46,20 +36,11 @@ export default function FootPrint() {
 
     const fetchUserImages = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-
         const imageDataList = await Promise.all(
           footprints.map(async (f) => {
             // 足あとで取得したユーザーのid
             const userId = f.user_id;
-            const response = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            const response = await fetch(`http://127.0.0.1:8000/users/${userId}/images`);
 
             const data = await response.json();
 
@@ -78,7 +59,7 @@ export default function FootPrint() {
     };
 
     fetchUserImages();
-  }, [footprints, navigate, token]);
+  }, [footprints]);
 
   // 都道府県取得
   useEffect(() => {
@@ -97,16 +78,8 @@ export default function FootPrint() {
   // 自分からいいねした人を取得
   useEffect(() => {
     const fetchLikesUser = async () => {
-      if (!token) {
-        navigate('/');
-        return;
-      }
       try {
-        const likesUserRes = await fetch('http://127.0.0.1:8000/users/me/likes', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const likesUserRes = await fetch('http://127.0.0.1:8000/users/me/likes');
         const likesUserData = await likesUserRes.json();
         setLikesUser(likesUserData);
       } catch (error) {
@@ -114,7 +87,7 @@ export default function FootPrint() {
       }
     };
     fetchLikesUser();
-  }, [navigate, token]);
+  }, []);
 
   return (
     <div>

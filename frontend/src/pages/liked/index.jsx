@@ -7,25 +7,15 @@ import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 import styles from './liked.module.css';
 
 export default function Liked() {
-  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [images, setImages] = useState([]);
   const [locations, setLocations] = useState([]);
-  const token = localStorage.getItem('token');
 
   // いいね履歴取得
   useEffect(() => {
     const fetchLikedProfiles = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes');
         const likedData = await likedResponse.json();
         console.log(likedData);
         setProfile(likedData);
@@ -34,7 +24,7 @@ export default function Liked() {
       }
     };
     fetchLikedProfiles();
-  }, [navigate, token]);
+  }, []);
 
   // 画像取得
   useEffect(() => {
@@ -42,18 +32,10 @@ export default function Liked() {
 
     const fetchUserImages = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
         const imageData = await Promise.all(
           profile.map(async (p) => {
             const userId = p.user_id;
-            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`);
             const imageData = await imageResponse.json();
             console.log(imageData);
             return { userId, imageData };
@@ -65,7 +47,7 @@ export default function Liked() {
       }
     };
     fetchUserImages();
-  }, [profile, navigate, token]);
+  }, [profile]);
 
   // 都道府県取得
   useEffect(() => {

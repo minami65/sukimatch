@@ -7,17 +7,8 @@ export default function Likes({ footprintId, disabled }) {
   console.log('footprintId:', footprintId);
 
   const handleLikeCreate = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.assign('/');
-      return;
-    }
     try {
-      await axios.post(`http://127.0.0.1:8000/users/${footprintId}/like`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(`http://127.0.0.1:8000/users/${footprintId}/like`, null);
       console.log(`userId${footprintId}にいいねしました`);
     } catch (error) {
       console.error(error);
