@@ -30,11 +30,12 @@ createRoot(document.getElementById('root')).render(
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Welcome />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/form" element={<Form />} />
         <Route path="/create" element={<Create />} />
         <Route path="/pay" element={<Pay />} />
+        <Route path="/welcome" element={<Welcome />} />
 
         <Route element={<AuthLayout />}>
           <Route element={<BottomNavLayout />}>
