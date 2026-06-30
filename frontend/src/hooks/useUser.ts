@@ -1,17 +1,18 @@
 import {
   useGetImagesUsersUserIdImagesGet,
+  useGetUserDetailUsersUserIdGet,
   useGetUserListUsersGet,
 } from '@/api/generated/endpoints/api';
-import { GetUserListUsersGetParams } from '@/api/generated/models';
+import { GetUserListUsersGetParams, UserResponse } from '@/api/generated/models';
 
-// 画像一覧取得
+// ユーザ画像一覧取得
 export const useUserImages = (userId?: number) => {
   return useGetImagesUsersUserIdImagesGet(userId!, {
     query: { enabled: !!userId },
   });
 };
 
-// メイン画像取得
+// ユーザのメイン画像取得
 export const useMainUserImage = (userId?: number) => {
   const { data, isLoading, error } = useUserImages(userId);
   const mainImage = data?.find((img) => img.sort_order === 1);
@@ -21,6 +22,16 @@ export const useMainUserImage = (userId?: number) => {
     isLoading,
     error,
   };
+};
+
+// ユーザ情報取得
+export const useUserDetail = (userId?: number) => {
+  return useGetUserDetailUsersUserIdGet<UserResponse>(userId!, {
+    query: {
+      enabled: !!userId,
+      retry: false,
+    },
+  });
 };
 
 // 自分を含めた全てのユーザー一覧

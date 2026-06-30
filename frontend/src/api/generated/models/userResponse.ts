@@ -12,6 +12,7 @@ export interface UserResponse {
   name: string;
   mail_address?: string | null;
   age?: number | null;
+  bio?: string | null;
   birth_location_id?: number | null;
   current_location_id?: number | null;
   education_id?: number | null;

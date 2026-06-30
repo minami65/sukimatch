@@ -15,13 +15,13 @@ import '@/styles/index.css';
 
 import Create from './create.jsx';
 import Form from './form.jsx';
-import { AuthLayout } from './layouts/AuthLayout.js';
-import BottomNavLayout from './layouts/BottomNav/BottomNavLayout.js';
+import { AuthLayout } from './layouts/AuthLayout.tsx';
+import BottomNavLayout from './layouts/BottomNav/BottomNavLayout.tsx';
 import MatchComplete from './match.jsx';
+import UserDetails from './pages/user-details/index.tsx';
 import Pay from './pay.jsx';
 import Talk from './talk.jsx';
 import TalkList from './talkList.jsx';
-import UserDetails from './userDetails.jsx';
 import Welcome from './welcome.jsx';
 
 const queryClient = new QueryClient();

@@ -387,7 +387,7 @@ export const getUserDetailUsersUserIdGet = (
 ) => {
 
 
-      return customInstance<unknown>(
+      return customInstance<UserResponse>(
       {url: `/users/${userId}`, method: 'GET', signal
     },
       );

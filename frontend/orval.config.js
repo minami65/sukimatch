@@ -1,6 +1,6 @@
 module.exports = {
   'sukimatch-api': {
-    input: `${__dirname}/../backend/openapi.json`,
+    input: `http://localhost:8000/openapi.json`,
     output: {
       target: './src/api/generated/endpoints/api.ts',
       schemas: './src/api/generated/models',

@@ -59,6 +59,7 @@ class UserResponse(BaseModel):
     name: str
     mail_address: Optional[str] = None
     age: Optional[int] = None
+    bio: Optional[str] = None
 
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None

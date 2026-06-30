@@ -134,7 +134,7 @@ def get_user_list(
 
 
 # 詳細取得
-@router.get("/users/{user_id}")
+@router.get("/users/{user_id}", response_model=UserResponse)
 def get_user_detail(
     user_id: int,
     db: Session = Depends(get_db)
@@ -142,7 +142,10 @@ def get_user_detail(
     user = get_user(db, user_id)
 
     if not user:
-        return {"error": "User not found"}
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail="User not found"
+        )
 
     print(f"DEBUG: user.bio = {user.bio}")
     
