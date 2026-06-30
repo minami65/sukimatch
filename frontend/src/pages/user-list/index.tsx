@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
+import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
 
-import api from '@/api/axios';
+import { useFilteredUsers } from '@/hooks/useUser.js';
+
+import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
 import search from '@/assets/search_logo.png';
 import { API_BASE } from '@/config';
+import { useAuth } from '@/layouts/AuthLayout.js';
 
 import {
   ALCOHOL,
@@ -24,11 +28,13 @@ import {
 import styles from './userList.module.css';
 
 function UserList() {
+  const { user: currentUser } = useAuth();
+  const loginUserId = currentUser?.user_id ?? 1;
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [ageRange, setAgeRange] = useState([18, 60]);
   const [heightRange, setHeightRange] = useState([100, 200]);
-
   const [prefecture, setPrefecture] = useState(0);
   const [job, setJob] = useState(0);
   const [education, setEducation] = useState(0);
@@ -40,19 +46,12 @@ function UserList() {
   const [meeting, setMeeting] = useState(0);
   const [marriage, setMarriage] = useState(0);
 
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [activeParams, setActiveParams] = useState<GetUserListUsersGetParams>({
+    min_age: 18,
+    max_age: 60,
+  });
 
-  const loginUserId = Number(localStorage.getItem('loginUserId') ?? 1);
-
-  useEffect(() => {
-    api
-      .get('/users')
-      .then((res) => {
-        const otherUsers = res.data.filter((user) => user.user_id !== loginUserId);
-        setFilteredUsers(otherUsers);
-      })
-      .catch((err) => console.error(err));
-  }, [loginUserId]);
+  const { users: filteredUsers, isLoading } = useFilteredUsers(activeParams, loginUserId);
 
   // 検索開閉
   const handleSearchToggle = () => {
@@ -61,27 +60,25 @@ function UserList() {
 
   // 検索処理
   const handleFilterSearch = async () => {
-    const searchParams: Record<string, any> = {
+    const params: GetUserListUsersGetParams = {
       min_age: ageRange[0],
       max_age: ageRange[1],
     };
+    if (heightRange[0] !== 100) params.min_height = heightRange[0];
+    if (heightRange[1] !== 200) params.max_height = heightRange[1];
+    if (prefecture !== 0) params.current_location_id = prefecture;
+    if (job !== 0) params.job_id = job;
+    if (education !== 0) params.education_id = education;
+    if (income !== 0) params.income_id = income;
+    if (holidays !== 0) params.holiday_id = holidays;
+    if (alcohol !== 0) params.alcohol_id = alcohol;
+    if (smoking !== 0) params.smoking_id = smoking;
+    // TODO: Fix living arrangement id to be included
+    // if (living !== 0) params.living_arrangement_id = living;
+    if (meeting !== 0) params.meeting_preference_id = meeting;
+    if (marriage !== 0) params.marriage_intention_id = marriage;
 
-    if (heightRange[0] !== 100) searchParams.min_height = heightRange[0];
-    if (heightRange[1] !== 200) searchParams.max_height = heightRange[1];
-    if (prefecture !== 0) searchParams.current_location_id = prefecture;
-    if (job !== 0) searchParams.job_id = job;
-    if (education !== 0) searchParams.education_id = education;
-    if (income !== 0) searchParams.income_id = income;
-    if (holidays !== 0) searchParams.holiday_id = holidays;
-    if (alcohol !== 0) searchParams.alcohol_id = alcohol;
-    if (smoking !== 0) searchParams.smoking_id = smoking;
-    if (living !== 0) searchParams.living_arrangement_id = living;
-    if (meeting !== 0) searchParams.meeting_preference_id = meeting;
-    if (marriage !== 0) searchParams.marriage_intention_id = marriage;
-
-    const response = await api.get('/users', { params: searchParams });
-    const otherUsers = response.data.filter((user) => user.user_id !== loginUserId);
-    setFilteredUsers(otherUsers);
+    setActiveParams(params);
     setIsSearchOpen(false);
   };
 
@@ -100,15 +97,14 @@ function UserList() {
     setMeeting(0);
     setMarriage(0);
 
-    const response = await fetch(`${API_BASE}/users`);
-
-    const data = await response.json();
-
-    // 自分を除外
-    const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
-    setFilteredUsers(otherUsers);
+    setActiveParams({
+      min_age: 18,
+      max_age: 60,
+    });
+    setIsSearchOpen(false);
   };
+
+  if (isLoading) return <FullPageLoading />;
 
   return (
     <div className={styles.searchPage}>
