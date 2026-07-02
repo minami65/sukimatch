@@ -26,6 +26,7 @@ import type {
 import type {
   AlcoholResponse,
   BodyUploadImageUsersMeImagesPost,
+  DeleteResponse,
   EducationResponse,
   GenderResponse,
   GetUserListUsersGetParams,
@@ -33,6 +34,7 @@ import type {
   HolidayResponse,
   IncomeResponse,
   JobResponse,
+  LikeResponse,
   LivingResponse,
   LocationResponse,
   LoginRequest,
@@ -165,7 +167,7 @@ export const registerUserPost = (
 ) => {
 
 
-      return customInstance<unknown>(
+      return customInstance<UserResponse>(
       {url: `/user`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: userCreate, signal
@@ -699,7 +701,7 @@ export const likeUserUsersUserIdLikePost = (
 ) => {
 
 
-      return customInstance<unknown>(
+      return customInstance<LikeResponse>(
       {url: `/users/${userId}/like`, method: 'POST', signal
     },
       );
@@ -761,7 +763,7 @@ export const unlikeUserUsersUserIdLikeDelete = (
 ) => {
 
 
-      return customInstance<unknown>(
+      return customInstance<DeleteResponse>(
       {url: `/users/${userId}/like`, method: 'DELETE', signal
     },
       );

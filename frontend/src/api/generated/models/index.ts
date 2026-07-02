@@ -7,6 +7,7 @@
 
 export * from './alcoholResponse.ts';
 export * from './bodyUploadImageUsersMeImagesPost.ts';
+export * from './deleteResponse.ts';
 export * from './educationResponse.ts';
 export * from './genderResponse.ts';
 export * from './getUserListUsersGetParams.ts';
@@ -14,6 +15,8 @@ export * from './holidayResponse.ts';
 export * from './hTTPValidationError.ts';
 export * from './incomeResponse.ts';
 export * from './jobResponse.ts';
+export * from './likeBase.ts';
+export * from './likeResponse.ts';
 export * from './livingResponse.ts';
 export * from './locationResponse.ts';
 export * from './loginRequest.ts';
