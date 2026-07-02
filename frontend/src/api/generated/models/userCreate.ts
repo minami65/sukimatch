@@ -11,6 +11,7 @@ export interface UserCreate {
   birthday: string;
   mail_address?: string;
   bio?: string | null;
+  password: string;
   gender_id: number;
   birth_location_id?: number | null;
   current_location_id?: number | null;

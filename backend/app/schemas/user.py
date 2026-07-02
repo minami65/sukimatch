@@ -10,7 +10,7 @@ class UserCreate(BaseModel):
     birthday :date
     mail_address: EmailStr= None
     bio: Optional[str] = None
-
+    password: str
     gender_id:int
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
