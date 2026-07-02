@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading';
 
+import { useAuth } from '@/hooks/useAuth';
 import { useMainUserImage } from '@/hooks/useUser';
 
 import footprint from '@/assets/footprint.png';
 import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
-import { useAuth } from '@/layouts/AuthLayout';
 
 import LogOutButton from '../../components/shared/buttons/LogOutButton';
 import { API_BASE } from '../../config';

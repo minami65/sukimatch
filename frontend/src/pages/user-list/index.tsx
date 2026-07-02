@@ -6,12 +6,12 @@ import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
 
+import { useAuth } from '@/hooks/useAuth.js';
 import { useFilteredUsers } from '@/hooks/useUser.js';
 
 import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
 import search from '@/assets/search_logo.png';
 import { API_BASE } from '@/config';
-import { useAuth } from '@/layouts/AuthLayout.js';
 
 import {
   ALCOHOL,

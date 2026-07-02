@@ -1,4 +1,4 @@
-import { useAuth } from '@/layouts/AuthLayout';
+import { useAuth } from '@/hooks/useAuth';
 
 import Button, { ButtonProps } from '../../Button';
 

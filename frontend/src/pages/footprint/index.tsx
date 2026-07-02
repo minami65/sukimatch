@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
 import Likes from '@/components/likes';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
@@ -9,11 +7,23 @@ import '@/assets/default-profile.png';
 
 import styles from './footprint.module.css';
 
+interface Footprint {
+  user_id: number;
+  name: string;
+  age: number;
+  current_location_id: number;
+}
+
+interface UserImage {
+  user_id: number;
+  images: any[];
+}
+
 export default function FootPrint() {
-  const [footprints, setFootprints] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [images, setImages] = useState([]);
-  const [likesUser, setLikesUser] = useState([]);
+  const [footprints, setFootprints] = useState<Footprint[]>([]);
+  const [locations, setLocations] = useState<any[]>([]); //TODO: anyをやめる
+  const [images, setImages] = useState<UserImage[]>([]);
+  const [likesUser, setLikesUser] = useState<any[]>([]); //TODO: anyをやめる
 
   // 足あと取得
   useEffect(() => {

@@ -1,18 +1,12 @@
-import { createContext, useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading';
 
-import { useGetMeUserMeGet, useLogoutLogoutPost } from '@/api/generated/endpoints/api';
+import { AuthContext } from '@/hooks/useAuth';
 
-interface AuthContextType {
-  user: any;
-  isLoading: boolean;
-  isLoggedIn: boolean;
-  logout: () => void;
-}
-const AuthContext = createContext<AuthContextType | null>(null);
+import { useGetMeUserMeGet, useLogoutLogoutPost } from '@/api/generated/endpoints/api';
 
 export const AuthLayout = () => {
   const navigate = useNavigate();
@@ -34,7 +28,6 @@ export const AuthLayout = () => {
       navigate('/login');
       return;
     }
-
     if (token && isError && location.pathname !== '/login') {
       localStorage.removeItem('token');
       navigate('/login?reason=expired');
@@ -64,12 +57,4 @@ export const AuthLayout = () => {
       <Outlet />
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth は AuthLayout の中でしか使えません！');
-  }
-  return context;
 };
