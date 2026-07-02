@@ -13,7 +13,6 @@ import styles from './profile.module.css';
 export default function Profile() {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
 
   const [form, setForm] = useState({
     birth_location_id: '',
@@ -46,16 +45,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-
-        const userInfo = await fetch('http://127.0.0.1:8000/user/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const userInfo = await fetch('http://127.0.0.1:8000/user/me');
         const userData = await userInfo.json();
         setForm(userData);
       } catch (error) {
@@ -63,21 +53,13 @@ export default function Profile() {
       }
     };
     fetchUserInfo();
-  }, [navigate, token, userId]);
+  }, [userId]);
 
   // 登録済み画像取得
   useEffect(() => {
     const fetchUserImage = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-        const userImage = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const userImage = await fetch(`http://127.0.0.1:8000/users/${userId}/images`);
         const userImageData = await userImage.json();
         setImages(userImageData);
         console.log(userImageData);
@@ -86,7 +68,7 @@ export default function Profile() {
       }
     };
     fetchUserImage();
-  }, [navigate, token, userId]);
+  }, [userId]);
 
   // 出身地・居住地
   useEffect(() => {
@@ -265,17 +247,10 @@ export default function Profile() {
   };
   // 登録
   const handleSubmit = async () => {
-    if (!token) {
-      navigate('/');
-      return;
-    }
-
     try {
       for (const id of deletedImageIds) {
         try {
-          await axios.delete(`http://127.0.0.1:8000/users/me/images/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          await axios.delete(`http://127.0.0.1:8000/users/me/images/${id}`);
         } catch (err) {
           console.error(`Failed to delete image ${id}:`, err);
         }
@@ -287,18 +262,10 @@ export default function Profile() {
         const formData = new FormData();
         formData.append('file', image.file);
 
-        await axios.post('http://127.0.0.1:8000/users/me/images', formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.post('http://127.0.0.1:8000/users/me/images', formData);
       }
 
-      await axios.put('http://127.0.0.1:8000/users/me', form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.put('http://127.0.0.1:8000/users/me', form);
       navigate('/mypage');
     } catch (error) {
       console.error(error);

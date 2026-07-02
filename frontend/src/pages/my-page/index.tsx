@@ -1,65 +1,36 @@
-import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { FullPageLoading } from '@/components/Loading/FullPageLoading';
+
+import { useAuth } from '@/hooks/useAuth';
+import { useMainUserImage } from '@/hooks/useUser';
 
 import footprint from '@/assets/footprint.png';
 import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
 
-import { UserImageResponse } from '../../api/generated/models/userImageResponse';
+import LogOutButton from '../../components/shared/buttons/LogOutButton';
 import { API_BASE } from '../../config';
 import styles from './myPage.module.css';
 
 export default function Mypage() {
-  const navigate = useNavigate();
-  const [userId, setUserId] = useState<string | null>(null);
-  const [mainImages, setImages] = useState<UserImageResponse | null>(null);
-  const token = localStorage.getItem('token');
+  const { user, isLoading: isUserLoading } = useAuth();
+  const { mainImage, isLoading: isImageLoading } = useMainUserImage(user?.user_id);
 
-  // ユーザーID取得
-  useEffect(() => {
-    if (!token) {
-      navigate('/');
-      return;
-    }
-    fetch(`${API_BASE}/user/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        setUserId(json.user_id);
-      });
-  }, [navigate, token]);
-
-  // 画像取得
-  useEffect(() => {
-    if (!userId) return;
-
-    fetch(`${API_BASE}/users/${userId}/images`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-    })
-      .then((res) => res.json())
-      .then((json: UserImageResponse[]) => {
-        const mainImages = json.find((image) => image.sort_order === 1);
-        console.log(mainImages);
-        setImages(mainImages ?? null);
-      });
-  }, [userId, token]);
+  if (isUserLoading || isImageLoading) return <FullPageLoading />;
 
   return (
     <>
       <div className={styles.profile}>
-        {mainImages && (
+        {mainImage && (
           <img
-            src={`${API_BASE}${mainImages.image_url}`}
+            src={`${API_BASE}${mainImage.image_url}`}
             alt="プロフィール画像"
             className={styles.mainImage}
           />
         )}
         {/* 遷移先にuser_idを渡す */}
-        <Link to={`/profile/${userId}`} className={styles.mypageLink}>
+        <Link to={`/profile/${user?.user_id}`} className={styles.mypageLink}>
           <p>プロフィール確認・編集</p>
         </Link>
       </div>
@@ -83,6 +54,10 @@ export default function Mypage() {
             <p>登録情報確認</p>
           </Link>
         </div>
+      </div>
+
+      <div className={styles.logoutWrapper}>
+        <LogOutButton size="lg" className={styles.logoutBtn} />
       </div>
     </>
   );

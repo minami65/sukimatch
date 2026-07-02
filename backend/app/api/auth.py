@@ -32,3 +32,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
         "access_token": access_token,
         "token_type": "bearer"
     }
+
+@router.post("/logout")
+def logout():
+    return {"detail": "Successfully logged out"}

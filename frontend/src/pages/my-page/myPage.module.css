@@ -66,3 +66,14 @@
   align-items: center;
   color: #333;
 }
+
+.logoutWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.logoutBtn {
+  width: 50%;
+}

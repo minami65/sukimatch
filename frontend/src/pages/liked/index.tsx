@@ -1,31 +1,19 @@
 import { useEffect, useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
-
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 import styles from './liked.module.css';
 
 export default function Liked() {
-  const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
-  const [images, setImages] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const token = localStorage.getItem('token');
+  const [profile, setProfile] = useState<any[]>([]); //TODO: anyをやめる
+  const [images, setImages] = useState<{ userId: number; imageData: any }[]>([]); //TODO: anyをやめる
+  const [locations, setLocations] = useState<any[]>([]); //TODO: anyをやめる
 
   // いいね履歴取得
   useEffect(() => {
     const fetchLikedProfiles = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
-        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const likedResponse = await fetch('http://127.0.0.1:8000/users/me/likes');
         const likedData = await likedResponse.json();
         console.log(likedData);
         setProfile(likedData);
@@ -34,7 +22,7 @@ export default function Liked() {
       }
     };
     fetchLikedProfiles();
-  }, [navigate, token]);
+  }, []);
 
   // 画像取得
   useEffect(() => {
@@ -42,18 +30,10 @@ export default function Liked() {
 
     const fetchUserImages = async () => {
       try {
-        if (!token) {
-          navigate('/');
-          return;
-        }
         const imageData = await Promise.all(
           profile.map(async (p) => {
             const userId = p.user_id;
-            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
+            const imageResponse = await fetch(`http://127.0.0.1:8000/users/${userId}/images`);
             const imageData = await imageResponse.json();
             console.log(imageData);
             return { userId, imageData };
@@ -65,7 +45,7 @@ export default function Liked() {
       }
     };
     fetchUserImages();
-  }, [profile, navigate, token]);
+  }, [profile]);
 
   // 都道府県取得
   useEffect(() => {
@@ -92,18 +72,13 @@ export default function Liked() {
                 const location = locations.find((l) => l.id === p.current_location_id);
                 return (
                   <div className={styles.likedUser}>
-                    {images &&
-                      images.map((i) => {
-                        if (i.userId === p.user_id) {
-                          return (
-                            <img
-                              src={`http://127.0.0.1:8000${i.imageData[0].image_url}`}
-                              alt="Profile"
-                              className={styles.LikedUserImg}
-                            />
-                          );
-                        }
-                      })}
+                    {images.find((i) => i.userId === p.user_id)?.imageData[0]?.image_url && (
+                      <img
+                        src={`http://127.0.0.1:8000${images.find((i) => i.userId === p.user_id)!.imageData[0].image_url}`}
+                        alt="Profile"
+                        className={styles.LikedUserImg}
+                      />
+                    )}
                     <div className={styles.likedUserInfo}>
                       <p>{p.age}歳</p>
                       <p>{location ? location.name : '未選択'}</p>

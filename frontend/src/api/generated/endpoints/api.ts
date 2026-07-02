@@ -47,10 +47,7 @@ import type {
   UserUpdate
 } from '../models';
 
-
-
-
-
+import customInstance from '../../axios.ts';
 const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
   const result = { queryKey } as T & { queryKey: K };
   for (const key of Object.keys(query)) {
@@ -66,47 +63,20 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type rootGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type rootGetResponseSuccess = (rootGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type rootGetResponse = (rootGetResponseSuccess)
-
-export const getRootGetUrl = () => {
-
-
-
-
-  return `/`
-}
-
 /**
  * @summary Root
  */
-export const rootGet = async ( options?: RequestInit): Promise<rootGetResponse> => {
+export const rootGet = (
 
-  const res = await fetch(getRootGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: rootGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as rootGetResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -118,16 +88,16 @@ export const getRootGetQueryKey = () => {
     }
 
 
-export const getRootGetQueryOptions = <TData = Awaited<ReturnType<typeof rootGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, fetch?: RequestInit}
+export const getRootGetQueryOptions = <TData = Awaited<ReturnType<typeof rootGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getRootGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof rootGet>>> = ({ signal }) => rootGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof rootGet>>> = ({ signal }) => rootGet(signal);
 
 
 
@@ -147,7 +117,7 @@ export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError =
           TError,
           Awaited<ReturnType<typeof rootGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError = unknown>(
@@ -157,11 +127,11 @@ export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError =
           TError,
           Awaited<ReturnType<typeof rootGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -169,7 +139,7 @@ export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError =
  */
 
 export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -185,67 +155,36 @@ export function useRootGet<TData = Awaited<ReturnType<typeof rootGet>>, TError =
 
 
 
-export type registerUserPostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type registerUserPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type registerUserPostResponseSuccess = (registerUserPostResponse200) & {
-  headers: Headers;
-};
-export type registerUserPostResponseError = (registerUserPostResponse422) & {
-  headers: Headers;
-};
-
-export type registerUserPostResponse = (registerUserPostResponseSuccess | registerUserPostResponseError)
-
-export const getRegisterUserPostUrl = () => {
-
-
-
-
-  return `/user`
-}
 
 /**
  * @summary Register
  */
-export const registerUserPost = async (userCreate: UserCreate, options?: RequestInit): Promise<registerUserPostResponse> => {
-
-  const res = await fetch(getRegisterUserPostUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(userCreate)
-  }
-)
+export const registerUserPost = (
+    userCreate: UserCreate,
+ signal?: AbortSignal
+) => {
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: registerUserPostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as registerUserPostResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/user`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userCreate, signal
+    },
+      );
+    }
 
 
 
 export const getRegisterUserPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserPost>>, TError,{data: UserCreate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserPost>>, TError,{data: UserCreate}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof registerUserPost>>, TError,{data: UserCreate}, TContext> => {
 
 const mutationKey = ['registerUserPost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -253,7 +192,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerUserPost>>, {data: UserCreate}> = (props) => {
           const {data} = props ?? {};
 
-          return  registerUserPost(data,fetchOptions)
+          return  registerUserPost(data,)
         }
 
 
@@ -271,7 +210,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Register
  */
 export const useRegisterUserPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserPost>>, TError,{data: UserCreate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerUserPost>>, TError,{data: UserCreate}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof registerUserPost>>,
         TError,
@@ -280,67 +219,36 @@ export const useRegisterUserPost = <TError = HTTPValidationError,
       > => {
       return useMutation(getRegisterUserPostMutationOptions(options), queryClient);
     }
-    export type resetUserPasswordPasswordResetPutResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type resetUserPasswordPasswordResetPutResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type resetUserPasswordPasswordResetPutResponseSuccess = (resetUserPasswordPasswordResetPutResponse200) & {
-  headers: Headers;
-};
-export type resetUserPasswordPasswordResetPutResponseError = (resetUserPasswordPasswordResetPutResponse422) & {
-  headers: Headers;
-};
-
-export type resetUserPasswordPasswordResetPutResponse = (resetUserPasswordPasswordResetPutResponseSuccess | resetUserPasswordPasswordResetPutResponseError)
-
-export const getResetUserPasswordPasswordResetPutUrl = () => {
-
-
-
-
-  return `/password/reset`
-}
 
 /**
  * @summary Reset User Password
  */
-export const resetUserPasswordPasswordResetPut = async (passwordReset: PasswordReset, options?: RequestInit): Promise<resetUserPasswordPasswordResetPutResponse> => {
-
-  const res = await fetch(getResetUserPasswordPasswordResetPutUrl(),
-  {
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(passwordReset)
-  }
-)
+export const resetUserPasswordPasswordResetPut = (
+    passwordReset: PasswordReset,
+ signal?: AbortSignal
+) => {
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: resetUserPasswordPasswordResetPutResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as resetUserPasswordPasswordResetPutResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/password/reset`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: passwordReset, signal
+    },
+      );
+    }
 
 
 
 export const getResetUserPasswordPasswordResetPutMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, TError,{data: PasswordReset}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, TError,{data: PasswordReset}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, TError,{data: PasswordReset}, TContext> => {
 
 const mutationKey = ['resetUserPasswordPasswordResetPut'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -348,7 +256,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, {data: PasswordReset}> = (props) => {
           const {data} = props ?? {};
 
-          return  resetUserPasswordPasswordResetPut(data,fetchOptions)
+          return  resetUserPasswordPasswordResetPut(data,)
         }
 
 
@@ -366,7 +274,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Reset User Password
  */
 export const useResetUserPasswordPasswordResetPut = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, TError,{data: PasswordReset}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>, TError,{data: PasswordReset}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof resetUserPasswordPasswordResetPut>>,
         TError,
@@ -375,61 +283,22 @@ export const useResetUserPasswordPasswordResetPut = <TError = HTTPValidationErro
       > => {
       return useMutation(getResetUserPasswordPasswordResetPutMutationOptions(options), queryClient);
     }
-    export type getUserListUsersGetResponse200 = {
-  data: UserResponse[]
-  status: 200
-}
-
-export type getUserListUsersGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type getUserListUsersGetResponseSuccess = (getUserListUsersGetResponse200) & {
-  headers: Headers;
-};
-export type getUserListUsersGetResponseError = (getUserListUsersGetResponse422) & {
-  headers: Headers;
-};
-
-export type getUserListUsersGetResponse = (getUserListUsersGetResponseSuccess | getUserListUsersGetResponseError)
-
-export const getGetUserListUsersGetUrl = (params?: GetUserListUsersGetParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/users?${stringifiedParams}` : `/users`
-}
 
 /**
  * @summary Get User List
  */
-export const getUserListUsersGet = async (params?: GetUserListUsersGetParams, options?: RequestInit): Promise<getUserListUsersGetResponse> => {
-
-  const res = await fetch(getGetUserListUsersGetUrl(params),
-  {
-    ...options,
-    method: 'GET'
+export const getUserListUsersGet = (
+    params?: GetUserListUsersGetParams,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getUserListUsersGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getUserListUsersGetResponse
-}
-
+      return customInstance<UserResponse[]>(
+      {url: `/users`, method: 'GET',
+        params, signal
+    },
+      );
+    }
 
 
 
@@ -441,16 +310,16 @@ export const getGetUserListUsersGetQueryKey = (params?: GetUserListUsersGetParam
     }
 
 
-export const getGetUserListUsersGetQueryOptions = <TData = Awaited<ReturnType<typeof getUserListUsersGet>>, TError = HTTPValidationError>(params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetUserListUsersGetQueryOptions = <TData = Awaited<ReturnType<typeof getUserListUsersGet>>, TError = HTTPValidationError>(params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetUserListUsersGetQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserListUsersGet>>> = ({ signal }) => getUserListUsersGet(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserListUsersGet>>> = ({ signal }) => getUserListUsersGet(params, signal);
 
 
 
@@ -470,7 +339,7 @@ export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUser
           TError,
           Awaited<ReturnType<typeof getUserListUsersGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUserListUsersGet>>, TError = HTTPValidationError>(
@@ -480,11 +349,11 @@ export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUser
           TError,
           Awaited<ReturnType<typeof getUserListUsersGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUserListUsersGet>>, TError = HTTPValidationError>(
- params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, fetch?: RequestInit}
+ params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -492,7 +361,7 @@ export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUser
  */
 
 export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUserListUsersGet>>, TError = HTTPValidationError>(
- params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, fetch?: RequestInit}
+ params?: GetUserListUsersGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserListUsersGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -508,54 +377,21 @@ export function useGetUserListUsersGet<TData = Awaited<ReturnType<typeof getUser
 
 
 
-export type getUserDetailUsersUserIdGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type getUserDetailUsersUserIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type getUserDetailUsersUserIdGetResponseSuccess = (getUserDetailUsersUserIdGetResponse200) & {
-  headers: Headers;
-};
-export type getUserDetailUsersUserIdGetResponseError = (getUserDetailUsersUserIdGetResponse422) & {
-  headers: Headers;
-};
-
-export type getUserDetailUsersUserIdGetResponse = (getUserDetailUsersUserIdGetResponseSuccess | getUserDetailUsersUserIdGetResponseError)
-
-export const getGetUserDetailUsersUserIdGetUrl = (userId: number,) => {
-
-
-
-
-  return `/users/${userId}`
-}
 
 /**
  * @summary Get User Detail
  */
-export const getUserDetailUsersUserIdGet = async (userId: number, options?: RequestInit): Promise<getUserDetailUsersUserIdGetResponse> => {
-
-  const res = await fetch(getGetUserDetailUsersUserIdGetUrl(userId),
-  {
-    ...options,
-    method: 'GET'
+export const getUserDetailUsersUserIdGet = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getUserDetailUsersUserIdGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getUserDetailUsersUserIdGetResponse
-}
-
+      return customInstance<UserResponse>(
+      {url: `/users/${userId}`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -567,16 +403,16 @@ export const getGetUserDetailUsersUserIdGetQueryKey = (userId: number,) => {
     }
 
 
-export const getGetUserDetailUsersUserIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError = HTTPValidationError>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetUserDetailUsersUserIdGetQueryOptions = <TData = Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError = HTTPValidationError>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetUserDetailUsersUserIdGetQueryKey(userId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>> = ({ signal }) => getUserDetailUsersUserIdGet(userId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>> = ({ signal }) => getUserDetailUsersUserIdGet(userId, signal);
 
 
 
@@ -596,7 +432,7 @@ export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError = HTTPValidationError>(
@@ -606,11 +442,11 @@ export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError = HTTPValidationError>(
- userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, fetch?: RequestInit}
+ userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -618,7 +454,7 @@ export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof
  */
 
 export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError = HTTPValidationError>(
- userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, fetch?: RequestInit}
+ userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserDetailUsersUserIdGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -634,67 +470,34 @@ export function useGetUserDetailUsersUserIdGet<TData = Awaited<ReturnType<typeof
 
 
 
-export type deleteUserUserIdDeleteResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type deleteUserUserIdDeleteResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type deleteUserUserIdDeleteResponseSuccess = (deleteUserUserIdDeleteResponse200) & {
-  headers: Headers;
-};
-export type deleteUserUserIdDeleteResponseError = (deleteUserUserIdDeleteResponse422) & {
-  headers: Headers;
-};
-
-export type deleteUserUserIdDeleteResponse = (deleteUserUserIdDeleteResponseSuccess | deleteUserUserIdDeleteResponseError)
-
-export const getDeleteUserUserIdDeleteUrl = (userId: number,) => {
-
-
-
-
-  return `/user/${userId}`
-}
 
 /**
  * @summary Delete
  */
-export const deleteUserUserIdDelete = async (userId: number, options?: RequestInit): Promise<deleteUserUserIdDeleteResponse> => {
-
-  const res = await fetch(getDeleteUserUserIdDeleteUrl(userId),
-  {
-    ...options,
-    method: 'DELETE'
+export const deleteUserUserIdDelete = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: deleteUserUserIdDeleteResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as deleteUserUserIdDeleteResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/user/${userId}`, method: 'DELETE', signal
+    },
+      );
+    }
 
 
 
 export const getDeleteUserUserIdDeleteMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, TError,{userId: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, TError,{userId: number}, TContext> => {
 
 const mutationKey = ['deleteUserUserIdDelete'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -702,7 +505,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, {userId: number}> = (props) => {
           const {userId} = props ?? {};
 
-          return  deleteUserUserIdDelete(userId,fetchOptions)
+          return  deleteUserUserIdDelete(userId,)
         }
 
 
@@ -720,7 +523,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Delete
  */
 export const useDeleteUserUserIdDelete = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteUserUserIdDelete>>, TError,{userId: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteUserUserIdDelete>>,
         TError,
@@ -729,47 +532,21 @@ export const useDeleteUserUserIdDelete = <TError = HTTPValidationError,
       > => {
       return useMutation(getDeleteUserUserIdDeleteMutationOptions(options), queryClient);
     }
-    export type getMeUserMeGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type getMeUserMeGetResponseSuccess = (getMeUserMeGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getMeUserMeGetResponse = (getMeUserMeGetResponseSuccess)
-
-export const getGetMeUserMeGetUrl = () => {
-
-
-
-
-  return `/user/me`
-}
 
 /**
  * @summary Get Me
  */
-export const getMeUserMeGet = async ( options?: RequestInit): Promise<getMeUserMeGetResponse> => {
+export const getMeUserMeGet = (
 
-  const res = await fetch(getGetMeUserMeGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getMeUserMeGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getMeUserMeGetResponse
-}
-
+      return customInstance<UserResponse>(
+      {url: `/user/me`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -781,16 +558,16 @@ export const getGetMeUserMeGetQueryKey = () => {
     }
 
 
-export const getGetMeUserMeGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeUserMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetMeUserMeGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeUserMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetMeUserMeGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeUserMeGet>>> = ({ signal }) => getMeUserMeGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeUserMeGet>>> = ({ signal }) => getMeUserMeGet(signal);
 
 
 
@@ -810,7 +587,7 @@ export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeG
           TError,
           Awaited<ReturnType<typeof getMeUserMeGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeGet>>, TError = unknown>(
@@ -820,11 +597,11 @@ export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeG
           TError,
           Awaited<ReturnType<typeof getMeUserMeGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -832,7 +609,7 @@ export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeG
  */
 
 export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeUserMeGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -848,67 +625,36 @@ export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeG
 
 
 
-export type updateUsersMePutResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type updateUsersMePutResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type updateUsersMePutResponseSuccess = (updateUsersMePutResponse200) & {
-  headers: Headers;
-};
-export type updateUsersMePutResponseError = (updateUsersMePutResponse422) & {
-  headers: Headers;
-};
-
-export type updateUsersMePutResponse = (updateUsersMePutResponseSuccess | updateUsersMePutResponseError)
-
-export const getUpdateUsersMePutUrl = () => {
-
-
-
-
-  return `/users/me`
-}
 
 /**
  * @summary Update
  */
-export const updateUsersMePut = async (userUpdate: UserUpdate, options?: RequestInit): Promise<updateUsersMePutResponse> => {
-
-  const res = await fetch(getUpdateUsersMePutUrl(),
-  {
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(userUpdate)
-  }
-)
+export const updateUsersMePut = (
+    userUpdate: UserUpdate,
+ signal?: AbortSignal
+) => {
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: updateUsersMePutResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as updateUsersMePutResponse
-}
-
+      return customInstance<UserResponse>(
+      {url: `/users/me`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: userUpdate, signal
+    },
+      );
+    }
 
 
 
 export const getUpdateUsersMePutMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext> => {
 
 const mutationKey = ['updateUsersMePut'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -916,7 +662,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUsersMePut>>, {data: UserUpdate}> = (props) => {
           const {data} = props ?? {};
 
-          return  updateUsersMePut(data,fetchOptions)
+          return  updateUsersMePut(data,)
         }
 
 
@@ -934,7 +680,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Update
  */
 export const useUpdateUsersMePut = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateUsersMePut>>,
         TError,
@@ -943,67 +689,34 @@ export const useUpdateUsersMePut = <TError = HTTPValidationError,
       > => {
       return useMutation(getUpdateUsersMePutMutationOptions(options), queryClient);
     }
-    export type likeUserUsersUserIdLikePostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type likeUserUsersUserIdLikePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type likeUserUsersUserIdLikePostResponseSuccess = (likeUserUsersUserIdLikePostResponse200) & {
-  headers: Headers;
-};
-export type likeUserUsersUserIdLikePostResponseError = (likeUserUsersUserIdLikePostResponse422) & {
-  headers: Headers;
-};
-
-export type likeUserUsersUserIdLikePostResponse = (likeUserUsersUserIdLikePostResponseSuccess | likeUserUsersUserIdLikePostResponseError)
-
-export const getLikeUserUsersUserIdLikePostUrl = (userId: number,) => {
-
-
-
-
-  return `/users/${userId}/like`
-}
 
 /**
  * @summary Like User
  */
-export const likeUserUsersUserIdLikePost = async (userId: number, options?: RequestInit): Promise<likeUserUsersUserIdLikePostResponse> => {
-
-  const res = await fetch(getLikeUserUsersUserIdLikePostUrl(userId),
-  {
-    ...options,
-    method: 'POST'
+export const likeUserUsersUserIdLikePost = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: likeUserUsersUserIdLikePostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as likeUserUsersUserIdLikePostResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/${userId}/like`, method: 'POST', signal
+    },
+      );
+    }
 
 
 
 export const getLikeUserUsersUserIdLikePostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, TError,{userId: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, TError,{userId: number}, TContext> => {
 
 const mutationKey = ['likeUserUsersUserIdLikePost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -1011,7 +724,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, {userId: number}> = (props) => {
           const {userId} = props ?? {};
 
-          return  likeUserUsersUserIdLikePost(userId,fetchOptions)
+          return  likeUserUsersUserIdLikePost(userId,)
         }
 
 
@@ -1029,7 +742,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Like User
  */
 export const useLikeUserUsersUserIdLikePost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>, TError,{userId: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof likeUserUsersUserIdLikePost>>,
         TError,
@@ -1038,67 +751,34 @@ export const useLikeUserUsersUserIdLikePost = <TError = HTTPValidationError,
       > => {
       return useMutation(getLikeUserUsersUserIdLikePostMutationOptions(options), queryClient);
     }
-    export type unlikeUserUsersUserIdLikeDeleteResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type unlikeUserUsersUserIdLikeDeleteResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type unlikeUserUsersUserIdLikeDeleteResponseSuccess = (unlikeUserUsersUserIdLikeDeleteResponse200) & {
-  headers: Headers;
-};
-export type unlikeUserUsersUserIdLikeDeleteResponseError = (unlikeUserUsersUserIdLikeDeleteResponse422) & {
-  headers: Headers;
-};
-
-export type unlikeUserUsersUserIdLikeDeleteResponse = (unlikeUserUsersUserIdLikeDeleteResponseSuccess | unlikeUserUsersUserIdLikeDeleteResponseError)
-
-export const getUnlikeUserUsersUserIdLikeDeleteUrl = (userId: number,) => {
-
-
-
-
-  return `/users/${userId}/like`
-}
 
 /**
  * @summary Unlike User
  */
-export const unlikeUserUsersUserIdLikeDelete = async (userId: number, options?: RequestInit): Promise<unlikeUserUsersUserIdLikeDeleteResponse> => {
-
-  const res = await fetch(getUnlikeUserUsersUserIdLikeDeleteUrl(userId),
-  {
-    ...options,
-    method: 'DELETE'
+export const unlikeUserUsersUserIdLikeDelete = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: unlikeUserUsersUserIdLikeDeleteResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as unlikeUserUsersUserIdLikeDeleteResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/${userId}/like`, method: 'DELETE', signal
+    },
+      );
+    }
 
 
 
 export const getUnlikeUserUsersUserIdLikeDeleteMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, TError,{userId: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, TError,{userId: number}, TContext> => {
 
 const mutationKey = ['unlikeUserUsersUserIdLikeDelete'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -1106,7 +786,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, {userId: number}> = (props) => {
           const {userId} = props ?? {};
 
-          return  unlikeUserUsersUserIdLikeDelete(userId,fetchOptions)
+          return  unlikeUserUsersUserIdLikeDelete(userId,)
         }
 
 
@@ -1124,7 +804,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Unlike User
  */
 export const useUnlikeUserUsersUserIdLikeDelete = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>, TError,{userId: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof unlikeUserUsersUserIdLikeDelete>>,
         TError,
@@ -1133,47 +813,21 @@ export const useUnlikeUserUsersUserIdLikeDelete = <TError = HTTPValidationError,
       > => {
       return useMutation(getUnlikeUserUsersUserIdLikeDeleteMutationOptions(options), queryClient);
     }
-    export type getMyLikeUsersUsersMeLikesGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type getMyLikeUsersUsersMeLikesGetResponseSuccess = (getMyLikeUsersUsersMeLikesGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getMyLikeUsersUsersMeLikesGetResponse = (getMyLikeUsersUsersMeLikesGetResponseSuccess)
-
-export const getGetMyLikeUsersUsersMeLikesGetUrl = () => {
-
-
-
-
-  return `/users/me/likes`
-}
 
 /**
  * @summary Get My Like Users
  */
-export const getMyLikeUsersUsersMeLikesGet = async ( options?: RequestInit): Promise<getMyLikeUsersUsersMeLikesGetResponse> => {
+export const getMyLikeUsersUsersMeLikesGet = (
 
-  const res = await fetch(getGetMyLikeUsersUsersMeLikesGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getMyLikeUsersUsersMeLikesGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getMyLikeUsersUsersMeLikesGetResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/me/likes`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1185,16 +839,16 @@ export const getGetMyLikeUsersUsersMeLikesGetQueryKey = () => {
     }
 
 
-export const getGetMyLikeUsersUsersMeLikesGetQueryOptions = <TData = Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetMyLikeUsersUsersMeLikesGetQueryOptions = <TData = Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetMyLikeUsersUsersMeLikesGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>> = ({ signal }) => getMyLikeUsersUsersMeLikesGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>> = ({ signal }) => getMyLikeUsersUsersMeLikesGet(signal);
 
 
 
@@ -1214,7 +868,7 @@ export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError = unknown>(
@@ -1224,11 +878,11 @@ export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1236,7 +890,7 @@ export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<type
  */
 
 export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyLikeUsersUsersMeLikesGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1252,47 +906,21 @@ export function useGetMyLikeUsersUsersMeLikesGet<TData = Awaited<ReturnType<type
 
 
 
-export type getLikedByUsersMeLikedByGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type getLikedByUsersMeLikedByGetResponseSuccess = (getLikedByUsersMeLikedByGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getLikedByUsersMeLikedByGetResponse = (getLikedByUsersMeLikedByGetResponseSuccess)
-
-export const getGetLikedByUsersMeLikedByGetUrl = () => {
-
-
-
-
-  return `/users/me/liked-by`
-}
 
 /**
  * @summary Get Liked By
  */
-export const getLikedByUsersMeLikedByGet = async ( options?: RequestInit): Promise<getLikedByUsersMeLikedByGetResponse> => {
+export const getLikedByUsersMeLikedByGet = (
 
-  const res = await fetch(getGetLikedByUsersMeLikedByGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getLikedByUsersMeLikedByGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getLikedByUsersMeLikedByGetResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/me/liked-by`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1304,16 +932,16 @@ export const getGetLikedByUsersMeLikedByGetQueryKey = () => {
     }
 
 
-export const getGetLikedByUsersMeLikedByGetQueryOptions = <TData = Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetLikedByUsersMeLikedByGetQueryOptions = <TData = Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetLikedByUsersMeLikedByGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>> = ({ signal }) => getLikedByUsersMeLikedByGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>> = ({ signal }) => getLikedByUsersMeLikedByGet(signal);
 
 
 
@@ -1333,7 +961,7 @@ export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError = unknown>(
@@ -1343,11 +971,11 @@ export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1355,7 +983,7 @@ export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof
  */
 
 export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLikedByUsersMeLikedByGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1371,67 +999,34 @@ export function useGetLikedByUsersMeLikedByGet<TData = Awaited<ReturnType<typeof
 
 
 
-export type createFootprintUsersUserIdFootprintPostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type createFootprintUsersUserIdFootprintPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type createFootprintUsersUserIdFootprintPostResponseSuccess = (createFootprintUsersUserIdFootprintPostResponse200) & {
-  headers: Headers;
-};
-export type createFootprintUsersUserIdFootprintPostResponseError = (createFootprintUsersUserIdFootprintPostResponse422) & {
-  headers: Headers;
-};
-
-export type createFootprintUsersUserIdFootprintPostResponse = (createFootprintUsersUserIdFootprintPostResponseSuccess | createFootprintUsersUserIdFootprintPostResponseError)
-
-export const getCreateFootprintUsersUserIdFootprintPostUrl = (userId: number,) => {
-
-
-
-
-  return `/users/${userId}/footprint`
-}
 
 /**
  * @summary Create Footprint
  */
-export const createFootprintUsersUserIdFootprintPost = async (userId: number, options?: RequestInit): Promise<createFootprintUsersUserIdFootprintPostResponse> => {
-
-  const res = await fetch(getCreateFootprintUsersUserIdFootprintPostUrl(userId),
-  {
-    ...options,
-    method: 'POST'
+export const createFootprintUsersUserIdFootprintPost = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: createFootprintUsersUserIdFootprintPostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as createFootprintUsersUserIdFootprintPostResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/${userId}/footprint`, method: 'POST', signal
+    },
+      );
+    }
 
 
 
 export const getCreateFootprintUsersUserIdFootprintPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, TError,{userId: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, TError,{userId: number}, TContext> => {
 
 const mutationKey = ['createFootprintUsersUserIdFootprintPost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -1439,7 +1034,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, {userId: number}> = (props) => {
           const {userId} = props ?? {};
 
-          return  createFootprintUsersUserIdFootprintPost(userId,fetchOptions)
+          return  createFootprintUsersUserIdFootprintPost(userId,)
         }
 
 
@@ -1457,7 +1052,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Create Footprint
  */
 export const useCreateFootprintUsersUserIdFootprintPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, TError,{userId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>, TError,{userId: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createFootprintUsersUserIdFootprintPost>>,
         TError,
@@ -1466,47 +1061,21 @@ export const useCreateFootprintUsersUserIdFootprintPost = <TError = HTTPValidati
       > => {
       return useMutation(getCreateFootprintUsersUserIdFootprintPostMutationOptions(options), queryClient);
     }
-    export type getVisitedUserUsersMeFootprintGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type getVisitedUserUsersMeFootprintGetResponseSuccess = (getVisitedUserUsersMeFootprintGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getVisitedUserUsersMeFootprintGetResponse = (getVisitedUserUsersMeFootprintGetResponseSuccess)
-
-export const getGetVisitedUserUsersMeFootprintGetUrl = () => {
-
-
-
-
-  return `/users/me/footprint`
-}
 
 /**
  * @summary Get Visited User
  */
-export const getVisitedUserUsersMeFootprintGet = async ( options?: RequestInit): Promise<getVisitedUserUsersMeFootprintGetResponse> => {
+export const getVisitedUserUsersMeFootprintGet = (
 
-  const res = await fetch(getGetVisitedUserUsersMeFootprintGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getVisitedUserUsersMeFootprintGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getVisitedUserUsersMeFootprintGetResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/me/footprint`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1518,16 +1087,16 @@ export const getGetVisitedUserUsersMeFootprintGetQueryKey = () => {
     }
 
 
-export const getGetVisitedUserUsersMeFootprintGetQueryOptions = <TData = Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetVisitedUserUsersMeFootprintGetQueryOptions = <TData = Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetVisitedUserUsersMeFootprintGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>> = ({ signal }) => getVisitedUserUsersMeFootprintGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>> = ({ signal }) => getVisitedUserUsersMeFootprintGet(signal);
 
 
 
@@ -1547,7 +1116,7 @@ export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<
           TError,
           Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError = unknown>(
@@ -1557,11 +1126,11 @@ export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<
           TError,
           Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1569,7 +1138,7 @@ export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<
  */
 
 export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getVisitedUserUsersMeFootprintGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1585,47 +1154,21 @@ export function useGetVisitedUserUsersMeFootprintGet<TData = Awaited<ReturnType<
 
 
 
-export type getLocationListLocationsGetResponse200 = {
-  data: LocationResponse[]
-  status: 200
-}
-
-export type getLocationListLocationsGetResponseSuccess = (getLocationListLocationsGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getLocationListLocationsGetResponse = (getLocationListLocationsGetResponseSuccess)
-
-export const getGetLocationListLocationsGetUrl = () => {
-
-
-
-
-  return `/locations`
-}
 
 /**
  * @summary Get Location List
  */
-export const getLocationListLocationsGet = async ( options?: RequestInit): Promise<getLocationListLocationsGetResponse> => {
+export const getLocationListLocationsGet = (
 
-  const res = await fetch(getGetLocationListLocationsGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getLocationListLocationsGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getLocationListLocationsGetResponse
-}
-
+      return customInstance<LocationResponse[]>(
+      {url: `/locations`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1637,16 +1180,16 @@ export const getGetLocationListLocationsGetQueryKey = () => {
     }
 
 
-export const getGetLocationListLocationsGetQueryOptions = <TData = Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetLocationListLocationsGetQueryOptions = <TData = Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetLocationListLocationsGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLocationListLocationsGet>>> = ({ signal }) => getLocationListLocationsGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getLocationListLocationsGet>>> = ({ signal }) => getLocationListLocationsGet(signal);
 
 
 
@@ -1666,7 +1209,7 @@ export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getLocationListLocationsGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError = unknown>(
@@ -1676,11 +1219,11 @@ export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof
           TError,
           Awaited<ReturnType<typeof getLocationListLocationsGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1688,7 +1231,7 @@ export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof
  */
 
 export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getLocationListLocationsGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1704,47 +1247,21 @@ export function useGetLocationListLocationsGet<TData = Awaited<ReturnType<typeof
 
 
 
-export type getGenderListGenderGetResponse200 = {
-  data: GenderResponse[]
-  status: 200
-}
-
-export type getGenderListGenderGetResponseSuccess = (getGenderListGenderGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getGenderListGenderGetResponse = (getGenderListGenderGetResponseSuccess)
-
-export const getGetGenderListGenderGetUrl = () => {
-
-
-
-
-  return `/gender`
-}
 
 /**
  * @summary Get Gender List
  */
-export const getGenderListGenderGet = async ( options?: RequestInit): Promise<getGenderListGenderGetResponse> => {
+export const getGenderListGenderGet = (
 
-  const res = await fetch(getGetGenderListGenderGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getGenderListGenderGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getGenderListGenderGetResponse
-}
-
+      return customInstance<GenderResponse[]>(
+      {url: `/gender`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1756,16 +1273,16 @@ export const getGetGenderListGenderGetQueryKey = () => {
     }
 
 
-export const getGetGenderListGenderGetQueryOptions = <TData = Awaited<ReturnType<typeof getGenderListGenderGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetGenderListGenderGetQueryOptions = <TData = Awaited<ReturnType<typeof getGenderListGenderGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetGenderListGenderGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGenderListGenderGet>>> = ({ signal }) => getGenderListGenderGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getGenderListGenderGet>>> = ({ signal }) => getGenderListGenderGet(signal);
 
 
 
@@ -1785,7 +1302,7 @@ export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getG
           TError,
           Awaited<ReturnType<typeof getGenderListGenderGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getGenderListGenderGet>>, TError = unknown>(
@@ -1795,11 +1312,11 @@ export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getG
           TError,
           Awaited<ReturnType<typeof getGenderListGenderGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getGenderListGenderGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1807,7 +1324,7 @@ export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getG
  */
 
 export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getGenderListGenderGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getGenderListGenderGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1823,47 +1340,21 @@ export function useGetGenderListGenderGet<TData = Awaited<ReturnType<typeof getG
 
 
 
-export type getEducationListEducationGetResponse200 = {
-  data: EducationResponse[]
-  status: 200
-}
-
-export type getEducationListEducationGetResponseSuccess = (getEducationListEducationGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getEducationListEducationGetResponse = (getEducationListEducationGetResponseSuccess)
-
-export const getGetEducationListEducationGetUrl = () => {
-
-
-
-
-  return `/education`
-}
 
 /**
  * @summary Get Education List
  */
-export const getEducationListEducationGet = async ( options?: RequestInit): Promise<getEducationListEducationGetResponse> => {
+export const getEducationListEducationGet = (
 
-  const res = await fetch(getGetEducationListEducationGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getEducationListEducationGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getEducationListEducationGetResponse
-}
-
+      return customInstance<EducationResponse[]>(
+      {url: `/education`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1875,16 +1366,16 @@ export const getGetEducationListEducationGetQueryKey = () => {
     }
 
 
-export const getGetEducationListEducationGetQueryOptions = <TData = Awaited<ReturnType<typeof getEducationListEducationGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetEducationListEducationGetQueryOptions = <TData = Awaited<ReturnType<typeof getEducationListEducationGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetEducationListEducationGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEducationListEducationGet>>> = ({ signal }) => getEducationListEducationGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEducationListEducationGet>>> = ({ signal }) => getEducationListEducationGet(signal);
 
 
 
@@ -1904,7 +1395,7 @@ export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeo
           TError,
           Awaited<ReturnType<typeof getEducationListEducationGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeof getEducationListEducationGet>>, TError = unknown>(
@@ -1914,11 +1405,11 @@ export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeo
           TError,
           Awaited<ReturnType<typeof getEducationListEducationGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeof getEducationListEducationGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1926,7 +1417,7 @@ export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeo
  */
 
 export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeof getEducationListEducationGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEducationListEducationGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1942,47 +1433,21 @@ export function useGetEducationListEducationGet<TData = Awaited<ReturnType<typeo
 
 
 
-export type getJobListJobGetResponse200 = {
-  data: JobResponse[]
-  status: 200
-}
-
-export type getJobListJobGetResponseSuccess = (getJobListJobGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getJobListJobGetResponse = (getJobListJobGetResponseSuccess)
-
-export const getGetJobListJobGetUrl = () => {
-
-
-
-
-  return `/job`
-}
 
 /**
  * @summary Get Job List
  */
-export const getJobListJobGet = async ( options?: RequestInit): Promise<getJobListJobGetResponse> => {
+export const getJobListJobGet = (
 
-  const res = await fetch(getGetJobListJobGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getJobListJobGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getJobListJobGetResponse
-}
-
+      return customInstance<JobResponse[]>(
+      {url: `/job`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -1994,16 +1459,16 @@ export const getGetJobListJobGetQueryKey = () => {
     }
 
 
-export const getGetJobListJobGetQueryOptions = <TData = Awaited<ReturnType<typeof getJobListJobGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetJobListJobGetQueryOptions = <TData = Awaited<ReturnType<typeof getJobListJobGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetJobListJobGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getJobListJobGet>>> = ({ signal }) => getJobListJobGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getJobListJobGet>>> = ({ signal }) => getJobListJobGet(signal);
 
 
 
@@ -2023,7 +1488,7 @@ export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobList
           TError,
           Awaited<ReturnType<typeof getJobListJobGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobListJobGet>>, TError = unknown>(
@@ -2033,11 +1498,11 @@ export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobList
           TError,
           Awaited<ReturnType<typeof getJobListJobGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobListJobGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2045,7 +1510,7 @@ export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobList
  */
 
 export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobListJobGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListJobGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2061,47 +1526,21 @@ export function useGetJobListJobGet<TData = Awaited<ReturnType<typeof getJobList
 
 
 
-export type getIncomeListIncomeGetResponse200 = {
-  data: IncomeResponse[]
-  status: 200
-}
-
-export type getIncomeListIncomeGetResponseSuccess = (getIncomeListIncomeGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getIncomeListIncomeGetResponse = (getIncomeListIncomeGetResponseSuccess)
-
-export const getGetIncomeListIncomeGetUrl = () => {
-
-
-
-
-  return `/income`
-}
 
 /**
  * @summary Get Income List
  */
-export const getIncomeListIncomeGet = async ( options?: RequestInit): Promise<getIncomeListIncomeGetResponse> => {
+export const getIncomeListIncomeGet = (
 
-  const res = await fetch(getGetIncomeListIncomeGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getIncomeListIncomeGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getIncomeListIncomeGetResponse
-}
-
+      return customInstance<IncomeResponse[]>(
+      {url: `/income`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2113,16 +1552,16 @@ export const getGetIncomeListIncomeGetQueryKey = () => {
     }
 
 
-export const getGetIncomeListIncomeGetQueryOptions = <TData = Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetIncomeListIncomeGetQueryOptions = <TData = Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetIncomeListIncomeGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIncomeListIncomeGet>>> = ({ signal }) => getIncomeListIncomeGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIncomeListIncomeGet>>> = ({ signal }) => getIncomeListIncomeGet(signal);
 
 
 
@@ -2142,7 +1581,7 @@ export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getI
           TError,
           Awaited<ReturnType<typeof getIncomeListIncomeGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError = unknown>(
@@ -2152,11 +1591,11 @@ export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getI
           TError,
           Awaited<ReturnType<typeof getIncomeListIncomeGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2164,7 +1603,7 @@ export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getI
  */
 
 export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIncomeListIncomeGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2180,47 +1619,21 @@ export function useGetIncomeListIncomeGet<TData = Awaited<ReturnType<typeof getI
 
 
 
-export type getMarriageListMarriageGetResponse200 = {
-  data: MarriageResponse[]
-  status: 200
-}
-
-export type getMarriageListMarriageGetResponseSuccess = (getMarriageListMarriageGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getMarriageListMarriageGetResponse = (getMarriageListMarriageGetResponseSuccess)
-
-export const getGetMarriageListMarriageGetUrl = () => {
-
-
-
-
-  return `/marriage`
-}
 
 /**
  * @summary Get Marriage List
  */
-export const getMarriageListMarriageGet = async ( options?: RequestInit): Promise<getMarriageListMarriageGetResponse> => {
+export const getMarriageListMarriageGet = (
 
-  const res = await fetch(getGetMarriageListMarriageGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getMarriageListMarriageGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getMarriageListMarriageGetResponse
-}
-
+      return customInstance<MarriageResponse[]>(
+      {url: `/marriage`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2232,16 +1645,16 @@ export const getGetMarriageListMarriageGetQueryKey = () => {
     }
 
 
-export const getGetMarriageListMarriageGetQueryOptions = <TData = Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetMarriageListMarriageGetQueryOptions = <TData = Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetMarriageListMarriageGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMarriageListMarriageGet>>> = ({ signal }) => getMarriageListMarriageGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMarriageListMarriageGet>>> = ({ signal }) => getMarriageListMarriageGet(signal);
 
 
 
@@ -2261,7 +1674,7 @@ export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof 
           TError,
           Awaited<ReturnType<typeof getMarriageListMarriageGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError = unknown>(
@@ -2271,11 +1684,11 @@ export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof 
           TError,
           Awaited<ReturnType<typeof getMarriageListMarriageGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2283,7 +1696,7 @@ export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof 
  */
 
 export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMarriageListMarriageGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2299,47 +1712,21 @@ export function useGetMarriageListMarriageGet<TData = Awaited<ReturnType<typeof 
 
 
 
-export type getHolidayListHolidayGetResponse200 = {
-  data: HolidayResponse[]
-  status: 200
-}
-
-export type getHolidayListHolidayGetResponseSuccess = (getHolidayListHolidayGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getHolidayListHolidayGetResponse = (getHolidayListHolidayGetResponseSuccess)
-
-export const getGetHolidayListHolidayGetUrl = () => {
-
-
-
-
-  return `/holiday`
-}
 
 /**
  * @summary Get Holiday List
  */
-export const getHolidayListHolidayGet = async ( options?: RequestInit): Promise<getHolidayListHolidayGetResponse> => {
+export const getHolidayListHolidayGet = (
 
-  const res = await fetch(getGetHolidayListHolidayGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getHolidayListHolidayGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getHolidayListHolidayGetResponse
-}
-
+      return customInstance<HolidayResponse[]>(
+      {url: `/holiday`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2351,16 +1738,16 @@ export const getGetHolidayListHolidayGetQueryKey = () => {
     }
 
 
-export const getGetHolidayListHolidayGetQueryOptions = <TData = Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetHolidayListHolidayGetQueryOptions = <TData = Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHolidayListHolidayGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHolidayListHolidayGet>>> = ({ signal }) => getHolidayListHolidayGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHolidayListHolidayGet>>> = ({ signal }) => getHolidayListHolidayGet(signal);
 
 
 
@@ -2380,7 +1767,7 @@ export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getHolidayListHolidayGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError = unknown>(
@@ -2390,11 +1777,11 @@ export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getHolidayListHolidayGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2402,7 +1789,7 @@ export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof ge
  */
 
 export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHolidayListHolidayGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2418,47 +1805,21 @@ export function useGetHolidayListHolidayGet<TData = Awaited<ReturnType<typeof ge
 
 
 
-export type getAlcoholListAlcoholGetResponse200 = {
-  data: AlcoholResponse[]
-  status: 200
-}
-
-export type getAlcoholListAlcoholGetResponseSuccess = (getAlcoholListAlcoholGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getAlcoholListAlcoholGetResponse = (getAlcoholListAlcoholGetResponseSuccess)
-
-export const getGetAlcoholListAlcoholGetUrl = () => {
-
-
-
-
-  return `/alcohol`
-}
 
 /**
  * @summary Get Alcohol List
  */
-export const getAlcoholListAlcoholGet = async ( options?: RequestInit): Promise<getAlcoholListAlcoholGetResponse> => {
+export const getAlcoholListAlcoholGet = (
 
-  const res = await fetch(getGetAlcoholListAlcoholGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getAlcoholListAlcoholGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getAlcoholListAlcoholGetResponse
-}
-
+      return customInstance<AlcoholResponse[]>(
+      {url: `/alcohol`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2470,16 +1831,16 @@ export const getGetAlcoholListAlcoholGetQueryKey = () => {
     }
 
 
-export const getGetAlcoholListAlcoholGetQueryOptions = <TData = Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetAlcoholListAlcoholGetQueryOptions = <TData = Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetAlcoholListAlcoholGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>> = ({ signal }) => getAlcoholListAlcoholGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>> = ({ signal }) => getAlcoholListAlcoholGet(signal);
 
 
 
@@ -2499,7 +1860,7 @@ export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError = unknown>(
@@ -2509,11 +1870,11 @@ export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2521,7 +1882,7 @@ export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof ge
  */
 
 export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAlcoholListAlcoholGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2537,47 +1898,21 @@ export function useGetAlcoholListAlcoholGet<TData = Awaited<ReturnType<typeof ge
 
 
 
-export type getSmokingListSmokingGetResponse200 = {
-  data: SmokingResponse[]
-  status: 200
-}
-
-export type getSmokingListSmokingGetResponseSuccess = (getSmokingListSmokingGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSmokingListSmokingGetResponse = (getSmokingListSmokingGetResponseSuccess)
-
-export const getGetSmokingListSmokingGetUrl = () => {
-
-
-
-
-  return `/smoking`
-}
 
 /**
  * @summary Get Smoking List
  */
-export const getSmokingListSmokingGet = async ( options?: RequestInit): Promise<getSmokingListSmokingGetResponse> => {
+export const getSmokingListSmokingGet = (
 
-  const res = await fetch(getGetSmokingListSmokingGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getSmokingListSmokingGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getSmokingListSmokingGetResponse
-}
-
+      return customInstance<SmokingResponse[]>(
+      {url: `/smoking`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2589,16 +1924,16 @@ export const getGetSmokingListSmokingGetQueryKey = () => {
     }
 
 
-export const getGetSmokingListSmokingGetQueryOptions = <TData = Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetSmokingListSmokingGetQueryOptions = <TData = Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSmokingListSmokingGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSmokingListSmokingGet>>> = ({ signal }) => getSmokingListSmokingGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSmokingListSmokingGet>>> = ({ signal }) => getSmokingListSmokingGet(signal);
 
 
 
@@ -2618,7 +1953,7 @@ export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getSmokingListSmokingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError = unknown>(
@@ -2628,11 +1963,11 @@ export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getSmokingListSmokingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2640,7 +1975,7 @@ export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof ge
  */
 
 export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSmokingListSmokingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2656,47 +1991,21 @@ export function useGetSmokingListSmokingGet<TData = Awaited<ReturnType<typeof ge
 
 
 
-export type getJobListLivingGetResponse200 = {
-  data: LivingResponse[]
-  status: 200
-}
-
-export type getJobListLivingGetResponseSuccess = (getJobListLivingGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getJobListLivingGetResponse = (getJobListLivingGetResponseSuccess)
-
-export const getGetJobListLivingGetUrl = () => {
-
-
-
-
-  return `/living`
-}
 
 /**
  * @summary Get Job List
  */
-export const getJobListLivingGet = async ( options?: RequestInit): Promise<getJobListLivingGetResponse> => {
+export const getJobListLivingGet = (
 
-  const res = await fetch(getGetJobListLivingGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getJobListLivingGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getJobListLivingGetResponse
-}
-
+      return customInstance<LivingResponse[]>(
+      {url: `/living`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2708,16 +2017,16 @@ export const getGetJobListLivingGetQueryKey = () => {
     }
 
 
-export const getGetJobListLivingGetQueryOptions = <TData = Awaited<ReturnType<typeof getJobListLivingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetJobListLivingGetQueryOptions = <TData = Awaited<ReturnType<typeof getJobListLivingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetJobListLivingGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getJobListLivingGet>>> = ({ signal }) => getJobListLivingGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getJobListLivingGet>>> = ({ signal }) => getJobListLivingGet(signal);
 
 
 
@@ -2737,7 +2046,7 @@ export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobL
           TError,
           Awaited<ReturnType<typeof getJobListLivingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobListLivingGet>>, TError = unknown>(
@@ -2747,11 +2056,11 @@ export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobL
           TError,
           Awaited<ReturnType<typeof getJobListLivingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobListLivingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2759,7 +2068,7 @@ export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobL
  */
 
 export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobListLivingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getJobListLivingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2775,47 +2084,21 @@ export function useGetJobListLivingGet<TData = Awaited<ReturnType<typeof getJobL
 
 
 
-export type getMeetingListMeetingGetResponse200 = {
-  data: MeetingResponse[]
-  status: 200
-}
-
-export type getMeetingListMeetingGetResponseSuccess = (getMeetingListMeetingGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getMeetingListMeetingGetResponse = (getMeetingListMeetingGetResponseSuccess)
-
-export const getGetMeetingListMeetingGetUrl = () => {
-
-
-
-
-  return `/meeting`
-}
 
 /**
  * @summary Get Meeting List
  */
-export const getMeetingListMeetingGet = async ( options?: RequestInit): Promise<getMeetingListMeetingGetResponse> => {
+export const getMeetingListMeetingGet = (
 
-  const res = await fetch(getGetMeetingListMeetingGetUrl(),
-  {
-    ...options,
-    method: 'GET'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getMeetingListMeetingGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getMeetingListMeetingGetResponse
-}
-
+      return customInstance<MeetingResponse[]>(
+      {url: `/meeting`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -2827,16 +2110,16 @@ export const getGetMeetingListMeetingGetQueryKey = () => {
     }
 
 
-export const getGetMeetingListMeetingGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetMeetingListMeetingGetQueryOptions = <TData = Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetMeetingListMeetingGetQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeetingListMeetingGet>>> = ({ signal }) => getMeetingListMeetingGet({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMeetingListMeetingGet>>> = ({ signal }) => getMeetingListMeetingGet(signal);
 
 
 
@@ -2856,7 +2139,7 @@ export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getMeetingListMeetingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError = unknown>(
@@ -2866,11 +2149,11 @@ export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof ge
           TError,
           Awaited<ReturnType<typeof getMeetingListMeetingGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -2878,7 +2161,7 @@ export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof ge
  */
 
 export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMeetingListMeetingGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -2894,67 +2177,36 @@ export function useGetMeetingListMeetingGet<TData = Awaited<ReturnType<typeof ge
 
 
 
-export type loginLoginPostResponse200 = {
-  data: TokenResponse
-  status: 200
-}
-
-export type loginLoginPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type loginLoginPostResponseSuccess = (loginLoginPostResponse200) & {
-  headers: Headers;
-};
-export type loginLoginPostResponseError = (loginLoginPostResponse422) & {
-  headers: Headers;
-};
-
-export type loginLoginPostResponse = (loginLoginPostResponseSuccess | loginLoginPostResponseError)
-
-export const getLoginLoginPostUrl = () => {
-
-
-
-
-  return `/login`
-}
 
 /**
  * @summary Login
  */
-export const loginLoginPost = async (loginRequest: LoginRequest, options?: RequestInit): Promise<loginLoginPostResponse> => {
-
-  const res = await fetch(getLoginLoginPostUrl(),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(loginRequest)
-  }
-)
+export const loginLoginPost = (
+    loginRequest: LoginRequest,
+ signal?: AbortSignal
+) => {
 
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: loginLoginPostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginLoginPostResponse
-}
-
+      return customInstance<TokenResponse>(
+      {url: `/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginRequest, signal
+    },
+      );
+    }
 
 
 
 export const getLoginLoginPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginPost>>, TError,{data: LoginRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginPost>>, TError,{data: LoginRequest}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof loginLoginPost>>, TError,{data: LoginRequest}, TContext> => {
 
 const mutationKey = ['loginLoginPost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -2962,7 +2214,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginLoginPost>>, {data: LoginRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  loginLoginPost(data,fetchOptions)
+          return  loginLoginPost(data,)
         }
 
 
@@ -2980,7 +2232,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Login
  */
 export const useLoginLoginPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginPost>>, TError,{data: LoginRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginPost>>, TError,{data: LoginRequest}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginLoginPost>>,
         TError,
@@ -2989,60 +2241,34 @@ export const useLoginLoginPost = <TError = HTTPValidationError,
       > => {
       return useMutation(getLoginLoginPostMutationOptions(options), queryClient);
     }
-    export type logoutLogoutPostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type logoutLogoutPostResponseSuccess = (logoutLogoutPostResponse200) & {
-  headers: Headers;
-};
-;
-
-export type logoutLogoutPostResponse = (logoutLogoutPostResponseSuccess)
-
-export const getLogoutLogoutPostUrl = () => {
-
-
-
-
-  return `/logout`
-}
 
 /**
  * @summary Logout
  */
-export const logoutLogoutPost = async ( options?: RequestInit): Promise<logoutLogoutPostResponse> => {
+export const logoutLogoutPost = (
 
-  const res = await fetch(getLogoutLogoutPostUrl(),
-  {
-    ...options,
-    method: 'POST'
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: logoutLogoutPostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as logoutLogoutPostResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/logout`, method: 'POST', signal
+    },
+      );
+    }
 
 
 
 export const getLogoutLogoutPostMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutLogoutPost>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutLogoutPost>>, TError,void, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof logoutLogoutPost>>, TError,void, TContext> => {
 
 const mutationKey = ['logoutLogoutPost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -3050,7 +2276,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof logoutLogoutPost>>, void> = () => {
 
 
-          return  logoutLogoutPost(fetchOptions)
+          return  logoutLogoutPost()
         }
 
 
@@ -3068,7 +2294,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Logout
  */
 export const useLogoutLogoutPost = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutLogoutPost>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logoutLogoutPost>>, TError,void, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof logoutLogoutPost>>,
         TError,
@@ -3077,69 +2303,38 @@ export const useLogoutLogoutPost = <TError = unknown,
       > => {
       return useMutation(getLogoutLogoutPostMutationOptions(options), queryClient);
     }
-    export type uploadImageUsersMeImagesPostResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type uploadImageUsersMeImagesPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type uploadImageUsersMeImagesPostResponseSuccess = (uploadImageUsersMeImagesPostResponse200) & {
-  headers: Headers;
-};
-export type uploadImageUsersMeImagesPostResponseError = (uploadImageUsersMeImagesPostResponse422) & {
-  headers: Headers;
-};
-
-export type uploadImageUsersMeImagesPostResponse = (uploadImageUsersMeImagesPostResponseSuccess | uploadImageUsersMeImagesPostResponseError)
-
-export const getUploadImageUsersMeImagesPostUrl = () => {
-
-
-
-
-  return `/users/me/images`
-}
 
 /**
  * @summary Upload Image
  */
-export const uploadImageUsersMeImagesPost = async (bodyUploadImageUsersMeImagesPost: BodyUploadImageUsersMeImagesPost, options?: RequestInit): Promise<uploadImageUsersMeImagesPostResponse> => {
-    const formData = new FormData();
+export const uploadImageUsersMeImagesPost = (
+    bodyUploadImageUsersMeImagesPost: BodyUploadImageUsersMeImagesPost,
+ signal?: AbortSignal
+) => {
+
+      const formData = new FormData();
 formData.append(`file`, bodyUploadImageUsersMeImagesPost.file);
 
-  const res = await fetch(getUploadImageUsersMeImagesPostUrl(),
-  {
-    ...options,
-    method: 'POST'
-    ,
-    body: formData
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: uploadImageUsersMeImagesPostResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as uploadImageUsersMeImagesPostResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/me/images`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
+    },
+      );
+    }
 
 
 
 export const getUploadImageUsersMeImagesPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, TError,{data: BodyUploadImageUsersMeImagesPost}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, TError,{data: BodyUploadImageUsersMeImagesPost}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, TError,{data: BodyUploadImageUsersMeImagesPost}, TContext> => {
 
 const mutationKey = ['uploadImageUsersMeImagesPost'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -3147,7 +2342,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, {data: BodyUploadImageUsersMeImagesPost}> = (props) => {
           const {data} = props ?? {};
 
-          return  uploadImageUsersMeImagesPost(data,fetchOptions)
+          return  uploadImageUsersMeImagesPost(data,)
         }
 
 
@@ -3165,7 +2360,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Upload Image
  */
 export const useUploadImageUsersMeImagesPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, TError,{data: BodyUploadImageUsersMeImagesPost}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>, TError,{data: BodyUploadImageUsersMeImagesPost}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof uploadImageUsersMeImagesPost>>,
         TError,
@@ -3174,54 +2369,21 @@ export const useUploadImageUsersMeImagesPost = <TError = HTTPValidationError,
       > => {
       return useMutation(getUploadImageUsersMeImagesPostMutationOptions(options), queryClient);
     }
-    export type getImagesUsersUserIdImagesGetResponse200 = {
-  data: UserImageResponse[]
-  status: 200
-}
-
-export type getImagesUsersUserIdImagesGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type getImagesUsersUserIdImagesGetResponseSuccess = (getImagesUsersUserIdImagesGetResponse200) & {
-  headers: Headers;
-};
-export type getImagesUsersUserIdImagesGetResponseError = (getImagesUsersUserIdImagesGetResponse422) & {
-  headers: Headers;
-};
-
-export type getImagesUsersUserIdImagesGetResponse = (getImagesUsersUserIdImagesGetResponseSuccess | getImagesUsersUserIdImagesGetResponseError)
-
-export const getGetImagesUsersUserIdImagesGetUrl = (userId: number,) => {
-
-
-
-
-  return `/users/${userId}/images`
-}
 
 /**
  * @summary Get Images
  */
-export const getImagesUsersUserIdImagesGet = async (userId: number, options?: RequestInit): Promise<getImagesUsersUserIdImagesGetResponse> => {
-
-  const res = await fetch(getGetImagesUsersUserIdImagesGetUrl(userId),
-  {
-    ...options,
-    method: 'GET'
+export const getImagesUsersUserIdImagesGet = (
+    userId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getImagesUsersUserIdImagesGetResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getImagesUsersUserIdImagesGetResponse
-}
-
+      return customInstance<UserImageResponse[]>(
+      {url: `/users/${userId}/images`, method: 'GET', signal
+    },
+      );
+    }
 
 
 
@@ -3233,16 +2395,16 @@ export const getGetImagesUsersUserIdImagesGetQueryKey = (userId: number,) => {
     }
 
 
-export const getGetImagesUsersUserIdImagesGetQueryOptions = <TData = Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError = HTTPValidationError>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, fetch?: RequestInit}
+export const getGetImagesUsersUserIdImagesGetQueryOptions = <TData = Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError = HTTPValidationError>(userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, }
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetImagesUsersUserIdImagesGetQueryKey(userId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>> = ({ signal }) => getImagesUsersUserIdImagesGet(userId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>> = ({ signal }) => getImagesUsersUserIdImagesGet(userId, signal);
 
 
 
@@ -3262,7 +2424,7 @@ export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError = HTTPValidationError>(
@@ -3272,11 +2434,11 @@ export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<type
           TError,
           Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError = HTTPValidationError>(
- userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, fetch?: RequestInit}
+ userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -3284,7 +2446,7 @@ export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<type
  */
 
 export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError = HTTPValidationError>(
- userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, fetch?: RequestInit}
+ userId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getImagesUsersUserIdImagesGet>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -3300,67 +2462,34 @@ export function useGetImagesUsersUserIdImagesGet<TData = Awaited<ReturnType<type
 
 
 
-export type deleteImagesUsersMeImagesImageIdDeleteResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type deleteImagesUsersMeImagesImageIdDeleteResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type deleteImagesUsersMeImagesImageIdDeleteResponseSuccess = (deleteImagesUsersMeImagesImageIdDeleteResponse200) & {
-  headers: Headers;
-};
-export type deleteImagesUsersMeImagesImageIdDeleteResponseError = (deleteImagesUsersMeImagesImageIdDeleteResponse422) & {
-  headers: Headers;
-};
-
-export type deleteImagesUsersMeImagesImageIdDeleteResponse = (deleteImagesUsersMeImagesImageIdDeleteResponseSuccess | deleteImagesUsersMeImagesImageIdDeleteResponseError)
-
-export const getDeleteImagesUsersMeImagesImageIdDeleteUrl = (imageId: number,) => {
-
-
-
-
-  return `/users/me/images/${imageId}`
-}
 
 /**
  * @summary Delete Images
  */
-export const deleteImagesUsersMeImagesImageIdDelete = async (imageId: number, options?: RequestInit): Promise<deleteImagesUsersMeImagesImageIdDeleteResponse> => {
-
-  const res = await fetch(getDeleteImagesUsersMeImagesImageIdDeleteUrl(imageId),
-  {
-    ...options,
-    method: 'DELETE'
+export const deleteImagesUsersMeImagesImageIdDelete = (
+    imageId: number,
+ signal?: AbortSignal
+) => {
 
 
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: deleteImagesUsersMeImagesImageIdDeleteResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as deleteImagesUsersMeImagesImageIdDeleteResponse
-}
-
+      return customInstance<unknown>(
+      {url: `/users/me/images/${imageId}`, method: 'DELETE', signal
+    },
+      );
+    }
 
 
 
 export const getDeleteImagesUsersMeImagesImageIdDeleteMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, TError,{imageId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, TError,{imageId: number}, TContext>, }
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, TError,{imageId: number}, TContext> => {
 
 const mutationKey = ['deleteImagesUsersMeImagesImageIdDelete'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }};
 
 
 
@@ -3368,7 +2497,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, {imageId: number}> = (props) => {
           const {imageId} = props ?? {};
 
-          return  deleteImagesUsersMeImagesImageIdDelete(imageId,fetchOptions)
+          return  deleteImagesUsersMeImagesImageIdDelete(imageId,)
         }
 
 
@@ -3386,7 +2515,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Delete Images
  */
 export const useDeleteImagesUsersMeImagesImageIdDelete = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, TError,{imageId: number}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>, TError,{imageId: number}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteImagesUsersMeImagesImageIdDelete>>,
         TError,

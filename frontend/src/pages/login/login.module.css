@@ -1,0 +1,10 @@
+.errorBanner {
+  background-color: '#fff3f3';
+  color: '#e03131';
+  padding: '12px';
+  border-radius: '6px';
+  margin-bottom: '16px';
+  border: '1px solid #ffc9c9';
+  font-size: '14px';
+  text-align: 'center';
+}

@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
+import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
+import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
 
+import { useAuth } from '@/hooks/useAuth.js';
+import { useFilteredUsers } from '@/hooks/useUser.js';
+
+import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
 import search from '@/assets/search_logo.png';
 import { API_BASE } from '@/config';
 
-import Button from '../../components/Button/index.js';
 import {
   ALCOHOL,
   EDUCATION,
@@ -23,11 +28,13 @@ import {
 import styles from './userList.module.css';
 
 function UserList() {
+  const { user: currentUser } = useAuth();
+  const loginUserId = currentUser?.user_id ?? 1;
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const [ageRange, setAgeRange] = useState([18, 60]);
   const [heightRange, setHeightRange] = useState([100, 200]);
-
   const [prefecture, setPrefecture] = useState(0);
   const [job, setJob] = useState(0);
   const [education, setEducation] = useState(0);
@@ -39,23 +46,12 @@ function UserList() {
   const [meeting, setMeeting] = useState(0);
   const [marriage, setMarriage] = useState(0);
 
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [activeParams, setActiveParams] = useState<GetUserListUsersGetParams>({
+    min_age: 18,
+    max_age: 60,
+  });
 
-  const loginUserId = Number(localStorage.getItem('loginUserId') ?? 1);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/users`)
-      .then((res) => res.json())
-      .then((data) => {
-        // 自分を除外
-        const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
-        setFilteredUsers(otherUsers);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [loginUserId]);
+  const { users: filteredUsers, isLoading } = useFilteredUsers(activeParams, loginUserId);
 
   // 検索開閉
   const handleSearchToggle = () => {
@@ -64,67 +60,25 @@ function UserList() {
 
   // 検索処理
   const handleFilterSearch = async () => {
-    const params = new URLSearchParams();
+    const params: GetUserListUsersGetParams = {
+      min_age: ageRange[0],
+      max_age: ageRange[1],
+    };
+    if (heightRange[0] !== 100) params.min_height = heightRange[0];
+    if (heightRange[1] !== 200) params.max_height = heightRange[1];
+    if (prefecture !== 0) params.current_location_id = prefecture;
+    if (job !== 0) params.job_id = job;
+    if (education !== 0) params.education_id = education;
+    if (income !== 0) params.income_id = income;
+    if (holidays !== 0) params.holiday_id = holidays;
+    if (alcohol !== 0) params.alcohol_id = alcohol;
+    if (smoking !== 0) params.smoking_id = smoking;
+    // TODO: Fix living arrangement id to be included
+    // if (living !== 0) params.living_arrangement_id = living;
+    if (meeting !== 0) params.meeting_preference_id = meeting;
+    if (marriage !== 0) params.marriage_intention_id = marriage;
 
-    params.append('min_age', ageRange[0]);
-    params.append('max_age', ageRange[1]);
-
-    if (heightRange[0] !== 100) {
-      params.append('min_height', heightRange[0]);
-    }
-
-    if (heightRange[1] !== 200) {
-      params.append('max_height', heightRange[1]);
-    }
-
-    if (prefecture !== 0) {
-      params.append('current_location_id', prefecture);
-    }
-
-    if (job !== 0) {
-      params.append('job_id', job);
-    }
-
-    if (education !== 0) {
-      params.append('education_id', education);
-    }
-
-    if (income !== 0) {
-      params.append('income_id', income);
-    }
-
-    if (holidays !== 0) {
-      params.append('holiday_id', holidays);
-    }
-
-    if (alcohol !== 0) {
-      params.append('alcohol_id', alcohol);
-    }
-
-    if (smoking !== 0) {
-      params.append('smoking_id', smoking);
-    }
-
-    if (living !== 0) {
-      params.append('living_arrangement_id', living);
-    }
-
-    if (meeting !== 0) {
-      params.append('meeting_preference_id', meeting);
-    }
-
-    if (marriage !== 0) {
-      params.append('marriage_intention_id', marriage);
-    }
-
-    const response = await fetch(`${API_BASE}/users?${params.toString()}`);
-
-    const data = await response.json();
-
-    // 自分を除外
-    const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
-    setFilteredUsers(otherUsers);
+    setActiveParams(params);
     setIsSearchOpen(false);
   };
 
@@ -143,15 +97,14 @@ function UserList() {
     setMeeting(0);
     setMarriage(0);
 
-    const response = await fetch(`${API_BASE}/users`);
-
-    const data = await response.json();
-
-    // 自分を除外
-    const otherUsers = data.filter((user) => user.user_id !== loginUserId);
-
-    setFilteredUsers(otherUsers);
+    setActiveParams({
+      min_age: 18,
+      max_age: 60,
+    });
+    setIsSearchOpen(false);
   };
+
+  if (isLoading) return <FullPageLoading />;
 
   return (
     <div className={styles.searchPage}>
