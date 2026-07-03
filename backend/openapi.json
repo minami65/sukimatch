@@ -40,7 +40,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
               }
             }
           },
@@ -550,7 +552,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/LikeResponse"
+                }
               }
             }
           },
@@ -590,7 +594,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
               }
             }
           },
@@ -1169,6 +1175,19 @@
         ],
         "title": "Body_upload_image_users_me_images_post"
       },
+      "DeleteResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "DeleteResponse"
+      },
       "EducationResponse": {
         "properties": {
           "education_id": {
@@ -1271,6 +1290,46 @@
           "job_name"
         ],
         "title": "JobResponse"
+      },
+      "LikeBase": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "from_user_id": {
+            "type": "integer",
+            "title": "From User Id"
+          },
+          "to_user_id": {
+            "type": "integer",
+            "title": "To User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "from_user_id",
+          "to_user_id"
+        ],
+        "title": "LikeBase"
+      },
+      "LikeResponse": {
+        "properties": {
+          "like": {
+            "$ref": "#/components/schemas/LikeBase"
+          },
+          "is_match": {
+            "type": "boolean",
+            "title": "Is Match"
+          }
+        },
+        "type": "object",
+        "required": [
+          "like",
+          "is_match"
+        ],
+        "title": "LikeResponse"
       },
       "LivingResponse": {
         "properties": {
@@ -1454,6 +1513,10 @@
             ],
             "title": "Bio"
           },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
           "gender_id": {
             "type": "integer",
             "title": "Gender Id"
@@ -1596,6 +1659,7 @@
           "name",
           "age",
           "birthday",
+          "password",
           "gender_id"
         ],
         "title": "UserCreate"

@@ -2,29 +2,29 @@ import { useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import Airplane from './components/airplane';
-import './styles/create.css';
+import Button from '@/components/Button';
+
+import Airplane from '../../components/airplane';
+import { useRegister } from '../../hooks/useRegister';
+import styles from './create.module.css';
 
 function Create() {
   const navigate = useNavigate();
 
   // state
   const [nickname, setNickname] = useState('');
-
   const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [day, setDay] = useState('');
-
   const [gender, setGender] = useState('');
-
   const [age, setAge] = useState('');
-
   const [email, setEmail] = useState('');
   const [emailConfirmation, setEmailConfirmation] = useState('');
   const [emailError, setEmailError] = useState('');
-
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
+  const { registerUser, isRegistering } = useRegister();
 
   // 登録処理
   const handleRegister = async () => {
@@ -45,62 +45,34 @@ function Create() {
     // APIへ送るデータ
     const newUser = {
       name: nickname,
-
       age: Number(age),
-
       birthday: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
-
       mail_address: email,
-
       password: password,
-
       bio: '',
-
       gender_id: Number(gender),
     };
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/user', {
-        method: 'POST',
-
-        headers: {
-          'Content-Type': 'application/json',
-        },
-
-        body: JSON.stringify(newUser),
-      });
-
-      const data = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        const message = data?.detail ?? '登録失敗';
+    registerUser(newUser, {
+      onSuccess: (user) => {
+        console.log('登録に成功したユーザー:', user);
+        navigate('/login');
+      },
+      onError: (message) => {
         setEmailError(message);
-        return;
-      }
-
-      console.log(data);
-      if (data?.user_id) {
-        localStorage.setItem('loginUserId', String(data.user_id));
-      }
-
-      // 支払い画面へ
-      navigate('/pay');
-    } catch (error) {
-      console.error(error);
-
-      alert('登録失敗');
-    }
+      },
+    });
   };
 
   return (
     <div>
       <h1>会員登録</h1>
 
-      <section className="grid">
+      <section className={styles.grid}>
         <form>
-          <div className="signup">
+          <div className={styles.signup}>
             {/* ニックネーム */}
-            <div className="field">
+            <div className={styles.field}>
               <label>ニックネーム</label>
 
               <input
@@ -111,10 +83,10 @@ function Create() {
               />
             </div>
             {/* 生年月日 */}
-            <div className="field">
+            <div className={styles.field}>
               <label>生年月日</label>
 
-              <div className="expiry">
+              <div className={styles.expiry}>
                 <input
                   type="number"
                   // placeholder="2026"
@@ -147,7 +119,7 @@ function Create() {
               </div>
             </div>
             {/* 性別 */}
-            <div className="field">
+            <div className={styles.field}>
               <label>性別</label>
 
               <select value={gender} onChange={(e) => setGender(e.target.value)} required>
@@ -159,13 +131,13 @@ function Create() {
               </select>
             </div>
             {/* 年齢 */}
-            <div className="field">
+            <div className={styles.field}>
               <label>年齢</label>
 
               <input type="number" value={age} onChange={(e) => setAge(e.target.value)} required />
             </div>
             {/* メール */}
-            <div className="field">
+            <div className={styles.field}>
               <label>メールアドレス</label>
 
               <input
@@ -179,7 +151,7 @@ function Create() {
               />
             </div>
             {/* メール確認 */}
-            <div className="field">
+            <div className={styles.field}>
               <label>メールアドレス(確認用)</label>
 
               <input
@@ -191,10 +163,10 @@ function Create() {
                 }}
                 required
               />
-              {emailError && <p className="email_error">{emailError}</p>}
+              {emailError && <p className={styles.email_error}>{emailError}</p>}
             </div>
             {/* パスワード */}
-            <div className="field">
+            <div className={styles.field}>
               <label>パスワード</label>
 
               <input
@@ -205,7 +177,7 @@ function Create() {
               />
             </div>
             {/* パスワード確認 */}
-            <div className="field">
+            <div className={styles.field}>
               <label>パスワード(確認用)</label>
 
               <input
@@ -218,10 +190,15 @@ function Create() {
           </div>
 
           {/* 登録ボタン */}
-          <div className="create_button">
-            <button type="button" className="register" onClick={handleRegister}>
-              支払い情報登録へ
-            </button>
+          <div className={styles.create_button}>
+            <Button
+              type="submit"
+              disabled={isRegistering}
+              className={styles.register}
+              onClick={handleRegister}
+            >
+              登録
+            </Button>
           </div>
         </form>
 

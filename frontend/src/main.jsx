@@ -13,11 +13,11 @@ import Setting from '@/pages/setting/index.tsx';
 import UserList from '@/pages/user-list/index.tsx';
 import '@/styles/index.css';
 
-import Create from './create.jsx';
 import Form from './form.jsx';
 import { AuthLayout } from './layouts/AuthLayout.tsx';
 import BottomNavLayout from './layouts/BottomNav/BottomNavLayout.tsx';
 import MatchComplete from './match.jsx';
+import Create from './pages/create/index.tsx';
 import UserDetails from './pages/user-details/index.tsx';
 import Pay from './pay.jsx';
 import Talk from './talk.jsx';

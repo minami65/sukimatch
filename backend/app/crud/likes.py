@@ -6,11 +6,11 @@ from app.models.matches import Matches
 
 # いいね 
 def create_like(db:Session,from_user_id:int,to_user_id:int):
-
+  # 1. バリデーション
   if from_user_id == to_user_id:
         raise HTTPException(status_code=400,detail="cannot like yourself")
     
-  #重複チェック
+  # 2. 重複チェック
   existing_like = db.query(Likes).filter(
         Likes.from_user_id == from_user_id,
         Likes.to_user_id == to_user_id
@@ -21,14 +21,16 @@ def create_like(db:Session,from_user_id:int,to_user_id:int):
             status_code=400,
             detail = "already liked"
         )
-    
+  # 3. いいね作成    
   like = Likes(
         from_user_id = from_user_id,
         to_user_id = to_user_id
     )
-
   db.add(like)
+  db.flush()
 
+  # 4. マッチング判定
+  is_match = False
   reverse_like = db.query(Likes).filter(
       Likes.from_user_id == to_user_id,
       Likes.to_user_id == from_user_id,
@@ -46,11 +48,14 @@ def create_like(db:Session,from_user_id:int,to_user_id:int):
               user2_id=max(from_user_id, to_user_id),
           )
           db.add(match)
+          is_match = True
 
   db.commit()
-  db.refresh(like)
 
-  return  like
+  return {
+    "like": like,
+    "is_match": is_match
+  }
 
 # 自分がしたいいね
 def get_my_likes(db:Session,user_id:int):
@@ -97,7 +102,17 @@ def delete_like(db:Session,from_user_id:int,to_user_id:int):
     
     if not likes:
         raise HTTPException(status_code=404,detail="Like not found")
+
+    user1, user2 = sorted([from_user_id, to_user_id])
+    match = db.query(Matches).filter(
+        Matches.user1_id == user1,
+        Matches.user2_id == user2
+    ).first()
+    
+    if match:
+        db.delete(match)
     
     db.delete(likes)
     db.commit()
+    
     return {"message":"Like deleted"}

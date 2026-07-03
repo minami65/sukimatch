@@ -22,6 +22,10 @@ from app.crud.likes import (
 from app.models.footprint import FootPrint
 from app.crud.footprint import get_my_footprint
 from app.schemas.auth import PasswordReset
+from app.schemas.likes import (
+    LikeResponse,
+    DeleteResponse
+)
 
 router = APIRouter()
 
@@ -35,7 +39,7 @@ def get_db():
 
 
 # 登録
-@router.post("/user")
+@router.post("/user", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
@@ -188,7 +192,7 @@ def update(
 
 
 # いいね
-@router.post("/users/{user_id}/like")
+@router.post("/users/{user_id}/like", response_model=LikeResponse)
 def like_user(
     user_id: int,
     db: Session = Depends(get_db),
@@ -220,7 +224,7 @@ def get_liked_by(
 
 
 # いいね取り消し
-@router.delete("/users/{user_id}/like")
+@router.delete("/users/{user_id}/like", response_model=DeleteResponse)
 def unlike_user(
     user_id: int,
     db: Session = Depends(get_db),
