@@ -1,6 +1,7 @@
 from datetime import date
 from app.db import SessionLocal
 from app.models.user import User
+from app.core.security import hash_password
 
 def seed_users():
     db = SessionLocal()
@@ -13,7 +14,7 @@ def seed_users():
                 birthday=date(1999, 1, 1),
                 gender_id=1,
                 mail_address="taro@example.com",
-                password="password123",
+                password=hash_password("password123"),
                 bio="初めまして！週末はよく映画を見ています。よろしくお願いします。",
                 height=170,
                 current_location_id=13,
@@ -34,7 +35,7 @@ def seed_users():
                 birthday=date(2001, 5, 5),
                 gender_id=2,
                 mail_address="hanako@example.com",
-                password="password123",
+                password=hash_password("password123"),
                 bio="カフェ巡りと旅行が好きです！美味しいご飯を食べに行きたいです。",
                 height=158,
                 current_location_id=13,
@@ -55,7 +56,7 @@ def seed_users():
                 birthday=date(1997, 1, 31),
                 gender_id=2,
                 mail_address="mio@example.com",
-                password="password123",
+                password=hash_password("password123"),
                 bio="嵐が好きです！",
                 height=160,
                 current_location_id=4,
@@ -76,7 +77,7 @@ def seed_users():
                 birthday=date(1997, 4, 11),
                 gender_id=2,
                 mail_address="hayato@example.com",
-                password="password123",
+                password=hash_password("password123"),
                 bio="筋トレ大好きです！筋肉愛しています！",
                 height=171,
                 current_location_id=5,
@@ -97,7 +98,7 @@ def seed_users():
                 birthday=date(1996, 3, 23),
                 gender_id=2,
                 mail_address="yuko@example.com",
-                password="password123",
+                password=hash_password("password123"),
                 bio="女優やってます！",
                 height=169,
                 current_location_id=13,
