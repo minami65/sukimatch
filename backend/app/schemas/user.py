@@ -76,9 +76,15 @@ class UserResponse(BaseModel):
     current_location: Optional[LocationResponse] = None
     images: Optional[list] = None
 
-    current_location: Optional[LocationResponse] = None
+    # current_location: Optional[LocationResponse] = None
 
-    images: list[UserImageResponse] = []
+    # images: list[UserImageResponse] = []
+
+    class Config:
+        from_attributes = True
+
+class UserDetailResponse(UserResponse):
+    is_liked: bool
 
     class Config:
         from_attributes = True
