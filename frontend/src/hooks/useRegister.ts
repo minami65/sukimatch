@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useRegisterUserPost } from '@/api/generated/endpoints/api';
 import { UserResponse } from '@/api/generated/models';
 import type { UserCreate } from '@/api/generated/models/userCreate';
