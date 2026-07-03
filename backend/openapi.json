@@ -389,6 +389,11 @@
       "get": {
         "summary": "Get User Detail",
         "operationId": "get_user_detail_users__user_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "user_id",
@@ -406,7 +411,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponse"
+                  "$ref": "#/components/schemas/UserDetailResponse"
                 }
               }
             }
@@ -1014,6 +1019,28 @@
         }
       }
     },
+    "/matches/me": {
+      "get": {
+        "summary": "Read My Matches",
+        "operationId": "read_my_matches_matches_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MatchItem"
+                  },
+                  "type": "array",
+                  "title": "Response Read My Matches Matches Me Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/me/images": {
       "post": {
         "summary": "Upload Image",
@@ -1404,6 +1431,51 @@
         ],
         "title": "MarriageResponse"
       },
+      "MatchItem": {
+        "properties": {
+          "match_id": {
+            "type": "integer",
+            "title": "Match Id"
+          },
+          "is_chat_started": {
+            "type": "boolean",
+            "title": "Is Chat Started"
+          },
+          "user": {
+            "$ref": "#/components/schemas/MatchUserProfile"
+          }
+        },
+        "type": "object",
+        "required": [
+          "match_id",
+          "is_chat_started",
+          "user"
+        ],
+        "title": "MatchItem"
+      },
+      "MatchUserProfile": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "age": {
+            "type": "integer",
+            "title": "Age"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name",
+          "age"
+        ],
+        "title": "MatchUserProfile"
+      },
       "MeetingResponse": {
         "properties": {
           "meeting_preference_id": {
@@ -1664,6 +1736,216 @@
         ],
         "title": "UserCreate"
       },
+      "UserDetailResponse": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "mail_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mail Address"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "birth_location_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Location Id"
+          },
+          "current_location_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Location Id"
+          },
+          "education_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Education Id"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "income_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Income Id"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height"
+          },
+          "marriage_intention_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marriage Intention Id"
+          },
+          "holiday_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holiday Id"
+          },
+          "alcohol_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alcohol Id"
+          },
+          "smoking_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Smoking Id"
+          },
+          "living_arrangement_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Living Arrangement Id"
+          },
+          "meeting_preference_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meeting Preference Id"
+          },
+          "current_location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "images": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Images"
+          },
+          "is_liked": {
+            "type": "boolean",
+            "title": "Is Liked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name",
+          "is_liked"
+        ],
+        "title": "UserDetailResponse"
+      },
       "UserImageResponse": {
         "properties": {
           "id": {
@@ -1873,12 +2155,16 @@
             ]
           },
           "images": {
-            "items": {
-              "$ref": "#/components/schemas/UserImageResponse"
-            },
-            "type": "array",
-            "title": "Images",
-            "default": []
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Images"
           }
         },
         "type": "object",

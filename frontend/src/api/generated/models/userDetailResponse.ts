@@ -6,7 +6,7 @@
  */
 import type { LocationResponse } from './locationResponse.ts';
 
-export interface UserResponse {
+export interface UserDetailResponse {
   user_id: number;
   name: string;
   mail_address?: string | null;
@@ -26,4 +26,5 @@ export interface UserResponse {
   meeting_preference_id?: number | null;
   current_location?: LocationResponse | null;
   images?: unknown[] | null;
+  is_liked: boolean;
 }
