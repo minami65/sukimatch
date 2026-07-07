@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import Likes from '@/components/likes';
+import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
 import '@/assets/default-profile.png';
@@ -135,7 +135,7 @@ export default function FootPrint() {
                 </div>
 
                 {/* いいねボタン */}
-                <Likes footprintId={f.user_id} disabled={isLiked} />
+                <LikeButton userId={f.user_id} />
               </div>
             );
           })

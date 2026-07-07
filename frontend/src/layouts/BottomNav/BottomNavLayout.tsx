@@ -6,7 +6,7 @@ import styles from './BottomNavLayout.module.css';
 function BottomNavLayout() {
   return (
     <div className={styles.container}>
-      <main>
+      <main className={styles.mainContent}>
         <Outlet />
       </main>
 

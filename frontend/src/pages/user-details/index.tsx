@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
+import Modal from '@/components/Modal';
+import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
 
 import { useUserDetail, useUserImages } from '@/hooks/useUser.ts';
 
 import close from '@/assets/close.png';
-import likeIcon from '@/assets/like.png';
-import likedIcon from '@/assets/liked.png';
 import { API_BASE } from '@/config.js';
 import {
   ALCOHOL,
@@ -30,7 +30,6 @@ function UserDetails() {
   const userId = Number(id);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [liked, setLiked] = useState(false);
 
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useUserDetail(userId);
   const {
@@ -163,17 +162,7 @@ function UserDetails() {
         <span>{MEETING[(user.meeting_preference_id ?? 0) as keyof typeof MEETING]}</span>
       </div>
 
-      <img
-        src={liked ? likedIcon : likeIcon}
-        className={styles.likeButton}
-        alt="like"
-        onClick={() => {
-          if (!liked) {
-            // TODO: API call should happen here
-            setLiked(true);
-          }
-        }}
-      />
+      <LikeButton initialIsLiked={user.is_liked} userId={userId} className={styles.likeButton} />
     </>
   );
 }
