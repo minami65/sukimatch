@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
@@ -11,7 +11,6 @@ import { useAuth } from '@/hooks/useAuth.js';
 import { useFilteredUsers } from '@/hooks/useUser.js';
 
 import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
-import defaultAvatar from '@/assets/default-avatar.png';
 import search from '@/assets/search_logo.png';
 
 import {

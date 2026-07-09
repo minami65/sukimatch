@@ -14,13 +14,13 @@ interface MatchedUser {
   imageUrl?: string;
 }
 
-interface MatchNotificationModal {
+interface MatchNotificationModalProps {
   isOpen: boolean;
   onClose: () => void;
   matchedUsers: MatchedUser[];
 }
 
-const MatchNotificationModal = ({ isOpen, onClose, matchedUsers }: MatchNotificationModal) => {
+const MatchNotificationModal = ({ isOpen, onClose, matchedUsers }: MatchNotificationModalProps) => {
   const navigate = useNavigate();
   const isMultiple = matchedUsers.length > 1;
 

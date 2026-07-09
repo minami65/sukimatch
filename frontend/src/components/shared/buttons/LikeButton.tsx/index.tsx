@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useLikeUser, useUnLikeUser } from '@/hooks/useLike';
 
@@ -14,12 +14,7 @@ interface LikeButtonProps {
 }
 
 const LikeButton = ({ userId, initialIsLiked, className, onLikeSuccess }: LikeButtonProps) => {
-  const [isLiked, setIsLiked] = useState(initialIsLiked || false);
-  useEffect(() => {
-    if (initialIsLiked !== undefined) {
-      setIsLiked(initialIsLiked);
-    }
-  }, [initialIsLiked]);
+  const [isLiked, setIsLiked] = useState(initialIsLiked ?? false);
 
   const likeMutation = useLikeUser();
   const unlikeMutation = useUnLikeUser();
