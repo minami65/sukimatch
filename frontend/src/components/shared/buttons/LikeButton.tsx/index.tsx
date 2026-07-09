@@ -10,9 +10,10 @@ interface LikeButtonProps {
   userId: number;
   initialIsLiked?: boolean;
   className?: string;
+  onLikeSuccess?: (isMatch: boolean) => void;
 }
 
-const LikeButton = ({ userId, initialIsLiked, className }: LikeButtonProps) => {
+const LikeButton = ({ userId, initialIsLiked, className, onLikeSuccess }: LikeButtonProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked || false);
   useEffect(() => {
     if (initialIsLiked !== undefined) {
@@ -51,8 +52,12 @@ const LikeButton = ({ userId, initialIsLiked, className }: LikeButtonProps) => {
       likeMutation.mutate(
         { userId },
         {
-          onSuccess: () => {
+          onSuccess: (data) => {
             console.log(`userId${userId}にいいねしました`);
+
+            if (onLikeSuccess) {
+              onLikeSuccess(data.is_match);
+            }
           },
           onError: (error: unknown) => {
             console.error('いいねの送信に失敗しました:', error);
