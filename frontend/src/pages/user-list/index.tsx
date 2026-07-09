@@ -10,8 +10,8 @@ import { useAuth } from '@/hooks/useAuth.js';
 import { useFilteredUsers } from '@/hooks/useUser.js';
 
 import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
+import defaultAvatar from '@/assets/default-avatar.png';
 import search from '@/assets/search_logo.png';
-import { API_BASE } from '@/config';
 
 import {
   ALCOHOL,
@@ -52,6 +52,8 @@ function UserList() {
   });
 
   const { users: filteredUsers, isLoading } = useFilteredUsers(activeParams, loginUserId);
+
+  console.log('users: ', JSON.stringify(filteredUsers));
 
   // 検索開閉
   const handleSearchToggle = () => {
@@ -313,12 +315,7 @@ function UserList() {
               <div key={user.user_id} className={styles.userCard}>
                 <div className={styles.avatar}>
                   <Link to={`/userDetail/${user.user_id}`} className={styles.link}>
-                    <img
-                      src={
-                        user.images?.[0] ? `${API_BASE}${user.images[0].image_url}` : '/default.png'
-                      }
-                      alt="user"
-                    />
+                    <img src={user?.images?.[0]?.image_url ?? defaultAvatar} alt="user" />
                   </Link>
                 </div>
 
