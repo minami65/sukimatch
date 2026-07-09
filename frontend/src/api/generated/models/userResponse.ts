@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { LocationResponse } from './locationResponse.ts';
+import type { UserImageResponse } from './userImageResponse.ts';
 
 export interface UserResponse {
   user_id: number;
@@ -25,5 +26,5 @@ export interface UserResponse {
   living_arrangement_id?: number | null;
   meeting_preference_id?: number | null;
   current_location?: LocationResponse | null;
-  images?: unknown[] | null;
+  images?: UserImageResponse[];
 }

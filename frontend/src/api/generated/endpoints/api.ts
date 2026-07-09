@@ -2412,7 +2412,7 @@ export const uploadImageUsersMeImagesPost = (
       const formData = new FormData();
 formData.append(`file`, bodyUploadImageUsersMeImagesPost.file);
 
-      return customInstance<unknown>(
+      return customInstance<UserImageResponse>(
       {url: `/users/me/images`, method: 'POST',
       headers: {'Content-Type': 'multipart/form-data', },
        data: formData, signal

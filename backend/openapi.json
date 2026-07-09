@@ -1060,7 +1060,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/UserImageResponse"
+                }
               }
             }
           },
@@ -1922,16 +1924,12 @@
             ]
           },
           "images": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Images"
+            "items": {
+              "$ref": "#/components/schemas/UserImageResponse"
+            },
+            "type": "array",
+            "title": "Images",
+            "default": []
           },
           "is_liked": {
             "type": "boolean",
@@ -2155,16 +2153,12 @@
             ]
           },
           "images": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Images"
+            "items": {
+              "$ref": "#/components/schemas/UserImageResponse"
+            },
+            "type": "array",
+            "title": "Images",
+            "default": []
           }
         },
         "type": "object",

@@ -73,7 +73,7 @@ class UserResponse(BaseModel):
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
     current_location: Optional[LocationResponse] = None
-    images: list[UserImageResponse] = []
+    images: List[UserImageResponse] = []
 
     class Config:
         from_attributes = True
