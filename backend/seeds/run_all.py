@@ -18,6 +18,7 @@ from seeds.seed_marriage import seed_marriage
 from seeds.seed_meeting import seed_meeting
 from seeds.seed_smoking import seed_smoking
 from seeds.seed_users import seed_users
+from seeds.seed_images import seed_images
 
 # ここで全モデルをインポートして、SQLAlchemyにテーブルの存在を教える
 from app.models.user import User
@@ -75,6 +76,9 @@ def run():
     # 一番最後にユーザーを入れる
     print("👥 ユーザーデータを投入中...")
     seed_users()
+
+    print("🖼 画像データを投入中...")
+    seed_images()
 
     print("✨ すべてのシードデータの投入が完了しました！")
 

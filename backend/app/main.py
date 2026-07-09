@@ -1,7 +1,5 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from app.db import engine, Base
 
 from app.api import user,locations,gender,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth,user_images,matches
@@ -22,7 +20,11 @@ from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
 
+from app.core.config import setup_cloudinary
+
 app = FastAPI()
+
+setup_cloudinary()
 
 app.add_middleware(
     CORSMiddleware,
@@ -59,6 +61,4 @@ app.include_router(meeting.router)
 app.include_router(auth.router)
 app.include_router(matches.router)
 
-# 静的ファイル（画像アップロード用）
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.include_router(user_images.router)

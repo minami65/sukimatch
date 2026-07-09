@@ -1,8 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends ,HTTPException
 from sqlalchemy.orm import Session
-import os
-import shutil
-from uuid import uuid4
+import cloudinary
+import cloudinary.uploader
 
 from app.db import SessionLocal
 from app.models.user_images import UserImages
@@ -29,33 +28,34 @@ def get_db():
         db.close()
 
 # プロフィールに画像追加
-@router.post("/users/me/images")
+@router.post("/users/me/images", response_model=UserImageResponse)
 def upload_image(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    upload_dir = f"uploads/users/{current_user.user_id}"
-    os.makedirs(upload_dir, exist_ok=True)
+    # フォルダパスを変数化
+    folder_path = f"sukimatch/users/{current_user.user_id}"
 
-    ext = file.filename.split(".")[-1]
-    filename = f"{uuid4()}.{ext}"
-    file_path = f"{upload_dir}/{filename}"
+    # Cloudinaryへアップロード
+    try:
+        upload_result = cloudinary.uploader.upload(file.file, folder=folder_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cloudinary upload failed: {str(e)}")
+    
+    # 返ってきたURLを取得
+    image_url = upload_result.get("secure_url")
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    # 【重要】後で削除するために public_id も取得しておくのがコツです
+    public_id = upload_result.get("public_id")
 
-    image_url = f"/{file_path}"
-
-    image_count = (
-        db.query(UserImages)
-        .filter(UserImages.user_id == current_user.user_id)
-        .count()
-    )
+    # データベース保存処理
+    image_count = db.query(UserImages).filter(UserImages.user_id == current_user.user_id).count()
 
     user_image = UserImages(
         user_id=current_user.user_id,
         image_url=image_url,
+        public_id=public_id,
         sort_order = image_count + 1
     )
     db.add(user_image)
@@ -84,12 +84,13 @@ def delete_images(
     if not image:
         raise HTTPException(status_code=404, detail="Image not found")
 
-    file_path = image.image_url.lstrip("/")  
-    file_path = f"app/{file_path}"           
+    # Cloudinaryから削除
+    try:
+        cloudinary.uploader.destroy(image.public_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cloudinary deletion failed: {str(e)}")
 
-    if os.path.exists(file_path):
-        os.remove(file_path)
-
+    # DBから削除
     db.delete(image)
     db.commit()
 

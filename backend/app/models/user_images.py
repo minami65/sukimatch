@@ -7,5 +7,6 @@ class UserImages(Base):
   id = Column(Integer,primary_key=True,index=True)
   user_id = Column(Integer, ForeignKey("users.user_id"),nullable=False)
   image_url = Column(String)
+  public_id = Column(String, nullable=False)
   sort_order= Column(Integer,nullable=False)
   user = relationship("User", back_populates="images")

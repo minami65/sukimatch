@@ -60,7 +60,6 @@ class UserResponse(BaseModel):
     mail_address: Optional[str] = None
     age: Optional[int] = None
     bio: Optional[str] = None
-
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -74,11 +73,7 @@ class UserResponse(BaseModel):
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
     current_location: Optional[LocationResponse] = None
-    images: Optional[list] = None
-
-    # current_location: Optional[LocationResponse] = None
-
-    # images: list[UserImageResponse] = []
+    images: list[UserImageResponse] = []
 
     class Config:
         from_attributes = True
