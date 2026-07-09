@@ -12,6 +12,7 @@ import Profile from '@/pages/profile/index.jsx';
 import Setting from '@/pages/setting/index.tsx';
 import UserList from '@/pages/user-list/index.tsx';
 import '@/styles/index.css';
+import '@/styles/reset.css';
 
 import Form from './form.jsx';
 import { AuthLayout } from './layouts/AuthLayout.tsx';

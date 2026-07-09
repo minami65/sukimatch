@@ -3,10 +3,23 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 /* 2. ブラウザ固有の邪魔な外枠・内枠の余白をゼロにする */
-* {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd {
   margin: 0;
   padding: 0;
 }
