@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 
 from app.db import SessionLocal
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserDetailResponse
 from app.crud.user import (
     create_user,
     get_user,
@@ -26,6 +26,8 @@ from app.schemas.likes import (
     LikeResponse,
     DeleteResponse
 )
+
+from app.services.user_service import get_user_detail_with_like
 
 router = APIRouter()
 
@@ -138,23 +140,21 @@ def get_user_list(
 
 
 # 詳細取得
-@router.get("/users/{user_id}", response_model=UserResponse)
+@router.get("/users/{user_id}", response_model=UserDetailResponse)
 def get_user_detail(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    user = get_user(db, user_id)
-
-    if not user:
+    user_data = get_user_detail_with_like(db, user_id, current_user.user_id)
+    
+    if not user_data:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
             detail="User not found"
         )
-
-    print(f"DEBUG: user.bio = {user.bio}")
-    
-
-    return user
+        
+    return user_data
 
 
 # 削除

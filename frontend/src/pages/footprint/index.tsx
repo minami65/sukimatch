@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import Likes from '@/components/likes';
+import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
 import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
 
-import '@/assets/default-profile.png';
+import defaultIcon from '@/assets/default-avatar.png';
 
 import styles from './footprint.module.css';
 
@@ -113,18 +113,20 @@ export default function FootPrint() {
             const isLiked = likesUser.some((user) => user.user_id === f.user_id);
             return (
               <div className={styles.footprintCard} key={f.user_id}>
-                {images.map((i) => {
-                  if (i.user_id === f.user_id) {
-                    return (
-                      <img
-                        key={i.user_id}
-                        src={`http://127.0.0.1:8000${i.images[0].image_url}`}
-                        alt="Profile"
-                        className={styles.profileImg}
-                      />
-                    );
-                  }
-                })}
+                {(() => {
+                  const userImgData = images.find((i) => i.user_id === f.user_id);
+                  const imageUrl = userImgData?.images?.[0]?.image_url;
+
+                  return imageUrl ? (
+                    <img
+                      src={`http://127.0.0.1:8000${imageUrl}`}
+                      alt="Profile"
+                      className={styles.profileImg}
+                    />
+                  ) : (
+                    <img src={defaultIcon} alt="Default Profile" className={styles.profileImg} />
+                  );
+                })()}
 
                 <div>
                   <p>{f.name}</p>
@@ -135,7 +137,7 @@ export default function FootPrint() {
                 </div>
 
                 {/* いいねボタン */}
-                <Likes footprintId={f.user_id} disabled={isLiked} />
+                <LikeButton key={f.user_id} userId={f.user_id} initialIsLiked={isLiked} />
               </div>
             );
           })

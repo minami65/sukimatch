@@ -39,11 +39,13 @@ import type {
   LocationResponse,
   LoginRequest,
   MarriageResponse,
+  MatchItem,
   MeetingResponse,
   PasswordReset,
   SmokingResponse,
   TokenResponse,
   UserCreate,
+  UserDetailResponse,
   UserImageResponse,
   UserResponse,
   UserUpdate
@@ -389,7 +391,7 @@ export const getUserDetailUsersUserIdGet = (
 ) => {
 
 
-      return customInstance<UserResponse>(
+      return customInstance<UserDetailResponse>(
       {url: `/users/${userId}`, method: 'GET', signal
     },
       );
@@ -2307,6 +2309,99 @@ export const useLogoutLogoutPost = <TError = unknown,
     }
 
 /**
+ * @summary Read My Matches
+ */
+export const readMyMatchesMatchesMeGet = (
+
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<MatchItem[]>(
+      {url: `/matches/me`, method: 'GET', signal
+    },
+      );
+    }
+
+
+
+
+export const getReadMyMatchesMatchesMeGetQueryKey = () => {
+    return [
+    `/matches/me`
+    ] as const;
+    }
+
+
+export const getReadMyMatchesMatchesMeGetQueryOptions = <TData = Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getReadMyMatchesMatchesMeGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>> = ({ signal }) => readMyMatchesMatchesMeGet(signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type ReadMyMatchesMatchesMeGetQueryResult = NonNullable<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>>
+export type ReadMyMatchesMatchesMeGetQueryError = unknown
+
+
+export function useReadMyMatchesMatchesMeGet<TData = Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReadMyMatchesMatchesMeGet<TData = Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>,
+          TError,
+          Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useReadMyMatchesMatchesMeGet<TData = Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Read My Matches
+ */
+
+export function useReadMyMatchesMatchesMeGet<TData = Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readMyMatchesMatchesMeGet>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getReadMyMatchesMatchesMeGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+/**
  * @summary Upload Image
  */
 export const uploadImageUsersMeImagesPost = (
@@ -2317,7 +2412,7 @@ export const uploadImageUsersMeImagesPost = (
       const formData = new FormData();
 formData.append(`file`, bodyUploadImageUsersMeImagesPost.file);
 
-      return customInstance<unknown>(
+      return customInstance<UserImageResponse>(
       {url: `/users/me/images`, method: 'POST',
       headers: {'Content-Type': 'multipart/form-data', },
        data: formData, signal

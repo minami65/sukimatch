@@ -1,5 +1,11 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.mainContent {
+  flex: 1;
+  overflow-y: auto;
 }

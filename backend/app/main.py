@@ -1,6 +1,10 @@
 from fastapi import FastAPI
-from app.api import user,locations,gender,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth,user_images
+from fastapi.middleware.cors import CORSMiddleware
 from app.db import engine, Base
+
+from app.api import user,locations,gender,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth,user_images,matches
+
+# モデルたち
 from app.models.user import User
 from app.models.locations import Location
 from app.models.education import Education
@@ -15,11 +19,12 @@ from app.models.meeting_preference import Meeting
 from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+
+from app.core.config import setup_cloudinary
 
 app = FastAPI()
+
+setup_cloudinary()
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,8 +42,10 @@ app.add_middleware(
 def root():
     return {"message": "Hello FastAPI"}
 
+# テーブルの自動作成
 Base.metadata.create_all(bind=engine)
 
+# ルーターの登録
 app.include_router(user.router)
 app.include_router(locations.router)
 app.include_router(gender.router)
@@ -52,5 +59,6 @@ app.include_router(smoking.router)
 app.include_router(living.router)
 app.include_router(meeting.router)
 app.include_router(auth.router)
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.include_router(matches.router)
+
 app.include_router(user_images.router)

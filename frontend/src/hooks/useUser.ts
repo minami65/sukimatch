@@ -3,7 +3,7 @@ import {
   useGetUserDetailUsersUserIdGet,
   useGetUserListUsersGet,
 } from '@/api/generated/endpoints/api';
-import { GetUserListUsersGetParams, UserResponse } from '@/api/generated/models';
+import { GetUserListUsersGetParams } from '@/api/generated/models';
 
 // ユーザ画像一覧取得
 export const useUserImages = (userId?: number) => {
@@ -26,7 +26,7 @@ export const useMainUserImage = (userId?: number) => {
 
 // ユーザ情報取得
 export const useUserDetail = (userId?: number) => {
-  return useGetUserDetailUsersUserIdGet<UserResponse>(userId!, {
+  return useGetUserDetailUsersUserIdGet(userId!, {
     query: {
       enabled: !!userId,
       retry: false,

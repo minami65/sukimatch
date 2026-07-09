@@ -3,13 +3,12 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
+import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
+import MatchNotificationModal from '@/components/shared/modals/MatchNotificationModal';
 
 import { useUserDetail, useUserImages } from '@/hooks/useUser.ts';
 
 import close from '@/assets/close.png';
-import likeIcon from '@/assets/like.png';
-import likedIcon from '@/assets/liked.png';
-import { API_BASE } from '@/config.js';
 import {
   ALCOHOL,
   EDUCATION,
@@ -30,7 +29,7 @@ function UserDetails() {
   const userId = Number(id);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [liked, setLiked] = useState(false);
+  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useUserDetail(userId);
   const {
@@ -38,6 +37,12 @@ function UserDetails() {
     isLoading: isImagesLoading,
     isError: isImagesError,
   } = useUserImages(userId);
+
+  const handleLikeSuccess = (isMatch: boolean) => {
+    if (isMatch) {
+      setIsMatchModalOpen(true);
+    }
+  };
 
   if (isUserLoading || isImagesLoading) {
     return <FullPageLoading />;
@@ -48,10 +53,14 @@ function UserDetails() {
   }
 
   const images = rawImages
-    ? [...rawImages]
-        .sort((a, b) => a.sort_order - b.sort_order)
-        .map((img) => `${API_BASE}${img.image_url}`)
+    ? [...rawImages].sort((a, b) => a.sort_order - b.sort_order).map((img) => img.image_url)
     : [];
+
+  const matchedUserData = {
+    id: userId,
+    name: user?.name ?? '',
+    imageUrl: images[0] ?? '',
+  };
 
   return (
     <>
@@ -163,16 +172,17 @@ function UserDetails() {
         <span>{MEETING[(user.meeting_preference_id ?? 0) as keyof typeof MEETING]}</span>
       </div>
 
-      <img
-        src={liked ? likedIcon : likeIcon}
+      <MatchNotificationModal
+        isOpen={isMatchModalOpen}
+        onClose={() => setIsMatchModalOpen(false)}
+        matchedUsers={[matchedUserData]}
+      />
+
+      <LikeButton
+        initialIsLiked={user.is_liked}
+        userId={userId}
         className={styles.likeButton}
-        alt="like"
-        onClick={() => {
-          if (!liked) {
-            // TODO: API call should happen here
-            setLiked(true);
-          }
-        }}
+        onLikeSuccess={handleLikeSuccess}
       />
     </>
   );

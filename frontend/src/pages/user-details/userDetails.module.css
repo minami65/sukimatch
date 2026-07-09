@@ -116,3 +116,11 @@
   cursor: pointer;
   z-index: 1000;
 }
+
+.likeButton {
+  position: fixed;
+  right: 10px;
+  bottom: 90px; /* bottomNavの高さ(80px) + ボタンの高さ(10px) */
+  cursor: pointer;
+  z-index: 1000;
+}

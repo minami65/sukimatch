@@ -1,17 +1,17 @@
 import { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
+import UserIconProfile from '@/components/shared/UserIconProfile.tsx/index.js';
 
 import { useAuth } from '@/hooks/useAuth.js';
 import { useFilteredUsers } from '@/hooks/useUser.js';
 
 import { GetUserListUsersGetParams } from '@/api/generated/models/getUserListUsersGetParams.js';
 import search from '@/assets/search_logo.png';
-import { API_BASE } from '@/config';
 
 import {
   ALCOHOL,
@@ -29,6 +29,7 @@ import styles from './userList.module.css';
 
 function UserList() {
   const { user: currentUser } = useAuth();
+  const navigate = useNavigate();
   const loginUserId = currentUser?.user_id ?? 1;
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -52,6 +53,8 @@ function UserList() {
   });
 
   const { users: filteredUsers, isLoading } = useFilteredUsers(activeParams, loginUserId);
+
+  console.log('users: ', JSON.stringify(filteredUsers));
 
   // 検索開閉
   const handleSearchToggle = () => {
@@ -310,22 +313,13 @@ function UserList() {
         ) : (
           filteredUsers.map((user) => {
             return (
-              <div key={user.user_id} className={styles.userCard}>
-                <div className={styles.avatar}>
-                  <Link to={`/userDetail/${user.user_id}`} className={styles.link}>
-                    <img
-                      src={
-                        user.images?.[0] ? `${API_BASE}${user.images[0].image_url}` : '/default.png'
-                      }
-                      alt="user"
-                    />
-                  </Link>
-                </div>
-
-                <p className={styles.info}>
-                  {user.age}歳 {user.current_location?.name ?? ''}
-                </p>
-              </div>
+              <UserIconProfile
+                key={user.user_id}
+                size="large"
+                name={user.name}
+                imageUrl={user?.images?.[0]?.image_url}
+                onClickIcon={() => navigate(`/userDetail/${user.user_id}`)}
+              />
             );
           })
         )}

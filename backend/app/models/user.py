@@ -1,8 +1,6 @@
 from sqlalchemy import Column, Integer, String,ForeignKey ,Date
 from sqlalchemy.orm import relationship
 from app.db import Base
-from typing import List
-from app.schemas.user_image import UserImageResponse
 
 class User(Base):
     __tablename__ = "users"
