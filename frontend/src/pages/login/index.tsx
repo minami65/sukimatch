@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 
-import Form from '../../form';
+import Form from './LoginForm/LoginForm';
 import styles from './login.module.css';
 
 function Login() {
