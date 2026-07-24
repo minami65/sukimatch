@@ -4,31 +4,19 @@ import { Link, useParams } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
 import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
-import MatchNotificationModal from '@/components/shared/modals/MatchNotificationModal';
+import MatchNotificationModal from '@/components/shared/modals/MatchNotificationModal/index.tsx';
 
 import { useUserDetail, useUserImages } from '@/hooks/useUser.ts';
 
-import close from '@/assets/close.png';
-import {
-  ALCOHOL,
-  EDUCATION,
-  HOLIDAY,
-  INCOME,
-  JOB,
-  LIVING,
-  MARRIAGE,
-  MEETING,
-  PREFECTURES,
-  SMOKING,
-} from '@/data/base.jsx';
+import backButtonIcon from '@/assets/back.png';
 
+import Gallery from './Gallery/index.tsx';
+import UserInfo from './UserInfo/UserInfo';
 import styles from './userDetails.module.css';
 
 function UserDetails() {
   const { id } = useParams();
   const userId = Number(id);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useUserDetail(userId);
@@ -56,133 +44,37 @@ function UserDetails() {
     ? [...rawImages].sort((a, b) => a.sort_order - b.sort_order).map((img) => img.image_url)
     : [];
 
-  const matchedUserData = {
-    id: userId,
-    name: user?.name ?? '',
-    imageUrl: images[0] ?? '',
-  };
+  const matchedUsers = user
+    ? [
+        {
+          id: user.user_id,
+          name: user.name,
+          imageUrl: images[0],
+        },
+      ]
+    : [];
 
   return (
     <>
-      <div className={styles.mainImg}>
-        <img src={images[currentIndex]} className={styles.user1} alt="main" />
-        {/* 左ボタン */}
-        <div
-          className={`${styles.arrow} ${styles.left}`}
-          onClick={() => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)}
-        >
-          ‹
-        </div>
+      <Link to={'/userList'} className={styles.link}>
+        <img src={backButtonIcon} className={styles.back} alt="back" />
+      </Link>
 
-        {/* 右ボタン */}
-        <div
-          className={`${styles.arrow} ${styles.right}`}
-          onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
-        >
-          ›
-        </div>
-        <Link to={'/userList'} className={styles.link}>
-          <img src={close} className={styles.close} alt="close" />
-        </Link>
-      </div>
+      <Gallery images={images} />
 
-      <div className={styles.subImg}>
-        {images.map((img, i) => (
-          <img
-            key={i}
-            src={img}
-            className={i === currentIndex ? styles.activeThumb : ''}
-            onClick={() => setCurrentIndex(i)}
-            alt="thumb"
-          />
-        ))}
-      </div>
-
-      <div className={styles.userInfo}>
-        <div className={styles.mainProfile}>
-          <h2>
-            {user.name} <span className={styles.age}>{user.age}歳</span>{' '}
-            <span className={styles.location}>
-              {PREFECTURES[(user.current_location_id ?? 0) as keyof typeof PREFECTURES]}
-            </span>
-          </h2>
-          <div className={styles.profile}>
-            <p className={styles.bio}>{user.bio ? user.bio : '自己紹介文がありません'}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.row}>
-        <span>出身地</span>
-        <span>{PREFECTURES[(user.birth_location_id ?? 0) as keyof typeof PREFECTURES]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>居住地</span>
-        <span>{PREFECTURES[(user.current_location_id ?? 0) as keyof typeof PREFECTURES]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>学歴</span>
-        <span>{EDUCATION[(user.education_id ?? 0) as keyof typeof EDUCATION]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>職種</span>
-        <span>{JOB[(user.job_id ?? 0) as keyof typeof JOB]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>年収</span>
-        <span>{INCOME[(user.income_id ?? 0) as keyof typeof INCOME]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>身長</span>
-        <span>{user.height}cm</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>休日</span>
-        <span>{HOLIDAY[(user.holiday_id ?? 0) as keyof typeof HOLIDAY]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>お酒</span>
-        <span>{ALCOHOL[(user.alcohol_id ?? 0) as keyof typeof ALCOHOL]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>タバコ</span>
-        <span>{SMOKING[(user.smoking_id ?? 0) as keyof typeof SMOKING]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>同居人</span>
-        <span>{LIVING[(user.living_arrangement_id ?? 0) as keyof typeof LIVING]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>結婚に対する意思</span>
-        <span>{MARRIAGE[(user.marriage_intention_id ?? 0) as keyof typeof MARRIAGE]}</span>
-      </div>
-
-      <div className={styles.row}>
-        <span>出会うまでの希望</span>
-        <span>{MEETING[(user.meeting_preference_id ?? 0) as keyof typeof MEETING]}</span>
-      </div>
-
-      <MatchNotificationModal
-        isOpen={isMatchModalOpen}
-        onClose={() => setIsMatchModalOpen(false)}
-        matchedUsers={[matchedUserData]}
-      />
+      <UserInfo user={user} />
 
       <LikeButton
         initialIsLiked={user.is_liked}
         userId={userId}
         className={styles.likeButton}
         onLikeSuccess={handleLikeSuccess}
+      />
+
+      <MatchNotificationModal
+        isOpen={isMatchModalOpen}
+        onClose={() => setIsMatchModalOpen(false)}
+        matchedUsers={matchedUsers}
       />
     </>
   );
