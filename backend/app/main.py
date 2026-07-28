@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db import engine, Base
 
-from app.api import user,locations,gender,education,job,income,marriage,holiday,alcohol,smoking,living,meeting,auth,user_images,matches
+from app.api import user, locations, gender, education, job, income, marriage, holiday, alcohol, smoking, living, meeting, auth, user_images, matches, likes
 
 # モデルたち
 from app.models.user import User
@@ -38,9 +38,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def root():
     return {"message": "Hello FastAPI"}
+
 
 # テーブルの自動作成
 Base.metadata.create_all(bind=engine)
@@ -60,5 +62,5 @@ app.include_router(living.router)
 app.include_router(meeting.router)
 app.include_router(auth.router)
 app.include_router(matches.router)
-
+app.include_router(likes.router)
 app.include_router(user_images.router)

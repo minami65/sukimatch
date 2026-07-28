@@ -6,26 +6,16 @@ from app.db import SessionLocal
 from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserDetailResponse
 from app.crud.user import (
     create_user,
-    get_user,
     update_user,
     password_reset,
     delete_user
 )
 from app.models.user import User
 from app.api.deps import get_current_user
-from app.crud.likes import (
-    create_like,
-    get_my_likes,
-    get_liked_by_users,
-    delete_like
-)
+
 from app.models.footprint import FootPrint
 from app.crud.footprint import get_my_footprint
 from app.schemas.auth import PasswordReset
-from app.schemas.likes import (
-    LikeResponse,
-    DeleteResponse
-)
 
 from app.services.user_service import get_user_detail_with_like
 
@@ -147,13 +137,13 @@ def get_user_detail(
     current_user: User = Depends(get_current_user)
 ):
     user_data = get_user_detail_with_like(db, user_id, current_user.user_id)
-    
+
     if not user_data:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-        
+
     return user_data
 
 
@@ -189,52 +179,6 @@ def update(
     )
 
     return result
-
-
-# いいね
-@router.post("/users/{user_id}/like", response_model=LikeResponse)
-def like_user(
-    user_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return create_like(
-        db,
-        current_user.user_id,
-        user_id
-    )
-
-
-# 自分がしたいいね
-@router.get("/users/me/likes")
-def get_my_like_users(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return get_my_likes(db, current_user.user_id)
-
-
-# 自分に来たいいね
-@router.get("/users/me/liked-by")
-def get_liked_by(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return get_liked_by_users(db, current_user.user_id)
-
-
-# いいね取り消し
-@router.delete("/users/{user_id}/like", response_model=DeleteResponse)
-def unlike_user(
-    user_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    return delete_like(
-        db,
-        current_user.user_id,
-        user_id
-    )
 
 
 # 足跡登録
