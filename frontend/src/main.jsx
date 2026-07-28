@@ -14,11 +14,12 @@ import UserList from '@/pages/user-list/index.tsx';
 import '@/styles/index.css';
 import '@/styles/reset.css';
 
-import Form from './form.jsx';
 import { AuthLayout } from './layouts/AuthLayout.tsx';
 import BottomNavLayout from './layouts/BottomNav/BottomNavLayout.tsx';
+import MatchNotificationLayout from './layouts/MatchNotificationLayout.tsx';
 import MatchComplete from './match.jsx';
 import Create from './pages/create/index.tsx';
+import Form from './pages/login/LoginForm/LoginForm.js';
 import UserDetails from './pages/user-details/index.tsx';
 import Pay from './pay.jsx';
 import Talk from './talk.jsx';
@@ -39,17 +40,19 @@ createRoot(document.getElementById('root')).render(
         <Route path="/welcome" element={<Welcome />} />
 
         <Route element={<AuthLayout />}>
-          <Route element={<BottomNavLayout />}>
-            <Route path="/userList" element={<UserList />} />
-            <Route path="/userDetail/:id" element={<UserDetails />} />
-            <Route path="/match" element={<MatchComplete />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/profile/:userId" element={<Profile />} />
-            <Route path="/footprint" element={<FootPrint />} />
-            <Route path="/liked" element={<Liked />} />
-            <Route path="/setting" element={<Setting />} />
-            <Route path="/talk" element={<Talk />} />
-            <Route path="/talkList" element={<TalkList />} />
+          <Route element={<MatchNotificationLayout />}>
+            <Route element={<BottomNavLayout />}>
+              <Route path="/userList" element={<UserList />} />
+              <Route path="/userDetail/:id" element={<UserDetails />} />
+              <Route path="/match" element={<MatchComplete />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/profile/:userId" element={<Profile />} />
+              <Route path="/footprint" element={<FootPrint />} />
+              <Route path="/liked" element={<Liked />} />
+              <Route path="/setting" element={<Setting />} />
+              <Route path="/talk" element={<Talk />} />
+              <Route path="/talkList" element={<TalkList />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

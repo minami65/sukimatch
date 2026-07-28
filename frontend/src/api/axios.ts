@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
 import { API_BASE } from '../config';
 
@@ -14,6 +14,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export default function customInstance<T>(config: AxiosRequestConfig): Promise<T> {
-  return api(config).then((response) => response.data);
+// Orvalのmutatorとして動作する関数
+// config だけでなく、後ろの引数（optionsなど）も全て引き渡せるように展開（...config）します
+export default function customInstance<T>(
+  config: AxiosRequestConfig,
+  options?: AxiosRequestConfig,
+): Promise<T> {
+  return api({
+    ...config,
+    ...options,
+  })
+    .then((response) => response.data)
+    .catch((error: AxiosError) => {
+      throw error;
+    });
 }

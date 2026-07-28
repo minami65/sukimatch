@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-import couple from './assets/image2.png';
-import Airplane from './components/airplane';
-import './styles/form.css';
+import Airplane from '@/components/airplane';
+
+import couple from '@/assets/image2.png';
+
+import styles from './LoginForm.module.css';
 
 const Form = () => {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const Form = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -25,7 +27,7 @@ const Form = () => {
       });
       localStorage.setItem('token', res.data.access_token);
       navigate('/userList');
-    } catch (err) {
+    } catch (err: any) {
       if (err.response?.status === 401) {
         setError('メールアドレスかパスワードが間違っています。');
       } else {
@@ -38,14 +40,14 @@ const Form = () => {
 
   return (
     <>
-      <div className="title">
+      <div className={styles.title}>
         <h1>スキマッチ</h1>
       </div>
-      <div className="couple_img">
-        <img src={couple} className="couple" alt="Couple" />
+      <div className={styles.coupleImg}>
+        <img src={couple} className={styles.couple} alt="Couple" />
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="login_form">
+        <div className={styles.loginForm}>
           <input
             type="email"
             id="email"
@@ -66,14 +68,14 @@ const Form = () => {
           />
         </div>
         {error && <p style={{ color: 'red', textAlign: 'center', margin: '8px 0' }}>{error}</p>}
-        <div className="form_button">
+        <div className={styles.formButton}>
           <input
             type="submit"
-            className="login"
+            className={styles.login}
             value={loading ? 'ログイン中...' : 'ログイン'}
             disabled={loading}
           />
-          <Link to="/create" className="new_registration">
+          <Link to="/create" className={styles.newRegistration}>
             新規の方はこちら
           </Link>
         </div>

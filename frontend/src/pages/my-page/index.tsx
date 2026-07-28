@@ -10,7 +10,6 @@ import likes from '@/assets/likes.png';
 import setting from '@/assets/setting.png';
 
 import LogOutButton from '../../components/shared/buttons/LogOutButton';
-import { API_BASE } from '../../config';
 import styles from './myPage.module.css';
 
 export default function Mypage() {
@@ -23,11 +22,7 @@ export default function Mypage() {
     <>
       <div className={styles.profile}>
         {mainImage && (
-          <img
-            src={`${API_BASE}${mainImage.image_url}`}
-            alt="プロフィール画像"
-            className={styles.mainImage}
-          />
+          <img src={mainImage.image_url} alt="プロフィール画像" className={styles.mainImage} />
         )}
         {/* 遷移先にuser_idを渡す */}
         <Link to={`/profile/${user?.user_id}`} className={styles.mypageLink}>

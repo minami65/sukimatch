@@ -20,6 +20,7 @@ export * from './likeResponse.ts';
 export * from './livingResponse.ts';
 export * from './locationResponse.ts';
 export * from './loginRequest.ts';
+export * from './markReadRequest.ts';
 export * from './marriageResponse.ts';
 export * from './matchItem.ts';
 export * from './matchUserProfile.ts';

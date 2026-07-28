@@ -9,8 +9,8 @@
   margin-top: 100px;
 }
 
-.couple_img {
-  text-align: center;
+.couple_img img {
+  margin: 0 auto 20px;
 }
 
 .couple {

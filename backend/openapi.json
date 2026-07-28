@@ -532,134 +532,6 @@
         ]
       }
     },
-    "/users/{user_id}/like": {
-      "post": {
-        "summary": "Like User",
-        "operationId": "like_user_users__user_id__like_post",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "User Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LikeResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Unlike User",
-        "operationId": "unlike_user_users__user_id__like_delete",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "title": "User Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DeleteResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/me/likes": {
-      "get": {
-        "summary": "Get My Like Users",
-        "operationId": "get_my_like_users_users_me_likes_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/users/me/liked-by": {
-      "get": {
-        "summary": "Get Liked By",
-        "operationId": "get_liked_by_users_me_liked_by_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
     "/users/{user_id}/footprint": {
       "post": {
         "summary": "Create Footprint",
@@ -1041,6 +913,196 @@
         }
       }
     },
+    "/matches/me/unread": {
+      "get": {
+        "summary": "Read Unread Matches",
+        "operationId": "read_unread_matches_matches_me_unread_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MatchItem"
+                  },
+                  "type": "array",
+                  "title": "Response Read Unread Matches Matches Me Unread Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matches/me/read": {
+      "put": {
+        "summary": "Update Matches Read Status",
+        "operationId": "update_matches_read_status_matches_me_read_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkReadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/like": {
+      "post": {
+        "summary": "Like User",
+        "description": "いいねをするAPI",
+        "operationId": "like_user_users__user_id__like_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Unlike User",
+        "description": "いいねを取り消すAPI",
+        "operationId": "unlike_user_users__user_id__like_delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me/likes": {
+      "get": {
+        "summary": "Get My Like Users",
+        "description": "自分がしたいいねを取得するAPI",
+        "operationId": "get_my_like_users_users_me_likes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/users/me/liked-by": {
+      "get": {
+        "summary": "Get Liked By",
+        "description": "自分に来たいいねを取得するAPI",
+        "operationId": "get_liked_by_users_me_liked_by_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/users/me/images": {
       "post": {
         "summary": "Upload Image",
@@ -1415,6 +1477,22 @@
         ],
         "title": "LoginRequest"
       },
+      "MarkReadRequest": {
+        "properties": {
+          "match_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Match Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "match_ids"
+        ],
+        "title": "MarkReadRequest"
+      },
       "MarriageResponse": {
         "properties": {
           "marriage_intention_id": {
@@ -1439,9 +1517,13 @@
             "type": "integer",
             "title": "Match Id"
           },
-          "is_chat_started": {
+          "user1_checked_match": {
             "type": "boolean",
-            "title": "Is Chat Started"
+            "title": "User1 Checked Match"
+          },
+          "user2_checked_match": {
+            "type": "boolean",
+            "title": "User2 Checked Match"
           },
           "user": {
             "$ref": "#/components/schemas/MatchUserProfile"
@@ -1450,7 +1532,8 @@
         "type": "object",
         "required": [
           "match_id",
-          "is_chat_started",
+          "user1_checked_match",
+          "user2_checked_match",
           "user"
         ],
         "title": "MatchItem"
@@ -1468,6 +1551,17 @@
           "age": {
             "type": "integer",
             "title": "Age"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
           }
         },
         "type": "object",

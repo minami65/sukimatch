@@ -8,6 +8,7 @@ import type { MatchUserProfile } from './matchUserProfile.ts';
 
 export interface MatchItem {
   match_id: number;
-  is_chat_started: boolean;
+  user1_checked_match: boolean;
+  user2_checked_match: boolean;
   user: MatchUserProfile;
 }

@@ -9,4 +9,5 @@ export interface MatchUserProfile {
   user_id: number;
   name: string;
   age: number;
+  image_url?: string | null;
 }

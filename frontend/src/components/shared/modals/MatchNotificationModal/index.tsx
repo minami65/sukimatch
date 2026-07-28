@@ -8,7 +8,7 @@ import balloonImage from '@/assets/balloon.png';
 import UserIconProfile from '../../UserIconProfile.tsx';
 import styles from './MatchNotificationModal.module.css';
 
-interface MatchedUser {
+export interface MatchedUser {
   id: number;
   name: string;
   imageUrl?: string;
@@ -25,6 +25,7 @@ const MatchNotificationModal = ({ isOpen, onClose, matchedUsers }: MatchNotifica
   const isMultiple = matchedUsers.length > 1;
 
   const handleClickStart = () => {
+    onClose();
     navigate('/talkList');
   };
 

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading';
@@ -12,6 +13,7 @@ export const AuthLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem('token');
+  const queryClient = useQueryClient();
 
   const {
     data: currentUser,
@@ -38,7 +40,8 @@ export const AuthLayout = () => {
     executeApiLogout(undefined, {
       onSuccess: () => {
         localStorage.removeItem('token');
-        navigate('/');
+        queryClient.clear();
+        window.location.href = '/login';
       },
     });
   };
