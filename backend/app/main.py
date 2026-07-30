@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db import engine, Base
 
-from app.api import user, locations, gender, education, job, income, marriage, holiday, alcohol, smoking, living, meeting, auth, user_images, matches, likes
+from app.api import user, locations, gender, education, job, income, marriage, holiday, alcohol, smoking, living, meeting, auth, user_images, matches, likes, websocket
 
 # モデルたち
 from app.models.user import User
@@ -64,3 +64,4 @@ app.include_router(auth.router)
 app.include_router(matches.router)
 app.include_router(likes.router)
 app.include_router(user_images.router)
+app.include_router(websocket.router)
