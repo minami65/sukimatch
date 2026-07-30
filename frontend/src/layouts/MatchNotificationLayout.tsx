@@ -9,9 +9,21 @@ import MatchNotificationModal, {
 import { useMarkMatchesAsRead, useUnreadMatches } from '@/hooks/useMatchNotification';
 
 const MatchNotificationLayout = () => {
-  const { unreadMatches } = useUnreadMatches();
+  const { unreadMatches, refetch } = useUnreadMatches();
   const { markAsRead } = useMarkMatchesAsRead();
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const handleMatchEvent = () => {
+      console.log('📢 MATCHイベントを検知！refetch()を直接実行します！');
+      refetch();
+    };
+
+    window.addEventListener('ws-match-event', handleMatchEvent);
+    return () => {
+      window.removeEventListener('ws-match-event', handleMatchEvent);
+    };
+  }, [refetch]);
 
   useEffect(() => {
     if (unreadMatches && unreadMatches.length > 0) {

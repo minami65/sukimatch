@@ -8,7 +8,7 @@ import {
 
 // 未読のマッチを取得
 export const useUnreadMatches = () => {
-  const { data, isLoading, isError } = useReadUnreadMatchesMatchesMeUnreadGet({
+  const { data, isLoading, isError, refetch } = useReadUnreadMatchesMatchesMeUnreadGet({
     query: {
       refetchOnWindowFocus: true,
       enabled: true,
@@ -19,6 +19,7 @@ export const useUnreadMatches = () => {
     unreadMatches: data || [],
     isLoading,
     isError,
+    refetch,
   };
 };
 
