@@ -2,6 +2,8 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from app.db import SessionLocal
 
+from app.core.connection_manager import manager
+
 # api
 from app.api.deps import get_current_user
 
@@ -34,7 +36,7 @@ def get_db():
 
 
 @router.post("/users/{user_id}/like", response_model=LikeResponse)
-def like_user(
+async def like_user(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -43,12 +45,31 @@ def like_user(
     いいねをするAPI
     """
     print(f"=== [DEBUG] current_user.user_id: {current_user.user_id} ===")
-    print(f"=== [DEBUG] user_id: {user_id} ===")
-    return create_like(
+    print(f"=== [DEBUG] target_user_id: {user_id} ===")
+
+    # 1. DB側のいいね・マッチ処理を実行
+    result = create_like(
         db,
         current_user.user_id,
         user_id
     )
+
+    print(f"DEBUG: is_match = {result.get('is_match')}")
+
+    # 💡 2. マッチングが成立した場合、相手(user_id)にWebSocketで通知を飛ばす！
+    if result.get("is_match"):
+        await manager.send_personal_message(
+            {
+                "event": "MATCH",
+                "data": {
+                    "matched_user_id": current_user.user_id,
+                    "message": "新しいマッチングが成立しました！"
+                }
+            },
+            user_id=user_id  # 送信対象：いいねされた相手
+        )
+
+    return result
 
 
 @router.get("/users/me/likes")
