@@ -6,6 +6,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { FullPageLoading } from '@/components/Loading/FullPageLoading';
 
 import { AuthContext } from '@/hooks/useAuth';
+import { useWebSocket } from '@/hooks/useWebSocket';
 
 import { useGetMeUserMeGet, useLogoutLogoutPost } from '@/api/generated/endpoints/api';
 
@@ -14,6 +15,8 @@ export const AuthLayout = () => {
   const location = useLocation();
   const token = localStorage.getItem('token');
   const queryClient = useQueryClient();
+
+  useWebSocket();
 
   const {
     data: currentUser,
