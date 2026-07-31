@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 
@@ -10,7 +10,7 @@ from app.crud.user import (
     password_reset,
     delete_user
 )
-from app.models.user import User
+from app.models.user import AlcoholEnum, EducationEnum, HolidayEnum, IncomeEnum, LivingArrangementEnum, MarriageIntentionEnum, MeetingPreferenceEnum, SmokingEnum, User, GenderEnum
 from app.api.deps import get_current_user
 
 from app.models.footprint import FootPrint
@@ -53,18 +53,23 @@ def get_user_list(
     min_age: Optional[int] = Query(None),
     max_age: Optional[int] = Query(None),
     birthday: Optional[int] = Query(None),
-    current_location_id: Optional[int] = Query(None),
-    job_id: Optional[int] = Query(None),
-    gender_id: Optional[int] = Query(None),
-    education_id: Optional[int] = Query(None),
-    income_id: Optional[int] = Query(None),
     min_height: Optional[int] = Query(None),
     max_height: Optional[int] = Query(None),
-    marriage_intention_id: Optional[int] = Query(None),
-    holiday_id: Optional[int] = Query(None),
-    alcohol_id: Optional[int] = Query(None),
-    smoking_id: Optional[int] = Query(None),
-    meeting_preference_id: Optional[int] = Query(None),
+
+    # Enum化されたパラメータ
+    gender: Optional[GenderEnum] = Query(None),
+    smoking: Optional[SmokingEnum] = Query(None),
+    alcohol: Optional[AlcoholEnum] = Query(None),
+    marriage_intention: Optional[MarriageIntentionEnum] = Query(None),
+    meeting_preference: Optional[MeetingPreferenceEnum] = Query(None),
+    living_arrangement: Optional[LivingArrangementEnum] = Query(None),
+    education: Optional[EducationEnum] = Query(None),
+    income: Optional[IncomeEnum] = Query(None),
+    holiday: Optional[HolidayEnum] = Query(None),
+
+    # マスタテーブルのパラメータ
+    current_location_id: Optional[int] = Query(None),
+    job_id: Optional[int] = Query(None),
 
     db: Session = Depends(get_db),
 ):
@@ -74,57 +79,43 @@ def get_user_list(
     if exclude_user_id is not None:
         query = query.filter(User.user_id != exclude_user_id)
 
-    # 検索条件
+    # 年齢・誕生日・身長
     if min_age is not None:
         query = query.filter(User.age >= min_age)
-
     if max_age is not None:
         query = query.filter(User.age <= max_age)
-
     if birthday:
         query = query.filter(User.birthday == birthday)
-
-    if gender_id:
-        query = query.filter(User.gender_id == gender_id)
-
-    if current_location_id:
-        query = query.filter(
-            User.current_location_id == current_location_id
-        )
-
-    if job_id:
-        query = query.filter(User.job_id == job_id)
-
-    if education_id:
-        query = query.filter(User.education_id == education_id)
-
     if min_height is not None:
         query = query.filter(User.height >= min_height)
-
     if max_height is not None:
         query = query.filter(User.height <= max_height)
 
-    if income_id:
-        query = query.filter(User.income_id == income_id)
+    # Enum フィルタリング
+    if gender:
+        query = query.filter(User.gender == gender)
+    if smoking:
+        query = query.filter(User.smoking == smoking)
+    if alcohol:
+        query = query.filter(User.alcohol == alcohol)
+    if marriage_intention:
+        query = query.filter(User.marriage_intention == marriage_intention)
+    if meeting_preference:
+        query = query.filter(User.meeting_preference == meeting_preference)
+    if living_arrangement:
+        query = query.filter(User.living_arrangement == living_arrangement)
+    if education:
+        query = query.filter(User.education == education)
+    if income:
+        query = query.filter(User.income == income)
+    if holiday:
+        query = query.filter(User.holiday == holiday)
 
-    if marriage_intention_id:
-        query = query.filter(
-            User.marriage_intention_id == marriage_intention_id
-        )
-
-    if holiday_id:
-        query = query.filter(User.holiday_id == holiday_id)
-
-    if alcohol_id:
-        query = query.filter(User.alcohol_id == alcohol_id)
-
-    if smoking_id:
-        query = query.filter(User.smoking_id == smoking_id)
-
-    if meeting_preference_id:
-        query = query.filter(
-            User.meeting_preference_id == meeting_preference_id
-        )
+    # マスタ参照 フィルタリング
+    if current_location_id:
+        query = query.filter(User.current_location_id == current_location_id)
+    if job_id:
+        query = query.filter(User.job_id == job_id)
 
     return query.all()
 

@@ -5,28 +5,28 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export * from './alcoholResponse.ts';
+export * from './alcoholEnum.ts';
 export * from './bodyUploadImageUsersMeImagesPost.ts';
 export * from './deleteResponse.ts';
-export * from './educationResponse.ts';
-export * from './genderResponse.ts';
+export * from './educationEnum.ts';
+export * from './genderEnum.ts';
 export * from './getUserListUsersGetParams.ts';
-export * from './holidayResponse.ts';
+export * from './holidayEnum.ts';
 export * from './hTTPValidationError.ts';
-export * from './incomeResponse.ts';
+export * from './incomeEnum.ts';
 export * from './jobResponse.ts';
 export * from './likeBase.ts';
 export * from './likeResponse.ts';
-export * from './livingResponse.ts';
+export * from './livingArrangementEnum.ts';
 export * from './locationResponse.ts';
 export * from './loginRequest.ts';
 export * from './markReadRequest.ts';
-export * from './marriageResponse.ts';
+export * from './marriageIntentionEnum.ts';
 export * from './matchItem.ts';
 export * from './matchUserProfile.ts';
-export * from './meetingResponse.ts';
+export * from './meetingPreferenceEnum.ts';
 export * from './passwordReset.ts';
-export * from './smokingResponse.ts';
+export * from './smokingEnum.ts';
 export * from './tokenResponse.ts';
 export * from './userCreate.ts';
 export * from './userDetailResponse.ts';
