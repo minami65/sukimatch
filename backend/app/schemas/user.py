@@ -1,4 +1,4 @@
-from app.models.user import GenderEnum
+from app.models.user import GenderEnum, SmokingEnum
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import date
@@ -13,7 +13,10 @@ class UserCreate(BaseModel):
     mail_address: EmailStr = None
     bio: Optional[str] = None
     password: str
+
     gender: Optional[GenderEnum] = None
+    smoking: Optional[SmokingEnum] = None
+
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -23,7 +26,6 @@ class UserCreate(BaseModel):
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
     alcohol_id: Optional[int] = None
-    smoking_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
 
@@ -35,7 +37,9 @@ class UserUpdate(BaseModel):
     mail_address: Optional[str] = None
     password: Optional[str] = None
     bio: Optional[str] = None
+
     gender: Optional[GenderEnum] = None
+    smoking: Optional[SmokingEnum] = None
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -45,7 +49,6 @@ class UserUpdate(BaseModel):
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
     alcohol_id: Optional[int] = None
-    smoking_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
 
@@ -64,7 +67,10 @@ class UserResponse(BaseModel):
     mail_address: Optional[str] = None
     age: Optional[int] = None
     bio: Optional[str] = None
+
     gender: Optional[GenderEnum] = None
+    smoking: Optional[SmokingEnum] = None
+
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -74,7 +80,6 @@ class UserResponse(BaseModel):
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
     alcohol_id: Optional[int] = None
-    smoking_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
     current_location: Optional[LocationResponse] = None

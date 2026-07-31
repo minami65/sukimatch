@@ -11,6 +11,12 @@ class GenderEnum(str, enum.Enum):
     OTHER = "答えたくない"
 
 
+class SmokingEnum(str, enum.Enum):
+    SMOKER = "吸う"
+    STOP_IF_DISLIKED = "相手が嫌ならやめる"
+    NON_SMOKER = "吸わない"
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -18,7 +24,10 @@ class User(Base):
     name = Column(String, nullable=True)
     age = Column(Integer, nullable=True)
     birthday = Column(Date, nullable=True)
+
     gender = Column(enum.Enum(GenderEnum), nullable=True)
+    smoking = Column(enum.Enum(SmokingEnum), nullable=True)
+
     mail_address = Column(String, unique=True, nullable=True)
     password = Column(String, nullable=True)
     bio = Column(String, nullable=True)
@@ -53,9 +62,6 @@ class User(Base):
 
     alcohol_id = Column(Integer, ForeignKey("alcohol.alcohol_id"))
     alcohol = relationship("Alcohol")
-
-    smoking_id = Column(Integer, ForeignKey("smoking.smoking_id"))
-    smoking = relationship("Smoking")
 
     living_arrangement_id = Column(Integer, ForeignKey(
         "living_arrangement.living_arrangement_id"))

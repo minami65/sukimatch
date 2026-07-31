@@ -3,7 +3,6 @@ from app.models.likes import Likes
 from app.models.user_images import UserImages
 from app.models.meeting_preference import Meeting
 from app.models.living_arrangement import Living
-from app.models.smoking import Smoking
 from app.models.alcohol import Alcohol
 from app.models.holiday import Holiday
 from app.models.marriage import Marriage
@@ -14,7 +13,6 @@ from app.models.locations import Location
 from app.models.user import User
 from seeds.seed_images import seed_images
 from seeds.seed_users import seed_users
-from seeds.seed_smoking import seed_smoking
 from seeds.seed_meeting import seed_meeting
 from seeds.seed_marriage import seed_marriage
 from seeds.seed_locations import seed_locations
@@ -65,9 +63,6 @@ def run():
 
     print("☕️会う願望データを投入中")
     seed_meeting()
-
-    print("🚬喫煙データを投入中")
-    seed_smoking()
 
     # 一番最後にユーザーを入れる
     print("👥 ユーザーデータを投入中...")
