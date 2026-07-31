@@ -2,20 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db import engine, Base
 
-from app.api import user, locations, gender, education, job, income, marriage, holiday, alcohol, smoking, living, meeting, auth, user_images, matches, likes, websocket
+from app.api import user, locations, job, auth, user_images, matches, likes, websocket
 
 # モデルたち
 from app.models.user import User
 from app.models.locations import Location
-from app.models.education import Education
 from app.models.job import Job
-from app.models.income import Income
-from app.models.marriage import Marriage
-from app.models.holiday import Holiday
-from app.models.alcohol import Alcohol
-from app.models.smoking import Smoking
-from app.models.living_arrangement import Living
-from app.models.meeting_preference import Meeting
 from app.models.user_images import UserImages
 from app.models.likes import Likes
 from app.models.matches import Matches
@@ -50,16 +42,7 @@ Base.metadata.create_all(bind=engine)
 # ルーターの登録
 app.include_router(user.router)
 app.include_router(locations.router)
-app.include_router(gender.router)
-app.include_router(education.router)
 app.include_router(job.router)
-app.include_router(income.router)
-app.include_router(marriage.router)
-app.include_router(holiday.router)
-app.include_router(alcohol.router)
-app.include_router(smoking.router)
-app.include_router(living.router)
-app.include_router(meeting.router)
 app.include_router(auth.router)
 app.include_router(matches.router)
 app.include_router(likes.router)
