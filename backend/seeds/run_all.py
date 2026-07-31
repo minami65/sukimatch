@@ -3,7 +3,6 @@ from app.models.likes import Likes
 from app.models.user_images import UserImages
 from app.models.meeting_preference import Meeting
 from app.models.living_arrangement import Living
-from app.models.alcohol import Alcohol
 from app.models.holiday import Holiday
 from app.models.marriage import Marriage
 from app.models.income import Income
@@ -21,7 +20,6 @@ from seeds.seed_jobs import seed_jobs
 from seeds.seed_income import seed_income
 from seeds.seed_holiday import seed_holiday
 from seeds.seed_educations import seed_educations
-from seeds.seed_alcohol import seed_alcohol
 from app.db import engine, Base
 import os
 import sys
@@ -36,9 +34,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def run():
     print("🔄 データベースを初期化中...")
     Base.metadata.create_all(bind=engine)
-
-    print("🍺アルコールデータを投入中")
-    seed_alcohol()
 
     print("🎓学歴データを投入中")
     seed_educations()

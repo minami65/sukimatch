@@ -10,7 +10,7 @@ from app.crud.user import (
     password_reset,
     delete_user
 )
-from app.models.user import SmokingEnum, User, GenderEnum
+from app.models.user import AlcoholEnum, SmokingEnum, User, GenderEnum
 from app.api.deps import get_current_user
 
 from app.models.footprint import FootPrint
@@ -58,6 +58,7 @@ def get_user_list(
 
     gender: Optional[GenderEnum] = Query(None),
     smoking: Optional[SmokingEnum] = Query(None),
+    alcohol: Optional[AlcoholEnum] = Query(None),
 
     education_id: Optional[int] = Query(None),
     income_id: Optional[int] = Query(None),
@@ -65,8 +66,6 @@ def get_user_list(
     max_height: Optional[int] = Query(None),
     marriage_intention_id: Optional[int] = Query(None),
     holiday_id: Optional[int] = Query(None),
-    alcohol_id: Optional[int] = Query(None),
-    smoking_id: Optional[int] = Query(None),
     meeting_preference_id: Optional[int] = Query(None),
 
     db: Session = Depends(get_db),
@@ -92,6 +91,9 @@ def get_user_list(
 
     if smoking:
         query = query.filter(User.smoking == smoking)
+
+    if alcohol:
+        query = query.filter(User.alcohol == alcohol)
 
     if current_location_id:
         query = query.filter(
@@ -120,9 +122,6 @@ def get_user_list(
 
     if holiday_id:
         query = query.filter(User.holiday_id == holiday_id)
-
-    if alcohol_id:
-        query = query.filter(User.alcohol_id == alcohol_id)
 
     if meeting_preference_id:
         query = query.filter(

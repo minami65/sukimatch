@@ -1,4 +1,4 @@
-from app.models.user import GenderEnum, SmokingEnum
+from app.models.user import AlcoholEnum, GenderEnum, SmokingEnum
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import date
@@ -16,6 +16,7 @@ class UserCreate(BaseModel):
 
     gender: Optional[GenderEnum] = None
     smoking: Optional[SmokingEnum] = None
+    alcohol: Optional[AlcoholEnum] = None
 
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
@@ -25,7 +26,6 @@ class UserCreate(BaseModel):
     height: Optional[int] = None
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
-    alcohol_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
 
@@ -40,6 +40,8 @@ class UserUpdate(BaseModel):
 
     gender: Optional[GenderEnum] = None
     smoking: Optional[SmokingEnum] = None
+    alcohol: Optional[AlcoholEnum] = None
+
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
     education_id: Optional[int] = None
@@ -48,7 +50,6 @@ class UserUpdate(BaseModel):
     height: Optional[int] = None
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
-    alcohol_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
 
@@ -70,6 +71,7 @@ class UserResponse(BaseModel):
 
     gender: Optional[GenderEnum] = None
     smoking: Optional[SmokingEnum] = None
+    alcohol: Optional[AlcoholEnum] = None
 
     birth_location_id: Optional[int] = None
     current_location_id: Optional[int] = None
@@ -79,7 +81,6 @@ class UserResponse(BaseModel):
     height: Optional[int] = None
     marriage_intention_id: Optional[int] = None
     holiday_id: Optional[int] = None
-    alcohol_id: Optional[int] = None
     living_arrangement_id: Optional[int] = None
     meeting_preference_id: Optional[int] = None
     current_location: Optional[LocationResponse] = None
