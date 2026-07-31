@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 
@@ -10,7 +10,7 @@ from app.crud.user import (
     password_reset,
     delete_user
 )
-from app.models.user import User
+from app.models.user import User, GenderEnum
 from app.api.deps import get_current_user
 
 from app.models.footprint import FootPrint
@@ -55,7 +55,7 @@ def get_user_list(
     birthday: Optional[int] = Query(None),
     current_location_id: Optional[int] = Query(None),
     job_id: Optional[int] = Query(None),
-    gender_id: Optional[int] = Query(None),
+    gender: Optional[GenderEnum] = Query(None),
     education_id: Optional[int] = Query(None),
     income_id: Optional[int] = Query(None),
     min_height: Optional[int] = Query(None),
@@ -84,8 +84,8 @@ def get_user_list(
     if birthday:
         query = query.filter(User.birthday == birthday)
 
-    if gender_id:
-        query = query.filter(User.gender_id == gender_id)
+    if gender:
+        query = query.filter(User.gender == gender)
 
     if current_location_id:
         query = query.filter(
