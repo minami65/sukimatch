@@ -1,0 +1,81 @@
+/* === 全体コンテナ（SelectBoxと同一） === */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+/* === ラベル（SelectBoxと同一） === */
+.label {
+  width: 35%;
+  font-size: var(--select-font-size, 16px);
+  font-weight: 500;
+  color: var(--select-color-text, #333333);
+  line-height: 1.4;
+}
+
+/* === インプットのラッパー（右側の60%幅を占有し、単位を右端に配置） === */
+.inputGroup {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === インプット要素 === */
+.input {
+  flex: 1;
+  width: 100%;
+  height: var(--select-height, 42px);
+  padding: 0 16px;
+  font-size: var(--select-font-size, 16px);
+  color: var(--select-color-text, #333333);
+  background-color: var(--select-color-bg, #ffffff);
+  border: 1px solid var(--select-color-border, #d0d7de);
+  border-radius: var(--select-border-radius, 8px);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* ホバー・フォーカス・Disabled（SelectBoxと統一） */
+.input:hover:not(:disabled) {
+  border-color: var(--select-color-border-hover, #888888);
+}
+
+.input:focus {
+  border-color: var(--select-color-focus, #0070f3);
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
+}
+
+.input:disabled {
+  background-color: var(--select-color-disabled-bg, #f5f5f5);
+  color: var(--select-color-disabled-text, #aaaaaa);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.inputError {
+  border-color: var(--select-color-error, #e53e3e);
+}
+
+.inputError:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+/* === 単位テキスト（"cm" や "kg" など） === */
+.unit {
+  font-size: 16px;
+  color: #555555;
+  white-space: nowrap;
+}
+
+/* エラーメッセージ */
+.errorMessage {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--select-color-error, #e53e3e);
+}
