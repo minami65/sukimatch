@@ -99,37 +99,6 @@
   color: #333;
 }
 
-.profileInput {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 25px;
-}
-
-.profileInput p {
-  width: 35%;
-  font-size: 18px;
-  color: #333;
-}
-
-.profileInput input {
-  width: 40%;
-}
-.profileInput select {
-  width: 60%;
-}
-.profileInput input,
-.profileInput select {
-  height: 35px;
-  border: 1px solid #222;
-  border-radius: 10px;
-  padding: 0 15px;
-  font-size: 18px;
-  background-color: var(--color-bg-surface);
-  color: #333;
-  outline: none;
-}
-
 .buttonGroup {
   margin: 0 40px 120px;
 

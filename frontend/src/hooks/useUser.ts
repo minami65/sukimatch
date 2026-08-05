@@ -1,5 +1,6 @@
 import {
   useGetImagesUsersUserIdImagesGet,
+  useGetMeUserMeGet,
   useGetUserDetailUsersUserIdGet,
   useGetUserListUsersGet,
 } from '@/api/generated/endpoints/api';
@@ -32,6 +33,11 @@ export const useUserDetail = (userId?: number) => {
       retry: false,
     },
   });
+};
+
+// 自分のユーザ情報取得
+export const useCurrentUserDetail = () => {
+  return useGetMeUserMeGet();
 };
 
 // 自分を含めた全てのユーザー一覧

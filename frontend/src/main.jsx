@@ -8,7 +8,7 @@ import FootPrint from '@/pages/footprint/index.jsx';
 import Liked from '@/pages/liked/index.jsx';
 import Login from '@/pages/login/index.tsx';
 import MyPage from '@/pages/my-page/index.jsx';
-import Profile from '@/pages/profile/index.jsx';
+import Profile from '@/pages/profile/index.tsx';
 import Setting from '@/pages/setting/index.tsx';
 import UserList from '@/pages/user-list/index.tsx';
 import '@/styles/index.css';
