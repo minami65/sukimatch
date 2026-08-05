@@ -1160,9 +1160,9 @@
       },
       "JobResponse": {
         "properties": {
-          "job_id": {
+          "id": {
             "type": "integer",
-            "title": "Job Id"
+            "title": "Id"
           },
           "job_name": {
             "type": "string",
@@ -1171,7 +1171,7 @@
         },
         "type": "object",
         "required": [
-          "job_id",
+          "id",
           "job_name"
         ],
         "title": "JobResponse"

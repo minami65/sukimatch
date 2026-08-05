@@ -6,6 +6,6 @@
  */
 
 export interface JobResponse {
-  job_id: number;
+  id: number;
   job_name: string;
 }
