@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';
 import { SelectBox } from '@/components/SelectBox';
-import ToMyPageButton from '@/components/shared/buttons/ToMyPageButton';
+import { Textarea } from '@/components/Textarea';
 
 import {
   AlcoholEnum,
@@ -14,43 +14,113 @@ import {
   MarriageIntentionEnum,
   MeetingPreferenceEnum,
   SmokingEnum,
+  UserResponse,
 } from '@/api/generated/models';
 import { LOCATION_OPTIONS } from '@/lib/constants';
 import { enumToOptions } from '@/lib/enum';
 
+import ImageGallery from '../ImageGallery';
 import styles from './ProfileForm.module.css';
 
-const ProfileForm = ({ userDetail, jobOptions }: { userDetail: any; jobOptions: any }) => {
-  const [form, setForm] = useState({
+export type ImageItem = {
+  id?: number | null;
+  url: string;
+  file?: File | null;
+};
+
+export type ProfileFormState = Partial<Omit<UserResponse, 'images'>> & {
+  images: ImageItem[];
+};
+
+type ProfileFormProps = {
+  userDetail: UserResponse;
+  jobOptions: {
+    value: number;
+    label: string;
+  }[];
+  onSubmit: (formValues: ProfileFormState) => void;
+  isSubmitting?: boolean;
+};
+
+const ProfileForm = ({ userDetail, jobOptions, onSubmit, isSubmitting }: ProfileFormProps) => {
+  const [form, setForm] = useState<ProfileFormState>({
     bio: userDetail.bio ?? '',
     birth_location_id: userDetail.birth_location_id ?? null,
     current_location_id: userDetail.current_location_id ?? null,
-    education: userDetail.education ?? '',
+    education: userDetail.education ?? null,
     job_id: userDetail.job_id ?? null,
-    income: userDetail.income ?? '',
-    height: userDetail.height ?? '',
-    marriage_intention: userDetail.marriage_intention ?? '',
-    holiday: userDetail.holiday ?? '',
-    alcohol: userDetail.alcohol ?? '',
-    smoking: userDetail.smoking ?? '',
-    living_arrangement: userDetail.living_arrangement ?? '',
-    meeting_preference: userDetail.meeting_preference ?? '',
+    income: userDetail.income ?? null,
+    height: userDetail.height ?? null,
+    marriage_intention: userDetail.marriage_intention ?? null,
+    holiday: userDetail.holiday ?? null,
+    alcohol: userDetail.alcohol ?? null,
+    smoking: userDetail.smoking ?? null,
+    living_arrangement: userDetail.living_arrangement ?? null,
+    meeting_preference: userDetail.meeting_preference ?? null,
+    images:
+      userDetail.images?.map((img) => ({
+        id: img.id,
+        url: img.image_url,
+        file: null,
+      })) ?? [],
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleAddFiles = (files: File[]) => {
+    const newItems: ImageItem[] = files.map((file) => ({
+      id: null,
+      url: URL.createObjectURL(file),
+      file: file,
+    }));
+
+    setForm((prev) => ({
+      ...prev,
+      images: [...prev.images, ...newItems],
+    }));
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(form);
+  };
+
   return (
-    <>
-      <div className={styles.introductionText}>
-        <input type="text" name="bio" value={form.bio} onChange={handleChange} />
+    <form id="profile-form" className={styles.formContainer} onSubmit={handleSubmit}>
+      <div className={styles.labelField}>
+        <span className={styles.label}>画像</span>
+
+        <ImageGallery
+          images={form.images.map((img) => img.url)}
+          onAddFiles={handleAddFiles}
+          onRemove={handleRemoveImage}
+          maxImages={10}
+        />
       </div>
 
-      <div className={styles.profileDetail}>
-        <p>プロフィール</p>
+      <Textarea
+        label="自己紹介"
+        name="bio"
+        value={form.bio}
+        onChange={handleChange}
+        placeholder="自己紹介文を入力してください"
+        minRows={3}
+        maxLength={300}
+      />
 
+      <div className={styles.profileDetail}>
         <SelectBox
           label="出身地"
           name="birth_location_id"
@@ -86,7 +156,6 @@ const ProfileForm = ({ userDetail, jobOptions }: { userDetail: any; jobOptions: 
           options={enumToOptions(IncomeEnum)}
           onChange={handleChange}
         />
-
         <Input
           label="身長"
           name="height"
@@ -96,7 +165,6 @@ const ProfileForm = ({ userDetail, jobOptions }: { userDetail: any; jobOptions: 
           unit="cm"
           placeholder="170"
         />
-
         <SelectBox
           label="結婚に対する意思"
           name="marriage_intention"
@@ -141,18 +209,10 @@ const ProfileForm = ({ userDetail, jobOptions }: { userDetail: any; jobOptions: 
         />
       </div>
 
-      <div className={styles.buttonGroup}>
-        <Button
-          fullWidth
-          size="lg"
-          variant="secondary"
-          onClick={() => console.log('送信データ:', form)}
-        >
-          登録
-        </Button>
-        <ToMyPageButton />
-      </div>
-    </>
+      <Button fullWidth size="lg" variant="secondary" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? '保存中...' : '保存'}
+      </Button>
+    </form>
   );
 };
 
