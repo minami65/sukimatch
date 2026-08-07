@@ -1,0 +1,81 @@
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ★ 背景を白に固定 */
+  background-color: #ffffff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+
+  /* ★ 白い背景に埋もれないよう、薄い影をつけて立体感を出す */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+  color: var(--color-text, #1a202c);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  outline: none;
+}
+
+/* フォーカス時のアクセシビリティリング */
+.backButton:focus-visible {
+  box-shadow:
+    0 0 0 3px rgba(66, 153, 225, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* ★ ホバー・アクティブ時：少し暗くして押し込まれた感を出す */
+.backButton:hover {
+  background-color: var(--color-hover-bg, #f7fafc);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.backButton:active {
+  background-color: var(--color-active-bg, #edf2f7);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transform: translateY(0px);
+}
+
+/* 無効化状態 */
+.backButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-bg-base, #ffffff);
+  box-shadow: none;
+  transform: none;
+}
+
+/* アイコンスタイル（変更なし） */
+.backIcon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* サイズバリエーション（paddingとbox-shadowを微調整） */
+.sm {
+  padding: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.sm .backIcon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.lg {
+  padding: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+.lg .backIcon {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.4;
+}
