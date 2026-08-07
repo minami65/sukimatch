@@ -6,6 +6,7 @@
  */
 
 export * from './alcoholEnum.ts';
+export * from './bodyUpdateUsersMePut.ts';
 export * from './bodyUploadImageUsersMeImagesPost.ts';
 export * from './deleteResponse.ts';
 export * from './educationEnum.ts';
@@ -32,6 +33,5 @@ export * from './userCreate.ts';
 export * from './userDetailResponse.ts';
 export * from './userImageResponse.ts';
 export * from './userResponse.ts';
-export * from './userUpdate.ts';
 export * from './validationError.ts';
 export * from './validationErrorCtx.ts';

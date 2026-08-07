@@ -24,6 +24,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  BodyUpdateUsersMePut,
   BodyUploadImageUsersMeImagesPost,
   DeleteResponse,
   GetUserListUsersGetParams,
@@ -39,8 +40,7 @@ import type {
   UserCreate,
   UserDetailResponse,
   UserImageResponse,
-  UserResponse,
-  UserUpdate
+  UserResponse
 } from '../models';
 
 import customInstance from '../../axios.ts';
@@ -630,15 +630,64 @@ export function useGetMeUserMeGet<TData = Awaited<ReturnType<typeof getMeUserMeG
  * @summary Update
  */
 export const updateUsersMePut = (
-    userUpdate: UserUpdate,
+    bodyUpdateUsersMePut?: BodyUpdateUsersMePut,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
 
+      const formData = new FormData();
+if(bodyUpdateUsersMePut?.name !== undefined && bodyUpdateUsersMePut.name !== null) {
+ formData.append(`name`, bodyUpdateUsersMePut.name);
+ }
+if(bodyUpdateUsersMePut?.bio !== undefined && bodyUpdateUsersMePut.bio !== null) {
+ formData.append(`bio`, bodyUpdateUsersMePut.bio);
+ }
+if(bodyUpdateUsersMePut?.height !== undefined && bodyUpdateUsersMePut.height !== null) {
+ formData.append(`height`, bodyUpdateUsersMePut.height.toString())
+ }
+if(bodyUpdateUsersMePut?.smoking !== undefined && bodyUpdateUsersMePut.smoking !== null) {
+ formData.append(`smoking`, bodyUpdateUsersMePut.smoking);
+ }
+if(bodyUpdateUsersMePut?.alcohol !== undefined && bodyUpdateUsersMePut.alcohol !== null) {
+ formData.append(`alcohol`, bodyUpdateUsersMePut.alcohol);
+ }
+if(bodyUpdateUsersMePut?.income !== undefined && bodyUpdateUsersMePut.income !== null) {
+ formData.append(`income`, bodyUpdateUsersMePut.income);
+ }
+if(bodyUpdateUsersMePut?.education !== undefined && bodyUpdateUsersMePut.education !== null) {
+ formData.append(`education`, bodyUpdateUsersMePut.education);
+ }
+if(bodyUpdateUsersMePut?.marriage_intention !== undefined && bodyUpdateUsersMePut.marriage_intention !== null) {
+ formData.append(`marriage_intention`, bodyUpdateUsersMePut.marriage_intention);
+ }
+if(bodyUpdateUsersMePut?.holiday !== undefined && bodyUpdateUsersMePut.holiday !== null) {
+ formData.append(`holiday`, bodyUpdateUsersMePut.holiday);
+ }
+if(bodyUpdateUsersMePut?.living_arrangement !== undefined && bodyUpdateUsersMePut.living_arrangement !== null) {
+ formData.append(`living_arrangement`, bodyUpdateUsersMePut.living_arrangement);
+ }
+if(bodyUpdateUsersMePut?.meeting_preference !== undefined && bodyUpdateUsersMePut.meeting_preference !== null) {
+ formData.append(`meeting_preference`, bodyUpdateUsersMePut.meeting_preference);
+ }
+if(bodyUpdateUsersMePut?.birth_location_id !== undefined && bodyUpdateUsersMePut.birth_location_id !== null) {
+ formData.append(`birth_location_id`, bodyUpdateUsersMePut.birth_location_id.toString())
+ }
+if(bodyUpdateUsersMePut?.current_location_id !== undefined && bodyUpdateUsersMePut.current_location_id !== null) {
+ formData.append(`current_location_id`, bodyUpdateUsersMePut.current_location_id.toString())
+ }
+if(bodyUpdateUsersMePut?.job_id !== undefined && bodyUpdateUsersMePut.job_id !== null) {
+ formData.append(`job_id`, bodyUpdateUsersMePut.job_id.toString())
+ }
+if(bodyUpdateUsersMePut?.keep_image_ids !== undefined) {
+ bodyUpdateUsersMePut?.keep_image_ids.forEach(value => formData.append(`keep_image_ids`, value.toString()));
+ }
+if(bodyUpdateUsersMePut?.new_images !== undefined) {
+ bodyUpdateUsersMePut?.new_images.forEach(value => formData.append(`new_images`, value));
+ }
 
       return customInstance<UserResponse>(
       {url: `/users/me`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: userUpdate, signal
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData, signal
     },
       options);
     }
@@ -646,8 +695,8 @@ export const updateUsersMePut = (
 
 
 export const getUpdateUsersMePutMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data?: BodyUpdateUsersMePut}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data?: BodyUpdateUsersMePut}, TContext> => {
 
 const mutationKey = ['updateUsersMePut'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -659,7 +708,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUsersMePut>>, {data: UserUpdate}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateUsersMePut>>, {data?: BodyUpdateUsersMePut}> = (props) => {
           const {data} = props ?? {};
 
           return  updateUsersMePut(data,requestOptions)
@@ -673,18 +722,18 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type UpdateUsersMePutMutationResult = NonNullable<Awaited<ReturnType<typeof updateUsersMePut>>>
-    export type UpdateUsersMePutMutationBody = UserUpdate
+    export type UpdateUsersMePutMutationBody = BodyUpdateUsersMePut | undefined
     export type UpdateUsersMePutMutationError = HTTPValidationError
 
     /**
  * @summary Update
  */
 export const useUpdateUsersMePut = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data: UserUpdate}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateUsersMePut>>, TError,{data?: BodyUpdateUsersMePut}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateUsersMePut>>,
         TError,
-        {data: UserUpdate},
+        {data?: BodyUpdateUsersMePut},
         TContext
       > => {
       return useMutation(getUpdateUsersMePutMutationOptions(options), queryClient);
