@@ -1,0 +1,102 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  background-color: var(--color-header-bg, var(--color-bg-base));
+}
+
+/* 左エリア（戻るボタンなど） */
+.leftGroup {
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  min-width: 40px;
+}
+
+/* ★ 中央エリア（タイトル群を絶対配置で真ん中に固定） */
+.titleContainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 60%; /* ボタンと被らないための制限 */
+  pointer-events: none; /* 下の要素の操作を邪魔しない */
+}
+
+/* ★ おしゃれで小さめなタイトル */
+.title {
+  margin: 0;
+  font-family:
+    'Plus Jakarta Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  font-size: 1.05rem; /* 約16.8px (小さめで繊細な印象) */
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text, #1a202c);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subtitle {
+  margin: 2px 0 0 0;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted, #718096);
+  line-height: 1;
+}
+
+/* 右エリア（カスタムアクションボタン） */
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 2;
+  min-width: 40px;
+}
+
+/* 戻るボタンのスタイル */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 8px;
+  margin-left: -8px;
+  cursor: pointer;
+  border-radius: 50%;
+  color: var(--color-text, #1a202c);
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.backButton:hover {
+  background-color: var(--color-hover-bg, rgba(0, 0, 0, 0.04));
+  opacity: 0.8;
+}
+
+.backIcon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

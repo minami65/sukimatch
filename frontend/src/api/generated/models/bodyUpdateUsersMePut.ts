@@ -6,7 +6,6 @@
  */
 import type { AlcoholEnum } from './alcoholEnum.ts';
 import type { EducationEnum } from './educationEnum.ts';
-import type { GenderEnum } from './genderEnum.ts';
 import type { HolidayEnum } from './holidayEnum.ts';
 import type { IncomeEnum } from './incomeEnum.ts';
 import type { LivingArrangementEnum } from './livingArrangementEnum.ts';
@@ -14,24 +13,21 @@ import type { MarriageIntentionEnum } from './marriageIntentionEnum.ts';
 import type { MeetingPreferenceEnum } from './meetingPreferenceEnum.ts';
 import type { SmokingEnum } from './smokingEnum.ts';
 
-export interface UserUpdate {
+export interface BodyUpdateUsersMePut {
   name?: string | null;
-  age?: number | null;
-  birthday?: string | null;
-  mail_address?: string | null;
-  password?: string | null;
   bio?: string | null;
   height?: number | null;
-  gender?: GenderEnum | null;
   smoking?: SmokingEnum | null;
   alcohol?: AlcoholEnum | null;
-  marriage_intention?: MarriageIntentionEnum | null;
-  meeting_preference?: MeetingPreferenceEnum | null;
-  living_arrangement?: LivingArrangementEnum | null;
-  education?: EducationEnum | null;
   income?: IncomeEnum | null;
+  education?: EducationEnum | null;
+  marriage_intention?: MarriageIntentionEnum | null;
   holiday?: HolidayEnum | null;
+  living_arrangement?: LivingArrangementEnum | null;
+  meeting_preference?: MeetingPreferenceEnum | null;
   birth_location_id?: number | null;
   current_location_id?: number | null;
   job_id?: number | null;
+  keep_image_ids?: number[];
+  new_images?: Blob[];
 }

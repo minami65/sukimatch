@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Button/index.js';
 import DoubleSlider from '@/components/DoubleSlider/index.js';
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
+import { PageHeader } from '@/components/PageHeader/index.js';
 import UserIconProfile from '@/components/shared/UserIconProfile.tsx/index.js';
 
 import { useAuth } from '@/hooks/useAuth.js';
@@ -111,10 +112,7 @@ function UserList() {
 
   return (
     <div className={styles.searchPage}>
-      {/* ヘッダー */}
-      <div className={styles.header}>
-        <h2>さがす</h2>
-      </div>
+      <PageHeader title="FIND" />
 
       {/* 虫眼鏡 */}
       <div className={styles.searchSet} onClick={handleSearchToggle}>

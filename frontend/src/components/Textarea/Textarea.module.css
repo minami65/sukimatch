@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.label {
+  font-size: var(--select-font-size, 16px);
+  font-weight: 500;
+  color: var(--select-color-text, #333333);
+  line-height: 1.4;
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+}
+.textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: var(--select-font-size, 16px);
+  font-family: inherit;
+  color: var(--select-color-text, #333333);
+  background-color: var(--select-color-bg, #ffffff);
+  border: 1px solid var(--select-color-border, #d0d7de);
+  border-radius: var(--select-border-radius, 8px);
+  outline: none;
+  resize: none;
+
+  overflow: hidden;
+
+  line-height: 1.6;
+  transition:
+    height 0.15s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.textarea:hover:not(:disabled) {
+  border-color: var(--select-color-border-hover, #888888);
+}
+
+.textarea:focus {
+  border-color: var(--select-color-focus, #0070f3);
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
+}
+
+.textarea:disabled {
+  background-color: var(--select-color-disabled-bg, #f5f5f5);
+  color: var(--select-color-disabled-text, #aaaaaa);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.textareaError {
+  border-color: var(--select-color-error, #e53e3e);
+}
+
+.textareaError:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+/* === フッター（エラーメッセージ ＆ 文字数カウント） === */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  min-height: 18px;
+}
+
+.errorMessage {
+  color: var(--select-color-error, #e53e3e);
+  margin: 0;
+}
+
+.charCount {
+  margin-left: auto;
+  color: #777777;
+}
+
+.charCountError {
+  color: var(--select-color-error, #e53e3e);
+  font-weight: bold;
+}

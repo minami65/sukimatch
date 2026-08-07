@@ -1,0 +1,95 @@
+/* === CSS変数の定義（テーマ・保守性の向上） === */
+:root {
+  --select-height: 42px;
+  --select-font-size: 16px;
+  --select-border-radius: 8px;
+
+  /* カラー定義 */
+  --select-color-text: #333333;
+  --select-color-bg: var(--color-bg-surface, #ffffff);
+  --select-color-border: #d0d7de;
+  --select-color-border-hover: #888888;
+  --select-color-focus: #0070f3;
+  --select-color-error: #e53e3e;
+  --select-color-disabled-bg: #f5f5f5;
+  --select-color-disabled-text: #aaaaaa;
+}
+
+/* === 全体コンテナ === */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* === ラベル === */
+.label {
+  width: 35%;
+  font-size: var(--select-font-size);
+  font-weight: 500;
+  color: var(--select-color-text);
+  line-height: 1.4;
+}
+
+/* === セレクトボックス（入力要素） === */
+.select {
+  width: 60%;
+  height: var(--select-height);
+  padding: 0 16px;
+  font-size: var(--select-font-size);
+  color: var(--select-color-text);
+  background-color: var(--select-color-bg);
+  border: 1px solid var(--select-color-border);
+  border-radius: var(--select-border-radius);
+  outline: none;
+
+  /* アニメーションと自然な見た目の調整 */
+  appearance: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  /* カスタム矢印アイコンの追加 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+/* ホバー時（マウスを乗せたとき） */
+.select:hover:not(:disabled) {
+  border-color: var(--select-color-border-hover);
+}
+
+/* フォーカス時（キーボード操作やクリック中） */
+.select:focus {
+  border-color: var(--select-color-focus);
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
+}
+
+/* 無効化（非活性）時 */
+.select:disabled {
+  background-color: var(--select-color-disabled-bg);
+  color: var(--select-color-disabled-text);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* エラー状態 */
+.selectError {
+  border-color: var(--select-color-error);
+}
+
+.selectError:focus {
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+}
+
+/* エラーメッセージテキスト */
+.errorMessage {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--select-color-error);
+  grid-column: 2;
+}

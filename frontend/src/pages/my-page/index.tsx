@@ -16,7 +16,7 @@ export default function Mypage() {
   const { user, isLoading: isUserLoading } = useAuth();
   const { mainImage, isLoading: isImageLoading } = useMainUserImage(user?.user_id);
 
-  if (isUserLoading || isImageLoading) return <FullPageLoading />;
+  if (isUserLoading || isImageLoading || !user) return <FullPageLoading />;
 
   return (
     <>

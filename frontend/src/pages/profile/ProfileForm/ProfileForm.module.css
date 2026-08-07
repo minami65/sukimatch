@@ -1,0 +1,41 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 30px 0 30px;
+}
+
+.labelField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #333;
+}
+
+.introductionText {
+  width: 100%;
+}
+
+.introductionText input {
+  width: 100%;
+  min-height: 200px;
+  border: 1px solid #222;
+  border-radius: 20px;
+  font-size: 20px;
+}
+
+.profileDetail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 30px 0;
+  border-top: var(--color-primary) solid 2px;
+  border-bottom: var(--color-primary) solid 2px;
+}
+
+.profileDetail > p {
+  font-size: 25px;
+}

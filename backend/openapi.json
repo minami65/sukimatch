@@ -511,13 +511,12 @@
         "operationId": "update_users_me_put",
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpdate"
+                "$ref": "#/components/schemas/Body_update_users_me_put"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -1077,6 +1076,175 @@
         ],
         "title": "AlcoholEnum"
       },
+      "Body_update_users_me_put": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "bio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bio"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height"
+          },
+          "smoking": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SmokingEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alcohol": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AlcoholEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "income": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/IncomeEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "education": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EducationEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "marriage_intention": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MarriageIntentionEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "holiday": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HolidayEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "living_arrangement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LivingArrangementEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meeting_preference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MeetingPreferenceEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "birth_location_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Location Id"
+          },
+          "current_location_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Location Id"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "keep_image_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Keep Image Ids",
+            "default": []
+          },
+          "new_images": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "New Images",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "Body_update_users_me_put"
+      },
       "Body_upload_image_users_me_images_post": {
         "properties": {
           "file": {
@@ -1160,9 +1328,9 @@
       },
       "JobResponse": {
         "properties": {
-          "job_id": {
+          "id": {
             "type": "integer",
-            "title": "Job Id"
+            "title": "Id"
           },
           "job_name": {
             "type": "string",
@@ -1171,7 +1339,7 @@
         },
         "type": "object",
         "required": [
-          "job_id",
+          "id",
           "job_name"
         ],
         "title": "JobResponse"
@@ -2023,213 +2191,6 @@
           "name"
         ],
         "title": "UserResponse"
-      },
-      "UserUpdate": {
-        "properties": {
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          },
-          "age": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Age"
-          },
-          "birthday": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Birthday"
-          },
-          "mail_address": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mail Address"
-          },
-          "password": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Password"
-          },
-          "bio": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Bio"
-          },
-          "height": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Height"
-          },
-          "gender": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/GenderEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "smoking": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/SmokingEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "alcohol": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/AlcoholEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "marriage_intention": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/MarriageIntentionEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "meeting_preference": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/MeetingPreferenceEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "living_arrangement": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/LivingArrangementEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "education": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/EducationEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "income": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/IncomeEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "holiday": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/HolidayEnum"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "birth_location_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Birth Location Id"
-          },
-          "current_location_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Current Location Id"
-          },
-          "job_id": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Job Id"
-          }
-        },
-        "type": "object",
-        "title": "UserUpdate"
       },
       "ValidationError": {
         "properties": {
