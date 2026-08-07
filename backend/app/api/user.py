@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, Query, HTTPException, status
+from fastapi import APIRouter, Depends, Query, HTTPException, status, Form, File, UploadFile
 from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 
 from app.db import SessionLocal
-from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserDetailResponse
+from app.schemas.user import UserCreate, UserResponse, UserDetailResponse
 from app.crud.user import (
     create_user,
     update_user,
@@ -155,24 +155,62 @@ def get_me(
 ):
     return current_user
 
-
 # プロフィール更新
+
+
 @router.put("/users/me", response_model=UserResponse)
 def update(
-    user_data: UserUpdate,
+    name: Optional[str] = Form(None),
+    bio: Optional[str] = Form(None),
+    height: Optional[int] = Form(None),
+    smoking: Optional[SmokingEnum] = Form(None),
+    alcohol: Optional[AlcoholEnum] = Form(None),
+    income: Optional[IncomeEnum] = Form(None),
+    education: Optional[EducationEnum] = Form(None),
+    marriage_intention: Optional[MarriageIntentionEnum] = Form(None),
+    holiday: Optional[HolidayEnum] = Form(None),
+    living_arrangement: Optional[LivingArrangementEnum] = Form(None),
+    meeting_preference: Optional[MeetingPreferenceEnum] = Form(None),
+    birth_location_id: Optional[int] = Form(None),
+    current_location_id: Optional[int] = Form(None),
+    job_id: Optional[int] = Form(None),
+
+    keep_image_ids: list[int] = Form([]),
+    new_images: list[UploadFile] = File([]),
+
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    user_data = {
+        "name": name,
+        "bio": bio,
+        "height": height,
+        "smoking": smoking,
+        "alcohol": alcohol,
+        "income": income,
+        "education": education,
+        "marriage_intention": marriage_intention,
+        "holiday": holiday,
+        "living_arrangement": living_arrangement,
+        "meeting_preference": meeting_preference,
+        "birth_location_id": birth_location_id,
+        "current_location_id": current_location_id,
+        "job_id": job_id,
+    }
+
     result = update_user(
-        db,
-        current_user.user_id,
-        user_data
+        db=db,
+        user_id=current_user.user_id,
+        user_data=user_data,
+        keep_image_ids=keep_image_ids,
+        new_images=new_images
     )
 
     return result
 
-
 # 足跡登録
+
+
 @router.post("/users/{user_id}/footprint")
 def create_footprint(
     user_id: int,

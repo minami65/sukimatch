@@ -32,32 +32,6 @@ class UserCreate(BaseModel):
     job_id: Optional[int] = None
 
 
-class UserUpdate(BaseModel):
-    name: Optional[str] = None
-    age: Optional[int] = None
-    birthday: Optional[date] = None
-    mail_address: Optional[str] = None
-    password: Optional[str] = None
-    bio: Optional[str] = None
-    height: Optional[int] = None
-
-    # Enum項目
-    gender: Optional[GenderEnum] = None
-    smoking: Optional[SmokingEnum] = None
-    alcohol: Optional[AlcoholEnum] = None
-    marriage_intention: Optional[MarriageIntentionEnum] = None
-    meeting_preference: Optional[MeetingPreferenceEnum] = None
-    living_arrangement: Optional[LivingArrangementEnum] = None
-    education: Optional[EducationEnum] = None
-    income: Optional[IncomeEnum] = None
-    holiday: Optional[HolidayEnum] = None
-
-    # マスタ参照項目
-    birth_location_id: Optional[int] = None
-    current_location_id: Optional[int] = None
-    job_id: Optional[int] = None
-
-
 class LocationResponse(BaseModel):
     id: int
     name: str
