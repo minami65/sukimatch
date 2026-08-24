@@ -1,55 +1,37 @@
-import React from 'react';
+import { ComponentProps, forwardRef } from 'react';
 
 import styles from './Input.module.css';
 
-type InputProps = {
+export type InputProps = ComponentProps<'input'> & {
   label?: string;
-  name: string;
-  type?: 'text' | 'number' | 'email' | 'password';
-  value: string | number | null | undefined;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
   unit?: string;
-  disabled?: boolean;
   error?: string;
-  className?: string;
 };
 
-export const Input: React.FC<InputProps> = ({
-  label,
-  name,
-  type = 'text',
-  value,
-  onChange,
-  placeholder,
-  unit,
-  disabled = false,
-  error,
-  className = '',
-}) => {
-  return (
-    <div className={`${styles.container} ${className}`}>
-      {label && (
-        <label htmlFor={name} className={styles.label}>
-          {label}
-        </label>
-      )}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ label, unit, error, className = '', ...rest }, ref) => {
+    return (
+      <div className={`${styles.container} ${className}`}>
+        {label && (
+          <label htmlFor={rest.name} className={styles.label}>
+            {label}
+          </label>
+        )}
 
-      <div className={styles.inputGroup}>
-        <input
-          id={name}
-          name={name}
-          type={type}
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={placeholder}
-          disabled={disabled}
-          className={`${styles.input} ${error ? styles.inputError : ''}`}
-        />
-        {unit && <span className={styles.unit}>{unit}</span>}
+        <div className={styles.inputGroup}>
+          <input
+            {...rest}
+            ref={ref}
+            id={rest.id || rest.name}
+            className={`${styles.input} ${error ? styles.inputError : ''}`}
+          />
+          {unit && <span className={styles.unit}>{unit}</span>}
+        </div>
+
+        {error && <p className={styles.errorMessage}>{error}</p>}
       </div>
+    );
+  },
+);
 
-      {error && <p className={styles.errorMessage}>{error}</p>}
-    </div>
-  );
-};
+Input.displayName = 'Input';

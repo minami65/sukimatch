@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Resolver, useForm, useWatch } from 'react-hook-form';
 
 import Button from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -20,17 +21,8 @@ import { LOCATION_OPTIONS } from '@/lib/constants';
 import { enumToOptions } from '@/lib/enum';
 
 import ImageGallery from '../ImageGallery';
+import { ImageItem, ProfileFormValues, profileSchema } from '../schemas/profileSchema';
 import styles from './ProfileForm.module.css';
-
-export type ImageItem = {
-  id?: number | null;
-  url: string;
-  file?: File | null;
-};
-
-export type ProfileFormState = Partial<Omit<UserResponse, 'images'>> & {
-  images: ImageItem[];
-};
 
 type ProfileFormProps = {
   userDetail: UserResponse;
@@ -38,32 +30,47 @@ type ProfileFormProps = {
     value: number;
     label: string;
   }[];
-  onSubmit: (formValues: ProfileFormState) => void;
+  onSubmit: (formValues: ProfileFormValues) => void;
   isSubmitting?: boolean;
 };
 
 const ProfileForm = ({ userDetail, jobOptions, onSubmit, isSubmitting }: ProfileFormProps) => {
-  const [form, setForm] = useState<ProfileFormState>({
-    bio: userDetail.bio ?? '',
-    birth_location_id: userDetail.birth_location_id ?? null,
-    current_location_id: userDetail.current_location_id ?? null,
-    education: userDetail.education ?? null,
-    job_id: userDetail.job_id ?? null,
-    income: userDetail.income ?? null,
-    height: userDetail.height ?? null,
-    marriage_intention: userDetail.marriage_intention ?? null,
-    holiday: userDetail.holiday ?? null,
-    alcohol: userDetail.alcohol ?? null,
-    smoking: userDetail.smoking ?? null,
-    living_arrangement: userDetail.living_arrangement ?? null,
-    meeting_preference: userDetail.meeting_preference ?? null,
-    images:
-      userDetail.images?.map((img) => ({
-        id: img.id,
-        url: img.image_url,
-        file: null,
-      })) ?? [],
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema) as Resolver<ProfileFormValues>,
+    defaultValues: {
+      bio: userDetail.bio ?? '',
+      birth_location_id: userDetail.birth_location_id ?? null,
+      current_location_id: userDetail.current_location_id ?? null,
+      education: userDetail.education ?? null,
+      job_id: userDetail.job_id ?? null,
+      income: userDetail.income ?? null,
+      height: userDetail.height ?? null,
+      marriage_intention: userDetail.marriage_intention ?? null,
+      holiday: userDetail.holiday ?? null,
+      alcohol: userDetail.alcohol ?? null,
+      smoking: userDetail.smoking ?? null,
+      living_arrangement: userDetail.living_arrangement ?? null,
+      meeting_preference: userDetail.meeting_preference ?? null,
+      images:
+        userDetail.images?.map((img) => ({
+          id: img.id,
+          url: img.image_url,
+          file: null,
+        })) ?? [],
+    },
   });
+
+  const images =
+    useWatch({
+      control,
+      name: 'images',
+    }) ?? [];
 
   const handleAddFiles = (files: File[]) => {
     const newItems: ImageItem[] = files.map((file) => ({
@@ -72,140 +79,126 @@ const ProfileForm = ({ userDetail, jobOptions, onSubmit, isSubmitting }: Profile
       file: file,
     }));
 
-    setForm((prev) => ({
-      ...prev,
-      images: [...prev.images, ...newItems],
-    }));
+    setValue('images', [...images, ...newItems], { shouldValidate: true });
   };
 
   const handleRemoveImage = (index: number) => {
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit(form);
+    setValue(
+      'images',
+      images.filter((_, i) => i !== index),
+      { shouldValidate: true },
+    );
   };
 
   return (
-    <form id="profile-form" className={styles.formContainer} onSubmit={handleSubmit}>
+    <form id="profile-form" className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.labelField}>
         <span className={styles.label}>画像</span>
 
         <ImageGallery
-          images={form.images.map((img) => img.url)}
+          images={images.map((img) => img.url)}
           onAddFiles={handleAddFiles}
           onRemove={handleRemoveImage}
           maxImages={10}
         />
+        {errors.images && <p className={styles.errorMessage}>{errors.images.message}</p>}
       </div>
 
       <Textarea
+        {...register('bio')}
         label="自己紹介"
         name="bio"
-        value={form.bio}
-        onChange={handleChange}
         placeholder="自己紹介文を入力してください"
         minRows={3}
         maxLength={300}
+        error={errors.bio?.message}
       />
 
       <div className={styles.profileDetail}>
         <SelectBox
+          {...register('birth_location_id', { valueAsNumber: true })}
           label="出身地"
           name="birth_location_id"
-          value={form.birth_location_id}
           options={LOCATION_OPTIONS}
-          onChange={handleChange}
+          error={errors.birth_location_id?.message}
         />
         <SelectBox
+          {...register('current_location_id', { valueAsNumber: true })}
           label="居住地"
           name="current_location_id"
-          value={form.current_location_id}
           options={LOCATION_OPTIONS}
-          onChange={handleChange}
+          error={errors.current_location_id?.message}
         />
         <SelectBox
+          {...register('education')}
           label="学歴"
           name="education"
-          value={form.education}
           options={enumToOptions(EducationEnum)}
-          onChange={handleChange}
+          error={errors.education?.message}
         />
         <SelectBox
+          {...register('job_id', { valueAsNumber: true })}
           label="職種"
           name="job_id"
-          value={form.job_id}
           options={jobOptions}
-          onChange={handleChange}
+          error={errors.job_id?.message}
         />
         <SelectBox
+          {...register('income')}
           label="年収"
           name="income"
-          value={form.income}
           options={enumToOptions(IncomeEnum)}
-          onChange={handleChange}
+          error={errors.income?.message}
         />
         <Input
+          {...register('height')}
           label="身長"
           name="height"
           type="number"
-          value={form.height}
-          onChange={handleChange}
           unit="cm"
           placeholder="170"
+          error={errors.height?.message}
         />
         <SelectBox
+          {...register('marriage_intention')}
           label="結婚に対する意思"
           name="marriage_intention"
-          value={form.marriage_intention}
           options={enumToOptions(MarriageIntentionEnum)}
-          onChange={handleChange}
+          error={errors.marriage_intention?.message}
         />
         <SelectBox
+          {...register('holiday')}
           label="休日"
           name="holiday"
-          value={form.holiday}
           options={enumToOptions(HolidayEnum)}
-          onChange={handleChange}
+          error={errors.holiday?.message}
         />
         <SelectBox
+          {...register('alcohol')}
           label="お酒"
           name="alcohol"
-          value={form.alcohol}
           options={enumToOptions(AlcoholEnum)}
-          onChange={handleChange}
+          error={errors.alcohol?.message}
         />
         <SelectBox
+          {...register('smoking')}
           label="タバコ"
           name="smoking"
-          value={form.smoking}
           options={enumToOptions(SmokingEnum)}
-          onChange={handleChange}
+          error={errors.smoking?.message}
         />
         <SelectBox
+          {...register('living_arrangement')}
           label="同居人"
           name="living_arrangement"
-          value={form.living_arrangement}
           options={enumToOptions(LivingArrangementEnum)}
-          onChange={handleChange}
         />
         <SelectBox
+          {...register('meeting_preference')}
           label="出会うまでの希望"
           name="meeting_preference"
-          value={form.meeting_preference}
           options={enumToOptions(MeetingPreferenceEnum)}
-          onChange={handleChange}
+          error={errors.meeting_preference?.message}
         />
       </div>
 
