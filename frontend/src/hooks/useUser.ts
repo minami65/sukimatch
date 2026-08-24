@@ -6,7 +6,7 @@ import {
   useUpdateUsersMePut,
 } from '@/api/generated/endpoints/api';
 import { GetUserListUsersGetParams } from '@/api/generated/models';
-import { ImageItem } from '@/pages/profile/ProfileForm';
+import { ImageItem } from '@/pages/profile/schemas/profileSchema';
 
 // ユーザ画像一覧取得
 export const useUserImages = (userId?: number) => {

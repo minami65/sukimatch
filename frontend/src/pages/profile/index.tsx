@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button';
@@ -7,21 +8,24 @@ import { PageHeader } from '@/components/PageHeader';
 import { useJob } from '@/hooks/useJob';
 import { useCurrentUserDetail, useUpdateProfile } from '@/hooks/useUser';
 
-import ProfileForm, { ProfileFormState } from './ProfileForm';
+import ProfileForm from './ProfileForm';
+import { ProfileFormValues } from './schemas/profileSchema';
 
 export default function Profile() {
-  const { data: userDetail } = useCurrentUserDetail();
+  const queryClient = useQueryClient();
+  const { data: userDetail, queryKey } = useCurrentUserDetail();
   const { jobOptions } = useJob();
   const { updateProfile, isLoading } = useUpdateProfile({
     onSuccess: () => {
       console.log('プロフィール更新成功');
+      queryClient.invalidateQueries({ queryKey });
     },
     onError: (error: any) => {
       console.error('プロフィール更新エラー:', error);
     },
   });
 
-  const handleSubmit = (form: ProfileFormState) => {
+  const handleSubmit = (form: ProfileFormValues) => {
     updateProfile(form);
     console.log('送信データ:', form);
   };

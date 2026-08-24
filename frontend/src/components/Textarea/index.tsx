@@ -1,79 +1,81 @@
-import React, { ChangeEvent, useEffect, useRef } from 'react';
+import React, { ComponentProps, forwardRef, useEffect, useRef, useState } from 'react';
 
 import styles from './Textarea.module.css';
 
-type TextareaProps = {
+export type TextareaProps = ComponentProps<'textarea'> & {
   label?: string;
-  name: string;
-  value: string | null | undefined;
-  onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  placeholder?: string;
-  minRows?: number;
-  maxLength?: number;
-  disabled?: boolean;
   error?: string;
-  className?: string;
+  minRows?: number;
 };
 
-export const Textarea: React.FC<TextareaProps> = ({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-  minRows = 3,
-  maxLength,
-  disabled = false,
-  error,
-  className = '',
-}) => {
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ label, error, className = '', maxLength, onChange, minRows = 3, ...rest }, ref) => {
+    const internalRef = useRef<HTMLTextAreaElement | null>(null);
+    const [textLength, setTextLength] = useState(0);
+    const isOverLength = maxLength ? textLength > maxLength : false;
 
-  const currentLength = value?.length ?? 0;
-  const isOverLength = maxLength ? currentLength > maxLength : false;
+    // 高さ自動調整
+    const adjustHeight = () => {
+      const el = internalRef.current;
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight}px`;
+    };
 
-  useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
+    // 初期マウント時に一度だけ文字数と高さを同期
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        if (internalRef.current) {
+          setTextLength(internalRef.current.value.length);
+          adjustHeight();
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    }, []);
 
-    // 一旦 auto にリセットして正確な scrollHeight を取得
-    el.style.height = 'auto';
-    // 改行も含めた全体の高さ（scrollHeight）をそのまま高さにセット
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
+    // タイピング時の処理
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setTextLength(e.target.value.length);
+      adjustHeight();
+      if (onChange) onChange(e);
+    };
 
-  return (
-    <div className={`${styles.container} ${className}`}>
-      {label && (
-        <label htmlFor={name} className={styles.label}>
-          {label}
-        </label>
-      )}
-
-      <div className={styles.textareaWrapper}>
-        <textarea
-          ref={textareaRef}
-          id={name}
-          name={name}
-          value={value ?? ''}
-          onChange={onChange}
-          placeholder={placeholder}
-          rows={minRows}
-          maxLength={maxLength}
-          disabled={disabled}
-          className={`${styles.textarea} ${error || isOverLength ? styles.textareaError : ''}`}
-        />
-      </div>
-
-      <div className={styles.footer}>
-        {error ? <p className={styles.errorMessage}>{error}</p> : <span />}
-
-        {maxLength && (
-          <span className={`${styles.charCount} ${isOverLength ? styles.charCountError : ''}`}>
-            {currentLength} / {maxLength}
-          </span>
+    return (
+      <div className={`${styles.container} ${className}`}>
+        {label && (
+          <label htmlFor={rest.name} className={styles.label}>
+            {label}
+          </label>
         )}
+
+        <div className={styles.textareaWrapper}>
+          <textarea
+            {...rest}
+            rows={minRows}
+            maxLength={maxLength}
+            onChange={handleChange}
+            ref={(node) => {
+              internalRef.current = node;
+              if (typeof ref === 'function') ref(node);
+              else if (ref) ref.current = node;
+            }}
+            id={rest.id || rest.name}
+            className={`${styles.textarea} ${error || isOverLength ? styles.textareaError : ''}`}
+          />
+        </div>
+
+        <div className={styles.footer}>
+          {error ? <p className={styles.errorMessage}>{error}</p> : <span />}
+
+          {maxLength && (
+            <span className={`${styles.charCount} ${isOverLength ? styles.charCountError : ''}`}>
+              {textLength} / {maxLength}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
+
+Textarea.displayName = 'Textarea';
