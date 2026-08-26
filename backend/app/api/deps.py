@@ -1,13 +1,15 @@
-from fastapi import Depends, HTTPException
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from sqlalchemy.orm import Session
-from jose import JWTError
+from typing import Annotated
 
-from app.db import SessionLocal
 from app.core.jwt import decode_token
+from app.db import SessionLocal
 from app.models.user import User
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from jose import JWTError
+from sqlalchemy.orm import Session
 
 security = HTTPBearer()
+
 
 def get_db():
     db = SessionLocal()
@@ -16,9 +18,14 @@ def get_db():
     finally:
         db.close()
 
+
+DBSession = Annotated[Session, Depends(get_db)]
+TokenCredentials = Annotated[HTTPAuthorizationCredentials, Depends(security)]
+
+
 def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db)
+    credentials: TokenCredentials,
+    db: DBSession,
 ):
     token = credentials.credentials
 
@@ -37,3 +44,6 @@ def get_current_user(
         raise HTTPException(status_code=401, detail="User not found")
 
     return user
+
+
+CurrentUser = Annotated[User, Depends(get_current_user)]

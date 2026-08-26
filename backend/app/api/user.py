@@ -1,47 +1,47 @@
-from fastapi import APIRouter, Depends, Query, HTTPException, status, Form, File, UploadFile
-from typing import Optional
-from sqlalchemy.orm import Session, joinedload
+from typing import Annotated
 
-from app.db import SessionLocal
-from app.schemas.user import UserCreate, UserResponse, UserDetailResponse
-from app.crud.user import (
-    create_user,
-    update_user,
-    password_reset,
-    delete_user
-)
-from app.models.user import AlcoholEnum, EducationEnum, HolidayEnum, IncomeEnum, LivingArrangementEnum, MarriageIntentionEnum, MeetingPreferenceEnum, SmokingEnum, User, GenderEnum
-from app.api.deps import get_current_user
-
-from app.models.footprint import FootPrint
+from app.api.deps import CurrentUser, DBSession
 from app.crud.footprint import get_my_footprint
+from app.crud.user import create_user, delete_user, password_reset, update_user
+from app.models.footprint import FootPrint
+from app.models.user import (
+    AlcoholEnum,
+    EducationEnum,
+    GenderEnum,
+    HolidayEnum,
+    IncomeEnum,
+    LivingArrangementEnum,
+    MarriageIntentionEnum,
+    MeetingPreferenceEnum,
+    SmokingEnum,
+    User,
+)
 from app.schemas.auth import PasswordReset
-
+from app.schemas.user import UserCreate, UserDetailResponse, UserResponse
 from app.services.user_service import get_user_detail_with_like
+from fastapi import (
+    APIRouter,
+    File,
+    Form,
+    HTTPException,
+    Query,
+    UploadFile,
+    status,
+)
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 # 登録
 @router.post("/user", response_model=UserResponse)
-def register(user: UserCreate, db: Session = Depends(get_db)):
+def register(user: UserCreate, db: DBSession):
     return create_user(db, user)
 
 
 # パスワード再登録
 @router.put("/password/reset")
-def reset_user_password(
-    data: PasswordReset,
-    db: Session = Depends(get_db)
-):
+def reset_user_password(data: PasswordReset, db: DBSession):
     password_reset(db, data.mail_address, data.password_confirm)
     return {"message": "password reset"}
 
@@ -49,29 +49,26 @@ def reset_user_password(
 # 一覧参照
 @router.get("/users", response_model=list[UserResponse])
 def get_user_list(
-    exclude_user_id: Optional[int] = Query(None),
-    min_age: Optional[int] = Query(None),
-    max_age: Optional[int] = Query(None),
-    birthday: Optional[int] = Query(None),
-    min_height: Optional[int] = Query(None),
-    max_height: Optional[int] = Query(None),
-
+    db: DBSession,
+    exclude_user_id: int | None = Query(None),
+    min_age: int | None = Query(None),
+    max_age: int | None = Query(None),
+    birthday: int | None = Query(None),
+    min_height: int | None = Query(None),
+    max_height: int | None = Query(None),
     # Enum化されたパラメータ
-    gender: Optional[GenderEnum] = Query(None),
-    smoking: Optional[SmokingEnum] = Query(None),
-    alcohol: Optional[AlcoholEnum] = Query(None),
-    marriage_intention: Optional[MarriageIntentionEnum] = Query(None),
-    meeting_preference: Optional[MeetingPreferenceEnum] = Query(None),
-    living_arrangement: Optional[LivingArrangementEnum] = Query(None),
-    education: Optional[EducationEnum] = Query(None),
-    income: Optional[IncomeEnum] = Query(None),
-    holiday: Optional[HolidayEnum] = Query(None),
-
+    gender: Annotated[GenderEnum | None, Query()] = None,
+    smoking: Annotated[SmokingEnum | None, Query()] = None,
+    alcohol: Annotated[AlcoholEnum | None, Query()] = None,
+    marriage_intention: Annotated[MarriageIntentionEnum | None, Query()] = None,
+    meeting_preference: Annotated[MeetingPreferenceEnum | None, Query()] = None,
+    living_arrangement: Annotated[LivingArrangementEnum | None, Query()] = None,
+    education: Annotated[EducationEnum | None, Query()] = None,
+    income: Annotated[IncomeEnum | None, Query()] = None,
+    holiday: Annotated[HolidayEnum | None, Query()] = None,
     # マスタテーブルのパラメータ
-    current_location_id: Optional[int] = Query(None),
-    job_id: Optional[int] = Query(None),
-
-    db: Session = Depends(get_db),
+    current_location_id: int | None = Query(None),
+    job_id: int | None = Query(None),
 ):
     query = db.query(User).options(joinedload(User.images))
 
@@ -122,17 +119,12 @@ def get_user_list(
 
 # 詳細取得
 @router.get("/users/{user_id}", response_model=UserDetailResponse)
-def get_user_detail(
-    user_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
+def get_user_detail(user_id: int, db: DBSession, current_user: CurrentUser):
     user_data = get_user_detail_with_like(db, user_id, current_user.user_id)
 
     if not user_data:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
     return user_data
@@ -140,46 +132,40 @@ def get_user_detail(
 
 # 削除
 @router.delete("/user/{user_id}")
-def delete(
-    user_id: int,
-    db: Session = Depends(get_db)
-):
+def delete(user_id: int, db: DBSession):
     delete_user(db, user_id)
     return {"message": "user delete"}
 
 
 # プロフィール取得
 @router.get("/user/me", response_model=UserResponse)
-def get_me(
-    current_user: User = Depends(get_current_user)
-):
+def get_me(current_user: CurrentUser):
     return current_user
+
 
 # プロフィール更新
 
 
 @router.put("/users/me", response_model=UserResponse)
 def update(
-    name: Optional[str] = Form(None),
-    bio: Optional[str] = Form(None),
-    height: Optional[int] = Form(None),
-    smoking: Optional[SmokingEnum] = Form(None),
-    alcohol: Optional[AlcoholEnum] = Form(None),
-    income: Optional[IncomeEnum] = Form(None),
-    education: Optional[EducationEnum] = Form(None),
-    marriage_intention: Optional[MarriageIntentionEnum] = Form(None),
-    holiday: Optional[HolidayEnum] = Form(None),
-    living_arrangement: Optional[LivingArrangementEnum] = Form(None),
-    meeting_preference: Optional[MeetingPreferenceEnum] = Form(None),
-    birth_location_id: Optional[int] = Form(None),
-    current_location_id: Optional[int] = Form(None),
-    job_id: Optional[int] = Form(None),
-
-    keep_image_ids: list[int] = Form([]),
-    new_images: list[UploadFile] = File([]),
-
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: DBSession,
+    current_user: CurrentUser,
+    name: str | None = Form(None),
+    bio: str | None = Form(None),
+    height: int | None = Form(None),
+    smoking: Annotated[SmokingEnum | None, Form()] = None,
+    alcohol: Annotated[AlcoholEnum | None, Form()] = None,
+    income: Annotated[IncomeEnum | None, Form()] = None,
+    education: Annotated[EducationEnum | None, Form()] = None,
+    marriage_intention: Annotated[MarriageIntentionEnum | None, Form()] = None,
+    holiday: Annotated[HolidayEnum | None, Form()] = None,
+    living_arrangement: Annotated[LivingArrangementEnum | None, Form()] = None,
+    meeting_preference: Annotated[MeetingPreferenceEnum | None, Form()] = None,
+    birth_location_id: Annotated[int | None, Form()] = None,
+    current_location_id: int | None = Form(None),
+    job_id: int | None = Form(None),
+    keep_image_ids: Annotated[list[int] | None, Form()] = None,
+    new_images: Annotated[list[UploadFile] | None, File()] = None,
 ):
     user_data = {
         "name": name,
@@ -203,10 +189,11 @@ def update(
         user_id=current_user.user_id,
         user_data=user_data,
         keep_image_ids=keep_image_ids,
-        new_images=new_images
+        new_images=new_images,
     )
 
     return result
+
 
 # 足跡登録
 
@@ -214,16 +201,13 @@ def update(
 @router.post("/users/{user_id}/footprint")
 def create_footprint(
     user_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
+    db: DBSession,
+    current_user: CurrentUser,
 ):
     if current_user.user_id == user_id:
         return {"message": "自分には足跡つけません"}
 
-    footprint = FootPrint(
-        visitor_user_id=current_user.user_id,
-        visited_user_id=user_id
-    )
+    footprint = FootPrint(visitor_user_id=current_user.user_id, visited_user_id=user_id)
 
     db.add(footprint)
     db.commit()
@@ -234,8 +218,5 @@ def create_footprint(
 
 # 足跡取得
 @router.get("/users/me/footprint")
-def get_visited_user(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
+def get_visited_user(db: DBSession, current_user: CurrentUser):
     return get_my_footprint(db, current_user.user_id)

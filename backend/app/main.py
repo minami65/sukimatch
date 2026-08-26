@@ -1,18 +1,27 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.db import engine, Base
 
-from app.api import user, locations, job, auth, user_images, matches, likes, websocket
+from app.api import (
+    auth,
+    job,
+    likes,
+    locations,
+    matches,
+    message,
+    user,
+    user_images,
+    websocket,
+)
+from app.core.config import setup_cloudinary
+from app.db import Base, engine
+from app.models.job import Job
+from app.models.likes import Likes
+from app.models.locations import Location
+from app.models.matches import Matches
 
 # モデルたち
 from app.models.user import User
-from app.models.locations import Location
-from app.models.job import Job
 from app.models.user_images import UserImages
-from app.models.likes import Likes
-from app.models.matches import Matches
-
-from app.core.config import setup_cloudinary
 
 app = FastAPI()
 
@@ -47,4 +56,5 @@ app.include_router(auth.router)
 app.include_router(matches.router)
 app.include_router(likes.router)
 app.include_router(user_images.router)
+app.include_router(message.router)
 app.include_router(websocket.router)

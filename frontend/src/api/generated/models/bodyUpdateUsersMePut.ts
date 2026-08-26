@@ -28,6 +28,6 @@ export interface BodyUpdateUsersMePut {
   birth_location_id?: number | null;
   current_location_id?: number | null;
   job_id?: number | null;
-  keep_image_ids?: number[];
-  new_images?: Blob[];
+  keep_image_ids?: number[] | null;
+  new_images?: Blob[] | null;
 }

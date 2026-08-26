@@ -1,9 +1,8 @@
-
 import enum
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Enum
-from sqlalchemy.orm import relationship
 from app.db import Base
+from sqlalchemy import Column, Date, Enum, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class GenderEnum(str, enum.Enum):
@@ -86,25 +85,25 @@ class User(Base):
     smoking = Column(Enum(SmokingEnum, native_enum=False), nullable=True)
     alcohol = Column(Enum(AlcoholEnum, native_enum=False), nullable=True)
     marriage_intention = Column(
-        Enum(MarriageIntentionEnum, native_enum=False), nullable=True)
+        Enum(MarriageIntentionEnum, native_enum=False), nullable=True
+    )
     meeting_preference = Column(
-        Enum(MeetingPreferenceEnum, native_enum=False), nullable=True)
+        Enum(MeetingPreferenceEnum, native_enum=False), nullable=True
+    )
     living_arrangement = Column(
-        Enum(LivingArrangementEnum, native_enum=False), nullable=True)
+        Enum(LivingArrangementEnum, native_enum=False), nullable=True
+    )
     education = Column(Enum(EducationEnum, native_enum=False), nullable=True)
     income = Column(Enum(IncomeEnum, native_enum=False), nullable=True)
     holiday = Column(Enum(HolidayEnum, native_enum=False), nullable=True)
 
     # === マスタテーブル（ID参照）に残す項目 ===
-    birth_location_id = Column(
-        Integer, ForeignKey("locations.id"), nullable=True)
-    current_location_id = Column(
-        Integer, ForeignKey("locations.id"), nullable=True)
+    birth_location_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
+    current_location_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
     job_id = Column(Integer, ForeignKey("jobs.id"), nullable=True)
 
     # リレーション（マスタ参照のみ残す）
-    current_location = relationship(
-        "Location", foreign_keys=[current_location_id])
+    current_location = relationship("Location", foreign_keys=[current_location_id])
     birth_location = relationship("Location", foreign_keys=[birth_location_id])
     job = relationship("Job")
 

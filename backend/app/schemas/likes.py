@@ -9,9 +9,11 @@ class LikeBase(BaseModel):
     class Config:
         from_attributes = True
 
+
 class LikeResponse(BaseModel):
     like: LikeBase
     is_match: bool
+
 
 class DeleteResponse(BaseModel):
     message: str

@@ -1,9 +1,18 @@
-from app.models.user import AlcoholEnum, EducationEnum, GenderEnum, HolidayEnum, IncomeEnum, LivingArrangementEnum, MarriageIntentionEnum, MeetingPreferenceEnum, SmokingEnum
-from pydantic import BaseModel, EmailStr
-from typing import Optional
 from datetime import date
-from typing import List
+
+from app.models.user import (
+    AlcoholEnum,
+    EducationEnum,
+    GenderEnum,
+    HolidayEnum,
+    IncomeEnum,
+    LivingArrangementEnum,
+    MarriageIntentionEnum,
+    MeetingPreferenceEnum,
+    SmokingEnum,
+)
 from app.schemas.user_image import UserImageResponse
+from pydantic import BaseModel, EmailStr
 
 
 class UserCreate(BaseModel):
@@ -11,25 +20,25 @@ class UserCreate(BaseModel):
     age: int
     birthday: date
     mail_address: EmailStr = None
-    bio: Optional[str] = None
+    bio: str | None = None
     password: str
-    height: Optional[int] = None
+    height: int | None = None
 
     # Enum項目
-    gender: Optional[GenderEnum] = None
-    smoking: Optional[SmokingEnum] = None
-    alcohol: Optional[AlcoholEnum] = None
-    marriage_intention: Optional[MarriageIntentionEnum] = None
-    meeting_preference: Optional[MeetingPreferenceEnum] = None
-    living_arrangement: Optional[LivingArrangementEnum] = None
-    education: Optional[EducationEnum] = None
-    income: Optional[IncomeEnum] = None
-    holiday: Optional[HolidayEnum] = None
+    gender: GenderEnum | None = None
+    smoking: SmokingEnum | None = None
+    alcohol: AlcoholEnum | None = None
+    marriage_intention: MarriageIntentionEnum | None = None
+    meeting_preference: MeetingPreferenceEnum | None = None
+    living_arrangement: LivingArrangementEnum | None = None
+    education: EducationEnum | None = None
+    income: IncomeEnum | None = None
+    holiday: HolidayEnum | None = None
 
     # マスタ参照項目
-    birth_location_id: Optional[int] = None
-    current_location_id: Optional[int] = None
-    job_id: Optional[int] = None
+    birth_location_id: int | None = None
+    current_location_id: int | None = None
+    job_id: int | None = None
 
 
 class LocationResponse(BaseModel):
@@ -43,28 +52,28 @@ class LocationResponse(BaseModel):
 class UserResponse(BaseModel):
     user_id: int
     name: str
-    mail_address: Optional[str] = None
-    age: Optional[int] = None
-    bio: Optional[str] = None
-    height: Optional[int] = None
+    mail_address: str | None = None
+    age: int | None = None
+    bio: str | None = None
+    height: int | None = None
 
     # Enum項目
-    gender: Optional[GenderEnum] = None
-    smoking: Optional[SmokingEnum] = None
-    alcohol: Optional[AlcoholEnum] = None
-    marriage_intention: Optional[MarriageIntentionEnum] = None
-    meeting_preference: Optional[MeetingPreferenceEnum] = None
-    living_arrangement: Optional[LivingArrangementEnum] = None
-    education: Optional[EducationEnum] = None
-    income: Optional[IncomeEnum] = None
-    holiday: Optional[HolidayEnum] = None
+    gender: GenderEnum | None = None
+    smoking: SmokingEnum | None = None
+    alcohol: AlcoholEnum | None = None
+    marriage_intention: MarriageIntentionEnum | None = None
+    meeting_preference: MeetingPreferenceEnum | None = None
+    living_arrangement: LivingArrangementEnum | None = None
+    education: EducationEnum | None = None
+    income: IncomeEnum | None = None
+    holiday: HolidayEnum | None = None
 
     # マスタ参照項目
-    birth_location_id: Optional[int] = None
-    current_location_id: Optional[int] = None
-    job_id: Optional[int] = None
-    current_location: Optional[LocationResponse] = None
-    images: List[UserImageResponse] = []
+    birth_location_id: int | None = None
+    current_location_id: int | None = None
+    job_id: int | None = None
+    current_location: LocationResponse | None = None
+    images: list[UserImageResponse] = []
 
     class Config:
         from_attributes = True

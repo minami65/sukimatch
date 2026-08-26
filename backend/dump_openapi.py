@@ -1,6 +1,7 @@
 # 📄 backend/dump_openapi.py
 import json
 import os
+
 from app.main import app
 
 # backendの直下に openapi.json という名前で保存する
