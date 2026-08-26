@@ -1,25 +1,11 @@
-from typing import Annotated
-
+from app.api.deps import DBSession
 from app.core.jwt import create_access_token
 from app.core.security import verify_password
 from app.crud.user import get_user_by_mail_address
-from app.db import SessionLocal
 from app.schemas.auth import LoginRequest, TokenResponse
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-DBSession = Annotated[Session, Depends(get_db)]
 
 
 @router.post("/login", response_model=TokenResponse)

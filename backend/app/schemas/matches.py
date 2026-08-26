@@ -1,12 +1,11 @@
 from pydantic import BaseModel
-from typing import List, Optional
 
 
 class MatchUserProfile(BaseModel):
     user_id: int
     name: str
     age: int
-    image_url: Optional[str] = None
+    image_url: str | None = None
 
 
 class MatchItem(BaseModel):
@@ -20,4 +19,4 @@ class MatchItem(BaseModel):
 
 
 class MarkReadRequest(BaseModel):
-    match_ids: List[int]
+    match_ids: list[int]

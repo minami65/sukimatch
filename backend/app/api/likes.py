@@ -1,34 +1,15 @@
 # api
-from typing import Annotated
-
-from app.api.deps import get_current_user
+from app.api.deps import CurrentUser, DBSession
 from app.core.connection_manager import manager
 
 # cruds
 from app.crud.likes import create_like, delete_like, get_liked_by_users, get_my_likes
-from app.db import SessionLocal
-
-# models
-from app.models.user import User
 
 # schemas
 from app.schemas.likes import DeleteResponse, LikeResponse
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-DBSession = Annotated[Session, Depends(get_db)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.post("/users/{user_id}/like", response_model=LikeResponse)

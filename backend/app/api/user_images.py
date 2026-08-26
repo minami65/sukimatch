@@ -2,15 +2,12 @@ from typing import Annotated
 
 import cloudinary
 import cloudinary.uploader
-from app.api.deps import get_current_user
-from app.db import SessionLocal
-from app.models.user import User
+from app.api.deps import CurrentUser, DBSession
 from app.models.user_images import UserImages
 from cloudinary.exceptions import Error as CloudinaryError
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
 
 
 class UserImageResponse(BaseModel):
@@ -23,18 +20,6 @@ class UserImageResponse(BaseModel):
 
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-DBSession = Annotated[Session, Depends(get_db)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 # プロフィールに画像追加

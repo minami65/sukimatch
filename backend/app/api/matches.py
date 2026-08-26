@@ -1,26 +1,9 @@
-from typing import Annotated
-
-from app.api.deps import get_current_user
+from app.api.deps import CurrentUser, DBSession
 from app.crud.matches import get_my_matches, get_unread_matches, mark_matches_as_read
-from app.db import SessionLocal
-from app.models.user import User
 from app.schemas.matches import MarkReadRequest, MatchItem
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-DBSession = Annotated[Session, Depends(get_db)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.get("/matches/me", response_model=list[MatchItem])

@@ -1,9 +1,8 @@
 from typing import Annotated
 
-from app.api.deps import get_current_user
+from app.api.deps import CurrentUser, DBSession
 from app.crud.footprint import get_my_footprint
 from app.crud.user import create_user, delete_user, password_reset, update_user
-from app.db import SessionLocal
 from app.models.footprint import FootPrint
 from app.models.user import (
     AlcoholEnum,
@@ -22,7 +21,6 @@ from app.schemas.user import UserCreate, UserDetailResponse, UserResponse
 from app.services.user_service import get_user_detail_with_like
 from fastapi import (
     APIRouter,
-    Depends,
     File,
     Form,
     HTTPException,
@@ -30,21 +28,9 @@ from fastapi import (
     UploadFile,
     status,
 )
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import joinedload
 
 router = APIRouter()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-DBSession = Annotated[Session, Depends(get_db)]
-CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 # 登録
