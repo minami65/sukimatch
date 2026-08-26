@@ -677,11 +677,11 @@ if(bodyUpdateUsersMePut?.current_location_id !== undefined && bodyUpdateUsersMeP
 if(bodyUpdateUsersMePut?.job_id !== undefined && bodyUpdateUsersMePut.job_id !== null) {
  formData.append(`job_id`, bodyUpdateUsersMePut.job_id.toString())
  }
-if(bodyUpdateUsersMePut?.keep_image_ids !== undefined) {
- bodyUpdateUsersMePut?.keep_image_ids.forEach(value => formData.append(`keep_image_ids`, value.toString()));
+if(bodyUpdateUsersMePut?.keep_image_ids !== undefined && bodyUpdateUsersMePut.keep_image_ids !== null) {
+ formData.append(`keep_image_ids`, bodyUpdateUsersMePut.keep_image_ids);
  }
-if(bodyUpdateUsersMePut?.new_images !== undefined) {
- bodyUpdateUsersMePut?.new_images.forEach(value => formData.append(`new_images`, value));
+if(bodyUpdateUsersMePut?.new_images !== undefined && bodyUpdateUsersMePut.new_images !== null) {
+ formData.append(`new_images`, bodyUpdateUsersMePut.new_images);
  }
 
       return customInstance<UserResponse>(

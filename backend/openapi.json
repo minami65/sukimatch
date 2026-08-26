@@ -1225,21 +1225,33 @@
             "title": "Job Id"
           },
           "keep_image_ids": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "Keep Image Ids",
-            "default": []
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keep Image Ids"
           },
           "new_images": {
-            "items": {
-              "type": "string",
-              "contentMediaType": "application/octet-stream"
-            },
-            "type": "array",
-            "title": "New Images",
-            "default": []
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "contentMediaType": "application/octet-stream"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Images"
           }
         },
         "type": "object",

@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
 from app.db import Base
+from sqlalchemy import Boolean, Column, ForeignKey, Integer
+from sqlalchemy.orm import relationship
 
 
 class Matches(Base):
