@@ -3,7 +3,7 @@ from app.models.message import Message
 from app.models.user import User
 from app.schemas.message import MessageCreate, TalkListItem
 from sqlalchemy import or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 
 class CRUDMessage:
@@ -55,10 +55,22 @@ class CRUDMessage:
         for match in matches:
             # 相手のユーザーIDを判定
             partner_id = match.user2_id if match.user1_id == user_id else match.user1_id
-            partner = db.query(User).filter(User.user_id == partner_id).first()
+            partner = (
+                db.query(User)
+                .options(joinedload(User.images))
+                .filter(User.user_id == partner_id)
+                .first()
+            )
 
             if not partner:
                 continue
+
+            # アイコン画像の取得（sort_order が最も小さい画像、なければ None）
+            partner_icon_url = None
+            if partner.images:
+                sorted_images = sorted(partner.images, key=lambda x: x.sort_order)
+                if sorted_images:
+                    partner_icon_url = sorted_images[0].image_url
 
             # このマッチの最新メッセージを取得
             latest_msg = (
@@ -85,7 +97,7 @@ class CRUDMessage:
                     match_id=match.id,
                     partner_id=partner.user_id,
                     partner_name=partner.name,
-                    partner_icon_url=getattr(partner, "icon_url", None),
+                    partner_icon_url=partner_icon_url,
                     latest_message=latest_msg.content
                     if latest_msg
                     else "マッチングしました！メッセージを送りましょう",
