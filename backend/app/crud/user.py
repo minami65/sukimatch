@@ -1,11 +1,11 @@
-from app.models.user_images import UserImages
-from app.core.config import setup_cloudinary
-from sqlalchemy.orm import Session, joinedload
-from app.models.user import User
-from passlib.context import CryptContext
-from fastapi import HTTPException, UploadFile
 import cloudinary
 import cloudinary.uploader
+from app.core.config import setup_cloudinary
+from app.models.user import User
+from app.models.user_images import UserImages
+from fastapi import HTTPException, UploadFile
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session, joinedload
 
 setup_cloudinary()
 
@@ -39,7 +39,7 @@ def create_user(db: Session, user):
         alcohol_id=user.alcohol_id,
         smoking_id=user.smoking_id,
         living_arrangement_id=user.living_arrangement_id,
-        meeting_preference_id=user.meeting_preference_id
+        meeting_preference_id=user.meeting_preference_id,
     )
     db.add(db_user)
     db.commit()
@@ -47,15 +47,16 @@ def create_user(db: Session, user):
 
     return db_user
 
+
 # 更新
 
 
 def update_user(
     db: Session,
     user_id: int,
-    user_data: dict,                # テキスト系の更新値が入った辞書
-    keep_image_ids: list[int],      # 残したい画像のID配列 [1, 2]
-    new_images: list[UploadFile]    # アップロードされた画像ファイル配列
+    user_data: dict,  # テキスト系の更新値が入った辞書
+    keep_image_ids: list[int],  # 残したい画像のID配列 [1, 2]
+    new_images: list[UploadFile],  # アップロードされた画像ファイル配列
 ):
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
@@ -67,10 +68,14 @@ def update_user(
             setattr(user, field, value)
 
     # 削除処理
-    images_to_delete = db.query(UserImages).filter(
-        UserImages.user_id == user_id,
-        UserImages.id.not_in(keep_image_ids) if keep_image_ids else True
-    ).all()
+    images_to_delete = (
+        db.query(UserImages)
+        .filter(
+            UserImages.user_id == user_id,
+            UserImages.id.not_in(keep_image_ids) if keep_image_ids else True,
+        )
+        .all()
+    )
 
     for img in images_to_delete:
         # ① Cloudinary から物理削除
@@ -91,22 +96,19 @@ def update_user(
             continue
 
         # ① Cloudinary へアップロード (UploadFile.file をそのまま渡す)
-        upload_result = cloudinary.uploader.upload(
-            file.file,
-            folder=folder_path
-        )
+        upload_result = cloudinary.uploader.upload(file.file, folder=folder_path)
 
         # ② sort_order の計算（シードコードと同じロジック）
-        current_count = db.query(UserImages).filter(
-            UserImages.user_id == user_id
-        ).count()
+        current_count = (
+            db.query(UserImages).filter(UserImages.user_id == user_id).count()
+        )
 
         # ③ DBに新規レコード登録
         new_image_record = UserImages(
             user_id=user_id,
             image_url=upload_result.get("secure_url"),
             public_id=upload_result.get("public_id"),
-            sort_order=current_count + 1
+            sort_order=current_count + 1,
         )
         db.add(new_image_record)
 
@@ -116,11 +118,13 @@ def update_user(
 
     return user
 
+
 # 一覧参照
 
 
 def get_users(db: Session):
     return db.query(User).all()
+
 
 # 詳細取得
 
@@ -133,11 +137,15 @@ def get_user(db: Session, user_id: int):
         .first()
     )
 
+
 # 検索
 
 
-def search_user(db: Session,):
+def search_user(
+    db: Session,
+):
     return db.query(User).filter().all()
+
 
 # 削除
 
@@ -152,11 +160,13 @@ def delete_user(db: Session, user_id: int):
     db.commit()
     return user
 
+
 # メールアドレスが一致するユーザーの取得
 
 
 def get_user_by_mail_address(db: Session, mail_address: str):
     return db.query(User).filter(User.mail_address == mail_address).first()
+
 
 # パスワードリセット
 

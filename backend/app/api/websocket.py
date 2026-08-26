@@ -1,7 +1,7 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query, status
-from jose import JWTError
-from app.core.jwt import decode_token
 from app.core.connection_manager import manager
+from app.core.jwt import decode_token
+from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect, status
+from jose import JWTError
 
 router = APIRouter()
 
@@ -22,7 +22,7 @@ def get_user_id_from_token(token: str) -> int | None:
 @router.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
-    token: str = Query(...)  # クエリパラメーター ?token=xxx からトークンを取得
+    token: str = Query(...),  # クエリパラメーター ?token=xxx からトークンを取得
 ):
     # 1. JWTトークンを検証して user_id を取得
     user_id = get_user_id_from_token(token)

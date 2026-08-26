@@ -1,7 +1,20 @@
 from datetime import date
-from app.db import SessionLocal
-from app.models.user import AlcoholEnum, EducationEnum, GenderEnum, HolidayEnum, IncomeEnum, LivingArrangementEnum, MarriageIntentionEnum, MeetingPreferenceEnum, SmokingEnum, User
+
 from app.core.security import hash_password
+from app.db import SessionLocal
+from app.models.user import (
+    AlcoholEnum,
+    EducationEnum,
+    GenderEnum,
+    HolidayEnum,
+    IncomeEnum,
+    LivingArrangementEnum,
+    MarriageIntentionEnum,
+    MeetingPreferenceEnum,
+    SmokingEnum,
+    User,
+)
+from sqlalchemy.exc import SQLAlchemyError
 
 
 def seed_users():
@@ -28,7 +41,7 @@ def seed_users():
                 alcohol=AlcoholEnum.HEAVY,
                 smoking=SmokingEnum.NON_SMOKER,
                 living_arrangement=LivingArrangementEnum.ALONE,
-                meeting_preference=MeetingPreferenceEnum.WANT_TO_MEET
+                meeting_preference=MeetingPreferenceEnum.WANT_TO_MEET,
             ),
             User(
                 name="テスト 花子",
@@ -49,7 +62,7 @@ def seed_users():
                 alcohol=AlcoholEnum.LIGHT,
                 smoking=SmokingEnum.NON_SMOKER,
                 living_arrangement=LivingArrangementEnum.FAMILY,
-                meeting_preference=MeetingPreferenceEnum.IF_MATCHES
+                meeting_preference=MeetingPreferenceEnum.IF_MATCHES,
             ),
             User(
                 name="テスト ミオ",
@@ -70,7 +83,7 @@ def seed_users():
                 alcohol=AlcoholEnum.LIGHT,
                 smoking=SmokingEnum.NON_SMOKER,
                 living_arrangement=LivingArrangementEnum.FAMILY,
-                meeting_preference=MeetingPreferenceEnum.IF_MATCHES
+                meeting_preference=MeetingPreferenceEnum.IF_MATCHES,
             ),
             User(
                 name="テスト ハヤト",
@@ -91,7 +104,7 @@ def seed_users():
                 alcohol=AlcoholEnum.LIGHT,
                 smoking=SmokingEnum.NON_SMOKER,
                 living_arrangement=LivingArrangementEnum.FAMILY,
-                meeting_preference=MeetingPreferenceEnum.IF_MATCHES
+                meeting_preference=MeetingPreferenceEnum.IF_MATCHES,
             ),
             User(
                 name="テスト ユウコ",
@@ -112,13 +125,16 @@ def seed_users():
                 alcohol=AlcoholEnum.REGULAR,
                 smoking=SmokingEnum.NON_SMOKER,
                 living_arrangement=LivingArrangementEnum.FAMILY,
-                meeting_preference=MeetingPreferenceEnum.IF_MATCHES
+                meeting_preference=MeetingPreferenceEnum.IF_MATCHES,
             ),
         ]
         added_count = 0
         for user_data in test_users:
-            exists = db.query(User).filter(
-                User.mail_address == user_data.mail_address).first()
+            exists = (
+                db.query(User)
+                .filter(User.mail_address == user_data.mail_address)
+                .first()
+            )
 
             if not exists:
                 db.add(user_data)
@@ -131,7 +147,7 @@ def seed_users():
         else:
             print("  -> すべてのユーザーが既に存在するため、追加をスキップしました。")
 
-    except Exception as e:
+    except SQLAlchemyError as e:
         db.rollback()
         print(f"  -> エラーが発生しました: {e}")
     finally:
