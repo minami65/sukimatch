@@ -1062,6 +1062,196 @@
           }
         }
       }
+    },
+    "/matches/{match_id}/messages": {
+      "get": {
+        "tags": [
+          "messages"
+        ],
+        "summary": "Get Messages",
+        "operationId": "get_messages_matches__match_id__messages_get",
+        "parameters": [
+          {
+            "name": "match_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Match Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 30,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageResponse"
+                  },
+                  "title": "Response Get Messages Matches  Match Id  Messages Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "messages"
+        ],
+        "summary": "Create Message",
+        "operationId": "create_message_matches__match_id__messages_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "match_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Match Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matches/me/talks": {
+      "get": {
+        "tags": [
+          "messages"
+        ],
+        "summary": "Get Talk List",
+        "description": "ログイン中のユーザーのトーク一覧（相手の名前、アイコン、最新メッセージ）を取得",
+        "operationId": "get_talk_list_matches_me_talks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TalkListItem"
+                  },
+                  "type": "array",
+                  "title": "Response Get Talk List Matches Me Talks Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/matches/{match_id}/read": {
+      "put": {
+        "tags": [
+          "messages"
+        ],
+        "summary": "Mark Messages As Read",
+        "description": "特定トークルームの未読メッセージをすべて既読にするAPI",
+        "operationId": "mark_messages_as_read_matches__match_id__read_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "match_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Match Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1270,6 +1460,15 @@
           "file"
         ],
         "title": "Body_upload_image_users_me_images_post"
+      },
+      "ContentType": {
+        "type": "string",
+        "enum": [
+          "text",
+          "image",
+          "file"
+        ],
+        "title": "ContentType"
       },
       "DeleteResponse": {
         "properties": {
@@ -1540,6 +1739,71 @@
         ],
         "title": "MeetingPreferenceEnum"
       },
+      "MessageCreate": {
+        "properties": {
+          "content_type": {
+            "$ref": "#/components/schemas/ContentType",
+            "default": "text"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "title": "MessageCreate"
+      },
+      "MessageResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "match_id": {
+            "type": "integer",
+            "title": "Match Id"
+          },
+          "sender_id": {
+            "type": "integer",
+            "title": "Sender Id"
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          },
+          "is_read": {
+            "type": "boolean",
+            "title": "Is Read"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/SenderSchema"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "match_id",
+          "sender_id",
+          "content_type",
+          "content",
+          "is_read",
+          "created_at",
+          "sender"
+        ],
+        "title": "MessageResponse"
+      },
       "PasswordReset": {
         "properties": {
           "mail_address": {
@@ -1564,6 +1828,48 @@
         ],
         "title": "PasswordReset"
       },
+      "ReadResponse": {
+        "properties": {
+          "updated_count": {
+            "type": "integer",
+            "title": "Updated Count"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": "Messages marked as read"
+          }
+        },
+        "type": "object",
+        "required": [
+          "updated_count"
+        ],
+        "title": "ReadResponse"
+      },
+      "SenderSchema": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "SenderSchema"
+      },
       "SmokingEnum": {
         "type": "string",
         "enum": [
@@ -1572,6 +1878,68 @@
           "吸わない"
         ],
         "title": "SmokingEnum"
+      },
+      "TalkListItem": {
+        "properties": {
+          "match_id": {
+            "type": "integer",
+            "title": "Match Id"
+          },
+          "partner_id": {
+            "type": "integer",
+            "title": "Partner Id"
+          },
+          "partner_name": {
+            "type": "string",
+            "title": "Partner Name"
+          },
+          "partner_icon_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partner Icon Url"
+          },
+          "latest_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Message"
+          },
+          "latest_message_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Message At"
+          },
+          "unread_count": {
+            "type": "integer",
+            "title": "Unread Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "match_id",
+          "partner_id",
+          "partner_name"
+        ],
+        "title": "TalkListItem"
       },
       "TokenResponse": {
         "properties": {

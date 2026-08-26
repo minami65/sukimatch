@@ -27,6 +27,7 @@ import type {
   BodyUpdateUsersMePut,
   BodyUploadImageUsersMeImagesPost,
   DeleteResponse,
+  GetMessagesMatchesMatchIdMessagesGetParams,
   GetUserListUsersGetParams,
   HTTPValidationError,
   JobResponse,
@@ -35,7 +36,11 @@ import type {
   LoginRequest,
   MarkReadRequest,
   MatchItem,
+  MessageCreate,
+  MessageResponse,
   PasswordReset,
+  ReadResponse,
+  TalkListItem,
   TokenResponse,
   UserCreate,
   UserDetailResponse,
@@ -1989,4 +1994,327 @@ export const useDeleteImagesUsersMeImagesImageIdDelete = <TError = HTTPValidatio
         TContext
       > => {
       return useMutation(getDeleteImagesUsersMeImagesImageIdDeleteMutationOptions(options), queryClient);
+    }
+
+/**
+ * @summary Get Messages
+ */
+export const getMessagesMatchesMatchIdMessagesGet = (
+    matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<MessageResponse[]>(
+      {url: `/matches/${matchId}/messages`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetMessagesMatchesMatchIdMessagesGetQueryKey = (matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams,) => {
+    return [
+    `/matches/${matchId}/messages`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetMessagesMatchesMatchIdMessagesGetQueryOptions = <TData = Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError = HTTPValidationError>(matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMessagesMatchesMatchIdMessagesGetQueryKey(matchId,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>> = ({ signal }) => getMessagesMatchesMatchIdMessagesGet(matchId,params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: matchId !== null && matchId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMessagesMatchesMatchIdMessagesGetQueryResult = NonNullable<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>>
+export type GetMessagesMatchesMatchIdMessagesGetQueryError = HTTPValidationError
+
+
+export function useGetMessagesMatchesMatchIdMessagesGet<TData = Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError = HTTPValidationError>(
+ matchId: number,
+    params: undefined |  GetMessagesMatchesMatchIdMessagesGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>,
+          TError,
+          Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMessagesMatchesMatchIdMessagesGet<TData = Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError = HTTPValidationError>(
+ matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>,
+          TError,
+          Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMessagesMatchesMatchIdMessagesGet<TData = Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError = HTTPValidationError>(
+ matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Messages
+ */
+
+export function useGetMessagesMatchesMatchIdMessagesGet<TData = Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError = HTTPValidationError>(
+ matchId: number,
+    params?: GetMessagesMatchesMatchIdMessagesGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMessagesMatchesMatchIdMessagesGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMessagesMatchesMatchIdMessagesGetQueryOptions(matchId,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+/**
+ * @summary Create Message
+ */
+export const createMessageMatchesMatchIdMessagesPost = (
+    matchId: number,
+    messageCreate: MessageCreate,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<MessageResponse>(
+      {url: `/matches/${matchId}/messages`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: messageCreate, signal
+    },
+      options);
+    }
+
+
+
+export const getCreateMessageMatchesMatchIdMessagesPostMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>, TError,{matchId: number;data: MessageCreate}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>, TError,{matchId: number;data: MessageCreate}, TContext> => {
+
+const mutationKey = ['createMessageMatchesMatchIdMessagesPost'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>, {matchId: number;data: MessageCreate}> = (props) => {
+          const {matchId,data} = props ?? {};
+
+          return  createMessageMatchesMatchIdMessagesPost(matchId,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateMessageMatchesMatchIdMessagesPostMutationResult = NonNullable<Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>>
+    export type CreateMessageMatchesMatchIdMessagesPostMutationBody = MessageCreate
+    export type CreateMessageMatchesMatchIdMessagesPostMutationError = HTTPValidationError
+
+    /**
+ * @summary Create Message
+ */
+export const useCreateMessageMatchesMatchIdMessagesPost = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>, TError,{matchId: number;data: MessageCreate}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createMessageMatchesMatchIdMessagesPost>>,
+        TError,
+        {matchId: number;data: MessageCreate},
+        TContext
+      > => {
+      return useMutation(getCreateMessageMatchesMatchIdMessagesPostMutationOptions(options), queryClient);
+    }
+
+/**
+ * ログイン中のユーザーのトーク一覧（相手の名前、アイコン、最新メッセージ）を取得
+ * @summary Get Talk List
+ */
+export const getTalkListMatchesMeTalksGet = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<TalkListItem[]>(
+      {url: `/matches/me/talks`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetTalkListMatchesMeTalksGetQueryKey = () => {
+    return [
+    `/matches/me/talks`
+    ] as const;
+    }
+
+
+export const getGetTalkListMatchesMeTalksGetQueryOptions = <TData = Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTalkListMatchesMeTalksGetQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>> = ({ signal }) => getTalkListMatchesMeTalksGet(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTalkListMatchesMeTalksGetQueryResult = NonNullable<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>>
+export type GetTalkListMatchesMeTalksGetQueryError = unknown
+
+
+export function useGetTalkListMatchesMeTalksGet<TData = Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>,
+          TError,
+          Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTalkListMatchesMeTalksGet<TData = Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>,
+          TError,
+          Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTalkListMatchesMeTalksGet<TData = Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Talk List
+ */
+
+export function useGetTalkListMatchesMeTalksGet<TData = Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTalkListMatchesMeTalksGet>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTalkListMatchesMeTalksGetQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+/**
+ * 特定トークルームの未読メッセージをすべて既読にするAPI
+ * @summary Mark Messages As Read
+ */
+export const markMessagesAsReadMatchesMatchIdReadPut = (
+    matchId: number,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<ReadResponse>(
+      {url: `/matches/${matchId}/read`, method: 'PUT', signal
+    },
+      options);
+    }
+
+
+
+export const getMarkMessagesAsReadMatchesMatchIdReadPutMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>, TError,{matchId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>, TError,{matchId: number}, TContext> => {
+
+const mutationKey = ['markMessagesAsReadMatchesMatchIdReadPut'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>, {matchId: number}> = (props) => {
+          const {matchId} = props ?? {};
+
+          return  markMessagesAsReadMatchesMatchIdReadPut(matchId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MarkMessagesAsReadMatchesMatchIdReadPutMutationResult = NonNullable<Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>>
+
+    export type MarkMessagesAsReadMatchesMatchIdReadPutMutationError = HTTPValidationError
+
+    /**
+ * @summary Mark Messages As Read
+ */
+export const useMarkMessagesAsReadMatchesMatchIdReadPut = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>, TError,{matchId: number}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof markMessagesAsReadMatchesMatchIdReadPut>>,
+        TError,
+        {matchId: number},
+        TContext
+      > => {
+      return useMutation(getMarkMessagesAsReadMatchesMatchIdReadPutMutationOptions(options), queryClient);
     }
