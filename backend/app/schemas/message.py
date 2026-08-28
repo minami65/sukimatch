@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 
 from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 
 
 class ContentType(str, Enum):
@@ -44,8 +45,11 @@ class TalkListItem(BaseModel):
     latest_message_at: datetime | None = None
     unread_count: int = 0
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(
+        alias_generator=to_camel,  # match_id などを matchId に自動変換
+        populate_by_name=True,  # Pythonコード内からは match_id = 1 のままでも代入可能
+        from_attributes=True,  # ORM (SQLAlchemy) からのモデル変換を許可
+    )
 
 
 class ReadResponse(BaseModel):
