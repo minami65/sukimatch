@@ -1881,19 +1881,19 @@
       },
       "TalkListItem": {
         "properties": {
-          "match_id": {
+          "matchId": {
             "type": "integer",
-            "title": "Match Id"
+            "title": "Matchid"
           },
-          "partner_id": {
+          "partnerId": {
             "type": "integer",
-            "title": "Partner Id"
+            "title": "Partnerid"
           },
-          "partner_name": {
+          "partnerName": {
             "type": "string",
-            "title": "Partner Name"
+            "title": "Partnername"
           },
-          "partner_icon_url": {
+          "partnerIconUrl": {
             "anyOf": [
               {
                 "type": "string"
@@ -1902,9 +1902,9 @@
                 "type": "null"
               }
             ],
-            "title": "Partner Icon Url"
+            "title": "Partnericonurl"
           },
-          "latest_message": {
+          "latestMessage": {
             "anyOf": [
               {
                 "type": "string"
@@ -1913,9 +1913,9 @@
                 "type": "null"
               }
             ],
-            "title": "Latest Message"
+            "title": "Latestmessage"
           },
-          "latest_message_at": {
+          "latestMessageAt": {
             "anyOf": [
               {
                 "type": "string",
@@ -1925,19 +1925,19 @@
                 "type": "null"
               }
             ],
-            "title": "Latest Message At"
+            "title": "Latestmessageat"
           },
-          "unread_count": {
+          "unreadCount": {
             "type": "integer",
-            "title": "Unread Count",
+            "title": "Unreadcount",
             "default": 0
           }
         },
         "type": "object",
         "required": [
-          "match_id",
-          "partner_id",
-          "partner_name"
+          "matchId",
+          "partnerId",
+          "partnerName"
         ],
         "title": "TalkListItem"
       },

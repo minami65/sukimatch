@@ -6,11 +6,11 @@
  */
 
 export interface TalkListItem {
-  match_id: number;
-  partner_id: number;
-  partner_name: string;
-  partner_icon_url?: string | null;
-  latest_message?: string | null;
-  latest_message_at?: string | null;
-  unread_count?: number;
+  matchId: number;
+  partnerId: number;
+  partnerName: string;
+  partnerIconUrl?: string | null;
+  latestMessage?: string | null;
+  latestMessageAt?: string | null;
+  unreadCount?: number;
 }
