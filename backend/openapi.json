@@ -1070,6 +1070,11 @@
         ],
         "summary": "Get Messages",
         "operationId": "get_messages_matches__match_id__messages_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "match_id",
@@ -1113,11 +1118,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/MessageResponse"
-                  },
-                  "title": "Response Get Messages Matches  Match Id  Messages Get"
+                  "$ref": "#/components/schemas/RoomMessagesResponse"
                 }
               }
             }
@@ -1820,6 +1821,41 @@
         ],
         "title": "MessageResponse"
       },
+      "PartnerInfo": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "PartnerInfo"
+      },
       "PasswordReset": {
         "properties": {
           "mail_address": {
@@ -1861,6 +1897,26 @@
           "updated_count"
         ],
         "title": "ReadResponse"
+      },
+      "RoomMessagesResponse": {
+        "properties": {
+          "partner": {
+            "$ref": "#/components/schemas/PartnerInfo"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/MessageResponse"
+            },
+            "type": "array",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "partner",
+          "messages"
+        ],
+        "title": "RoomMessagesResponse"
       },
       "SenderSchema": {
         "properties": {
