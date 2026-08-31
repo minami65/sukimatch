@@ -1,10 +1,12 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
+
 import {
+  getMessagesMatchesMatchIdMessagesGet,
   useCreateMessageMatchesMatchIdMessagesPost,
-  useGetMessagesMatchesMatchIdMessagesGet,
   useGetTalkListMatchesMeTalksGet,
   useMarkMessagesAsReadMatchesMatchIdReadPut,
 } from '@/api/generated/endpoints/api';
-import { GetMessagesMatchesMatchIdMessagesGetParams, MessageCreate } from '@/api/generated/models';
+import { MessageCreate } from '@/api/generated/models';
 import { HTTPValidationError } from '@/api/generated/models';
 
 /**
@@ -23,25 +25,25 @@ export const useTalkList = () => {
 };
 
 /**
- * 2. 特定マッチのメッセージ一覧を取得するフック
+ * 2. 特定マッチのメッセージ一覧を取得するフック (無限スクロール版)
  */
-export const useMessages = (
-  matchId: number,
-  params?: GetMessagesMatchesMatchIdMessagesGetParams,
-) => {
-  const query = useGetMessagesMatchesMatchIdMessagesGet(matchId, params, {
-    query: {
-      enabled: !!matchId,
+export const useInfiniteMessages = (matchId: number) => {
+  return useInfiniteQuery({
+    queryKey: ['messages', matchId],
+    queryFn: async ({ pageParam }) => {
+      return getMessagesMatchesMatchIdMessagesGet(matchId, {
+        limit: 30,
+        before_id: pageParam,
+      });
     },
-  });
 
-  return {
-    messages: query.data ?? [],
-    isLoading: query.isLoading,
-    isError: query.isError,
-    error: query.error,
-    refetch: query.refetch,
-  };
+    initialPageParam: undefined as number | undefined,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage || !lastPage.messages || lastPage.messages.length < 30) return undefined;
+      return lastPage.messages[lastPage.messages.length - 1].id;
+    },
+    enabled: !!matchId,
+  });
 };
 
 /**
