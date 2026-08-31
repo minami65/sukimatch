@@ -55,3 +55,18 @@ class TalkListItem(BaseModel):
 class ReadResponse(BaseModel):
     updated_count: int
     message: str = "Messages marked as read"
+
+
+class PartnerInfo(BaseModel):
+    user_id: int
+    name: str | None = None
+    avatar_url: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RoomMessagesResponse(BaseModel):
+    partner: PartnerInfo
+    messages: list[MessageResponse]
+
+    model_config = ConfigDict(from_attributes=True)

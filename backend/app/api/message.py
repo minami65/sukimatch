@@ -4,6 +4,7 @@ from app.schemas.message import (
     MessageCreate,
     MessageResponse,
     ReadResponse,
+    RoomMessagesResponse,
     TalkListItem,
 )
 from fastapi import APIRouter, HTTPException
@@ -11,16 +12,26 @@ from fastapi import APIRouter, HTTPException
 router = APIRouter(prefix="/matches", tags=["messages"])
 
 
-@router.get("/{match_id}/messages", response_model=list[MessageResponse])
+@router.get("/{match_id}/messages", response_model=RoomMessagesResponse)
 def get_messages(
     match_id: int,
+    current_user: CurrentUser,
     db: DBSession,
     limit: int = 30,
     before_id: int | None = None,
 ):
-    return crud_message.get_by_match_id(
+    # 1. 権限チェック 兼 相手のプロフィール（メタ情報）取得
+    partner_info = crud_message.get_room_meta(db, match_id, current_user.user_id)
+    if not partner_info:
+        raise HTTPException(status_code=403, detail="Not authorized or match not found")
+
+    # 2. メッセージ一覧の取得（0件の場合は [] が返る）
+    messages = crud_message.get_by_match_id(
         db, match_id=match_id, limit=limit, before_id=before_id
     )
+
+    # 3. 新しいスキーマの形（箱）に詰めてフロントへ返す
+    return RoomMessagesResponse(partner=partner_info, messages=messages)
 
 
 @router.post("/{match_id}/messages", response_model=MessageResponse)

@@ -28,6 +28,43 @@ class CRUDMessage:
         )
         return messages
 
+    def get_room_meta(self, db: Session, match_id: int, user_id: int) -> dict | None:
+        """マッチングの正当性を確認しつつ、相手のプロフィール情報を返す"""
+        match = db.query(Matches).filter(Matches.id == match_id).first()
+        if not match:
+            return None
+
+        # 自分がこのマッチングの当事者かチェック
+        if match.user1_id != user_id and match.user2_id != user_id:
+            return None
+
+        # 相手のIDを特定
+        partner_id = match.user2_id if match.user1_id == user_id else match.user1_id
+
+        # 相手の情報を取得（アイコン画像も一緒に読み込む）
+        partner = (
+            db.query(User)
+            .options(joinedload(User.images))
+            .filter(User.user_id == partner_id)
+            .first()
+        )
+
+        if not partner:
+            return None
+
+        # アイコン画像の取得
+        partner_icon_url = None
+        if partner.images:
+            sorted_images = sorted(partner.images, key=lambda x: x.sort_order)
+            if sorted_images:
+                partner_icon_url = sorted_images[0].image_url
+
+        return {
+            "user_id": partner.user_id,
+            "name": partner.name,
+            "avatar_url": partner_icon_url,
+        }
+
     def create(
         self, db: Session, obj_in: MessageCreate, match_id: int, sender_id: int
     ) -> Message:
