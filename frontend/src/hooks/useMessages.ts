@@ -1,6 +1,7 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  getGetTalkListMatchesMeTalksGetQueryKey,
   getMessagesMatchesMatchIdMessagesGet,
   useCreateMessageMatchesMatchIdMessagesPost,
   useGetTalkListMatchesMeTalksGet,
@@ -50,6 +51,7 @@ export const useInfiniteMessages = (matchId: number) => {
  * 3. メッセージを送信するフック
  */
 export const useSendMessage = () => {
+  const queryClient = useQueryClient();
   const mutation = useCreateMessageMatchesMatchIdMessagesPost();
 
   const sendMessage = (
@@ -64,6 +66,9 @@ export const useSendMessage = () => {
       { matchId, data },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: getGetTalkListMatchesMeTalksGetQueryKey(),
+          });
           options?.onSuccess?.();
         },
         onError: (err: HTTPValidationError) => {
@@ -85,6 +90,7 @@ export const useSendMessage = () => {
  * 4. メッセージを既読にするフック
  */
 export const useMarkAsRead = () => {
+  const queryClient = useQueryClient();
   const mutation = useMarkMessagesAsReadMatchesMatchIdReadPut();
 
   const markAsRead = (
@@ -98,6 +104,9 @@ export const useMarkAsRead = () => {
       { matchId },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: getGetTalkListMatchesMeTalksGetQueryKey(),
+          });
           options?.onSuccess?.();
         },
         onError: (err: HTTPValidationError) => {
