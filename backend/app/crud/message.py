@@ -8,17 +8,25 @@ from sqlalchemy.orm import Session, joinedload
 
 class CRUDMessage:
     def get_by_match_id(
-        self, db: Session, match_id: int, limit: int = 30
+        self,
+        db: Session,
+        match_id: int,
+        limit: int = 30,
+        before_id: int | None = None,
     ) -> list[Message]:
         """特定の マッチングID のメッセージ一覧（最新のN件を過去から順に並べて）取得"""
+        query = db.query(Message).filter(Message.match_id == match_id)
+
+        # ユーザーが上にスクロールした時だけ、この条件が発動する
+        if before_id:
+            query = query.filter(Message.id < before_id)
+
         messages = (
-            db.query(Message)
-            .filter(Message.match_id == match_id)
-            .order_by(Message.created_at.desc())  # 最新順に取得
+            query.order_by(Message.id.desc())  # created_at.desc() でもOK
             .limit(limit)
             .all()
         )
-        return list(reversed(messages))  # チャットUI用に古→新に並び替え
+        return messages
 
     def create(
         self, db: Session, obj_in: MessageCreate, match_id: int, sender_id: int

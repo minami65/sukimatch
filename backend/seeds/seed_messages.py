@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, timedelta, timezone
 
 from app.db import SessionLocal
@@ -9,7 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 def seed_messages():
     db = SessionLocal()
     try:
-        # シード対象のマッチングを取得（例: ID 1 のマッチ）
+        # シード対象のマッチングを取得
         match = db.query(Matches).filter(Matches.id == 1).first()
         if not match:
             print(
@@ -20,50 +21,68 @@ def seed_messages():
         user1_id = match.user1_id
         user2_id = match.user2_id
 
-        # 過去のダミーメッセージデータを作成
-        now = datetime.now(timezone.utc)
-        sample_messages = [
-            (
-                user1_id,
-                "はじめまして！マッチありがとうございます！",
-                now - timedelta(hours=2),
-            ),
-            (
-                user2_id,
-                "はじめまして！こちらこそよろしくお願いします！😊",
-                now - timedelta(hours=1, minutes=55),
-            ),
-            (
-                user1_id,
-                "プロフィールのカフェの写真、すごく素敵ですね！どこですか？",
-                now - timedelta(hours=1, minutes=40),
-            ),
-            (
-                user2_id,
-                "ありがとうございます！渋谷にある〇〇カフェです！ラテアートが有名なんですよ☕",
-                now - timedelta(hours=1, minutes=30),
-            ),
-            (
-                user1_id,
-                "そうなんですね！今度行ってみたいです！",
-                now - timedelta(minutes=20),
-            ),
+        # 生成するメッセージの件数（ページネーション検証用に多めに設定）
+        total_messages = 80
+
+        # 5日前の日時をスタート地点にする
+        current_time = datetime.now(timezone.utc) - timedelta(days=5)
+
+        # ダミーの会話テキスト候補
+        sample_texts = [
+            "こんにちは！",
+            "お疲れ様です！",
+            "今日は暑いですね☀️",
+            "それな！",
+            "週末は何してましたか？",
+            "映画見てました🎬",
+            "おすすめのカフェありますか？",
+            "仕事終わりました〜",
+            "了解です！",
+            "すごいですね！",
+            "また連絡しますね",
+            "おはようございます！",
+            "おやすみなさい💤",
+            "ほんとですか！？",
+            "笑",
+            "たしかに！",
+            "今度行きましょう！",
+            "いいですね✨",
+            "よろしくお願いします！",
         ]
 
-        # 登録処理
-        for sender_id, text, created_at in sample_messages:
-            msg = Message(
-                match_id=match.id,
-                sender_id=sender_id,
-                content_type="text",
-                content=text,
-                is_read=True,
-                created_at=created_at,
-            )
-            db.add(msg)
+        messages_to_insert = []
 
+        for i in range(total_messages):
+            # 70%の確率で交互に、30%の確率で連続投稿になるように送信者をランダムに決定
+            sender_id = user1_id if random.random() > 0.5 else user2_id
+
+            # メッセージ内容（何件目か分かるように番号を振っておくと検証しやすい）
+            text = f"[{i + 1}件目] {random.choice(sample_texts)}"
+
+            # 1件ごとに 2分〜30分 の間でランダムに時間を進める
+            current_time += timedelta(minutes=random.randint(2, 30))
+
+            # 最新の3件だけ「未読」にするなどのテストも可能
+            is_read = i < (total_messages - 3)
+
+            messages_to_insert.append(
+                Message(
+                    match_id=match.id,
+                    sender_id=sender_id,
+                    content_type="text",
+                    content=text,
+                    is_read=is_read,
+                    created_at=current_time,
+                )
+            )
+
+        # bulk_save_objects を使うと100件でも一瞬でDBに保存できる
+        db.bulk_save_objects(messages_to_insert)
         db.commit()
-        print("✅ メッセージのシードデータの登録が完了しました！")
+
+        print(
+            f"✅ メッセージのシードデータの登録が完了しました！（計{total_messages}件）"
+        )
 
     except SQLAlchemyError as e:
         db.rollback()

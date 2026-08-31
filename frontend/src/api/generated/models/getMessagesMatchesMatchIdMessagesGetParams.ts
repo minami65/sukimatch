@@ -7,4 +7,5 @@
 
 export type GetMessagesMatchesMatchIdMessagesGetParams = {
 limit?: number;
+before_id?: number | null;
 };

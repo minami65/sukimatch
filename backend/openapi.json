@@ -1089,6 +1089,22 @@
               "default": 30,
               "title": "Limit"
             }
+          },
+          {
+            "name": "before_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before Id"
+            }
           }
         ],
         "responses": {

@@ -12,8 +12,15 @@ router = APIRouter(prefix="/matches", tags=["messages"])
 
 
 @router.get("/{match_id}/messages", response_model=list[MessageResponse])
-def get_messages(match_id: int, db: DBSession, limit: int = 30):
-    return crud_message.get_by_match_id(db, match_id=match_id, limit=limit)
+def get_messages(
+    match_id: int,
+    db: DBSession,
+    limit: int = 30,
+    before_id: int | None = None,
+):
+    return crud_message.get_by_match_id(
+        db, match_id=match_id, limit=limit, before_id=before_id
+    )
 
 
 @router.post("/{match_id}/messages", response_model=MessageResponse)
