@@ -164,11 +164,8 @@ export default function TalkRoom() {
           const showDateDivider = !nextMsg || currentDateLabel !== nextDateLabel;
 
           return (
-            <React.Fragment>
-              <div
-                key={msg.id}
-                className={`${Styles.messageRow} ${isMe ? Styles.me : Styles.partner}`}
-              >
+            <React.Fragment key={msg.id}>
+              <div className={`${Styles.messageRow} ${isMe ? Styles.me : Styles.partner}`}>
                 {!isMe && (
                   <div className={Styles.avatarContainer}>
                     <img

@@ -106,6 +106,7 @@ export const useMarkAsRead = () => {
         onSuccess: () => {
           queryClient.invalidateQueries({
             queryKey: getGetTalkListMatchesMeTalksGetQueryKey(),
+            refetchType: 'none',
           });
           options?.onSuccess?.();
         },
