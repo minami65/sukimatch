@@ -40,6 +40,7 @@ import type {
   MessageResponse,
   PasswordReset,
   ReadResponse,
+  RoomMessagesResponse,
   TalkListItem,
   TokenResponse,
   UserCreate,
@@ -2006,7 +2007,7 @@ export const getMessagesMatchesMatchIdMessagesGet = (
 ) => {
 
 
-      return customInstance<MessageResponse[]>(
+      return customInstance<RoomMessagesResponse>(
       {url: `/matches/${matchId}/messages`, method: 'GET',
         params, signal
     },

@@ -12,7 +12,7 @@
   width: max-content;
   box-sizing: border-box;
   align-self: center;
-  height: auto !important;
+  height: auto;
   white-space: nowrap;
 }
 

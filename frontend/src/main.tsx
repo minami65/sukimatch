@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -21,7 +19,7 @@ import MatchComplete from './match.jsx';
 import Create from './pages/create/index.tsx';
 import Form from './pages/login/LoginForm/LoginForm.js';
 import TalkList from './pages/talk-list/index.tsx';
-// import Talk from './pages/talk/index.tsx';
+import TalkRoom from './pages/talk-room/index.tsx';
 import UserDetails from './pages/user-details/index.tsx';
 import Pay from './pay.jsx';
 import Welcome from './welcome.jsx';
@@ -54,8 +52,8 @@ if (rootElement) {
                 <Route path="/liked" element={<Liked />} />
                 <Route path="/setting" element={<Setting />} />
                 <Route path="/talkList" element={<TalkList />} />
-                {/* <Route path="/talks/:matchId" element={<Talk />} /> */}
               </Route>
+              <Route path="/talks/:matchId" element={<TalkRoom />} />
             </Route>
           </Route>
         </Routes>

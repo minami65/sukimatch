@@ -1,9 +1,11 @@
 from app.api.deps import CurrentUser, DBSession
+from app.core.connection_manager import manager
 from app.crud.message import crud_message
 from app.schemas.message import (
     MessageCreate,
     MessageResponse,
     ReadResponse,
+    RoomMessagesResponse,
     TalkListItem,
 )
 from fastapi import APIRouter, HTTPException
@@ -11,29 +13,57 @@ from fastapi import APIRouter, HTTPException
 router = APIRouter(prefix="/matches", tags=["messages"])
 
 
-@router.get("/{match_id}/messages", response_model=list[MessageResponse])
-def get_messages(match_id: int, db: DBSession, limit: int = 30):
-    return crud_message.get_by_match_id(db, match_id=match_id, limit=limit)
+@router.get("/{match_id}/messages", response_model=RoomMessagesResponse)
+def get_messages(
+    match_id: int,
+    current_user: CurrentUser,
+    db: DBSession,
+    limit: int = 30,
+    before_id: int | None = None,
+):
+    # 1. 権限チェック 兼 相手のプロフィール（メタ情報）取得
+    partner_info = crud_message.get_room_meta(db, match_id, current_user.user_id)
+    if not partner_info:
+        raise HTTPException(status_code=403, detail="Not authorized or match not found")
+
+    # 2. メッセージ一覧の取得（0件の場合は [] が返る）
+    messages = crud_message.get_by_match_id(
+        db, match_id=match_id, limit=limit, before_id=before_id
+    )
+
+    # 3. 新しいスキーマの形（箱）に詰めてフロントへ返す
+    return RoomMessagesResponse(partner=partner_info, messages=messages)
 
 
 @router.post("/{match_id}/messages", response_model=MessageResponse)
-def create_message(
+async def create_message(
     match_id: int,
     payload: MessageCreate,
     current_user: CurrentUser,
     db: DBSession,
 ):
-    # 認可チェック
-    is_valid = crud_message.check_user_in_match(
+    # 1. 権限チェック 兼 相手のユーザーID取得
+    partner_id = crud_message.get_partner_id(
         db, match_id=match_id, user_id=current_user.user_id
     )
-    if not is_valid:
+    if not partner_id:
         raise HTTPException(status_code=403, detail="Not authorized to send message")
 
-    # 作成処理
-    return crud_message.create(
+    # 2. メッセージをDBに保存
+    new_message = crud_message.create(
         db, obj_in=payload, match_id=match_id, sender_id=current_user.user_id
     )
+
+    # 3. 相手(partner_id)がオンラインなら WebSocket で直接通知！
+    event_data = {
+        "type": "NEW_MESSAGE",
+        "match_id": match_id,
+        "message": MessageResponse.model_validate(new_message).model_dump(mode="json"),
+    }
+    await manager.send_personal_message(event_data, user_id=partner_id)
+
+    # 4. フロント(送信者)にレスポンスを返す
+    return new_message
 
 
 @router.get("/me/talks", response_model=list[TalkListItem])

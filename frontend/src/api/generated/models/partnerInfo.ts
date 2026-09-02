@@ -5,7 +5,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GetMessagesMatchesMatchIdMessagesGetParams = {
-limit?: number;
-before_id?: number | null;
-};
+export interface PartnerInfo {
+  user_id: number;
+  name?: string | null;
+  avatar_url?: string | null;
+}

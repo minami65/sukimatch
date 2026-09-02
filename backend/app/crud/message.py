@@ -8,17 +8,73 @@ from sqlalchemy.orm import Session, joinedload
 
 class CRUDMessage:
     def get_by_match_id(
-        self, db: Session, match_id: int, limit: int = 30
+        self,
+        db: Session,
+        match_id: int,
+        limit: int = 30,
+        before_id: int | None = None,
     ) -> list[Message]:
         """特定の マッチングID のメッセージ一覧（最新のN件を過去から順に並べて）取得"""
+        query = db.query(Message).filter(Message.match_id == match_id)
+
+        # ユーザーが上にスクロールした時だけ、この条件が発動する
+        if before_id:
+            query = query.filter(Message.id < before_id)
+
         messages = (
-            db.query(Message)
-            .filter(Message.match_id == match_id)
-            .order_by(Message.created_at.desc())  # 最新順に取得
+            query.order_by(Message.id.desc())  # created_at.desc() でもOK
             .limit(limit)
             .all()
         )
-        return list(reversed(messages))  # チャットUI用に古→新に並び替え
+        return messages
+
+    def get_partner_id(self, db: Session, match_id: int, user_id: int) -> int | None:
+        """指定したユーザーがマッチングの当事者か確認し、相手のユーザーIDを返す"""
+        match = db.query(Matches).filter(Matches.id == match_id).first()
+
+        # マッチが存在しない、または自分が当事者でない場合は None
+        if not match or (match.user1_id != user_id and match.user2_id != user_id):
+            return None
+
+        # 相手のIDを返す
+        return match.user2_id if match.user1_id == user_id else match.user1_id
+
+    def get_room_meta(self, db: Session, match_id: int, user_id: int) -> dict | None:
+        """マッチングの正当性を確認しつつ、相手のプロフィール情報を返す"""
+        match = db.query(Matches).filter(Matches.id == match_id).first()
+        if not match:
+            return None
+
+        # 自分がこのマッチングの当事者かチェック
+        if match.user1_id != user_id and match.user2_id != user_id:
+            return None
+
+        # 相手のIDを特定
+        partner_id = match.user2_id if match.user1_id == user_id else match.user1_id
+
+        # 相手の情報を取得（アイコン画像も一緒に読み込む）
+        partner = (
+            db.query(User)
+            .options(joinedload(User.images))
+            .filter(User.user_id == partner_id)
+            .first()
+        )
+
+        if not partner:
+            return None
+
+        # アイコン画像の取得
+        partner_icon_url = None
+        if partner.images:
+            sorted_images = sorted(partner.images, key=lambda x: x.sort_order)
+            if sorted_images:
+                partner_icon_url = sorted_images[0].image_url
+
+        return {
+            "user_id": partner.user_id,
+            "name": partner.name,
+            "avatar_url": partner_icon_url,
+        }
 
     def create(
         self, db: Session, obj_in: MessageCreate, match_id: int, sender_id: int
