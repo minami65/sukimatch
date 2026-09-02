@@ -28,6 +28,17 @@ class CRUDMessage:
         )
         return messages
 
+    def get_partner_id(self, db: Session, match_id: int, user_id: int) -> int | None:
+        """指定したユーザーがマッチングの当事者か確認し、相手のユーザーIDを返す"""
+        match = db.query(Matches).filter(Matches.id == match_id).first()
+
+        # マッチが存在しない、または自分が当事者でない場合は None
+        if not match or (match.user1_id != user_id and match.user2_id != user_id):
+            return None
+
+        # 相手のIDを返す
+        return match.user2_id if match.user1_id == user_id else match.user1_id
+
     def get_room_meta(self, db: Session, match_id: int, user_id: int) -> dict | None:
         """マッチングの正当性を確認しつつ、相手のプロフィール情報を返す"""
         match = db.query(Matches).filter(Matches.id == match_id).first()

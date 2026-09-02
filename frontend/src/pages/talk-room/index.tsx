@@ -27,6 +27,7 @@ export default function TalkRoom() {
 
   const [inputText, setInputText] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const messagesAreaRef = useRef<HTMLDivElement>(null);
 
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -34,7 +35,7 @@ export default function TalkRoom() {
   const { sendMessage, isPending: isSending } = useSendMessage();
   const { markAsRead } = useMarkAsRead();
 
-  // 💡 テキストが変わるたびに textarea の高さを自動調整する
+  // テキストが変わるたびに textarea の高さを自動調整する
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -90,7 +91,7 @@ export default function TalkRoom() {
 
     // 楽観的に仮のメッセージを作成
     const optimisticMessage = {
-      id: -Date.now(),
+      id: crypto.randomUUID(),
       sender_id: myUserId,
       content: contentToSend,
       content_type: 'text',
@@ -129,6 +130,8 @@ export default function TalkRoom() {
         },
       },
     );
+
+    scrollToBottom('smooth');
   };
 
   const handleBack = useCallback(() => {
@@ -144,6 +147,15 @@ export default function TalkRoom() {
     }
   };
 
+  const scrollToBottom = (behavior: 'smooth' | 'auto' = 'smooth') => {
+    requestAnimationFrame(() => {
+      messagesAreaRef.current?.scrollIntoView({
+        behavior,
+        block: 'start',
+      });
+    });
+  };
+
   const messages = data?.pages.flatMap((page) => page.messages) ?? [];
   const partnerInfo = data?.pages[0]?.partner;
   const partnerName = partnerInfo?.name ?? 'チャット相手';
@@ -154,6 +166,8 @@ export default function TalkRoom() {
 
       {/* メッセージエリア */}
       <div className={Styles.messageArea}>
+        <div ref={messagesAreaRef} />
+
         {messages.map((msg, index) => {
           const isMe = msg.sender_id === myUserId;
 
