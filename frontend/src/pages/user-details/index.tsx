@@ -1,11 +1,9 @@
-import { useState } from 'react';
-
 import { Link, useParams } from 'react-router-dom';
 
 import { FullPageLoading } from '@/components/Loading/FullPageLoading/index.js';
 import LikeButton from '@/components/shared/buttons/LikeButton.tsx';
-import MatchNotificationModal from '@/components/shared/modals/MatchNotificationModal/index.tsx';
 
+import { useUnreadMatches } from '@/hooks/useMatchNotification.ts';
 import { useUserDetail, useUserImages } from '@/hooks/useUser.ts';
 
 import backButtonIcon from '@/assets/back.png';
@@ -17,7 +15,6 @@ import styles from './userDetails.module.css';
 function UserDetails() {
   const { id } = useParams();
   const userId = Number(id);
-  const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
 
   const { data: user, isLoading: isUserLoading, isError: isUserError } = useUserDetail(userId);
   const {
@@ -26,9 +23,11 @@ function UserDetails() {
     isError: isImagesError,
   } = useUserImages(userId);
 
+  const { refetch: refetchUnreadMatches } = useUnreadMatches();
+
   const handleLikeSuccess = (isMatch: boolean) => {
     if (isMatch) {
-      setIsMatchModalOpen(true);
+      refetchUnreadMatches();
     }
   };
 
@@ -42,16 +41,6 @@ function UserDetails() {
 
   const images = rawImages
     ? [...rawImages].sort((a, b) => a.sort_order - b.sort_order).map((img) => img.image_url)
-    : [];
-
-  const matchedUsers = user
-    ? [
-        {
-          id: user.user_id,
-          name: user.name,
-          imageUrl: images[0],
-        },
-      ]
     : [];
 
   return (
@@ -69,12 +58,6 @@ function UserDetails() {
         userId={userId}
         className={styles.likeButton}
         onLikeSuccess={handleLikeSuccess}
-      />
-
-      <MatchNotificationModal
-        isOpen={isMatchModalOpen}
-        onClose={() => setIsMatchModalOpen(false)}
-        matchedUsers={matchedUsers}
       />
     </>
   );

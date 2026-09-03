@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/Button';
@@ -9,6 +12,7 @@ import UserIconProfile from '../../UserIconProfile.tsx';
 import styles from './MatchNotificationModal.module.css';
 
 export interface MatchedUser {
+  matchId: number;
   id: number;
   name: string;
   imageUrl?: string;
@@ -22,11 +26,27 @@ interface MatchNotificationModalProps {
 
 const MatchNotificationModal = ({ isOpen, onClose, matchedUsers }: MatchNotificationModalProps) => {
   const navigate = useNavigate();
+
+  console.log('matchedUsers: ', matchedUsers);
+
+  const [selectedMatchId, setSelectedMatchId] = useState<number | null>(
+    matchedUsers.length === 1 ? matchedUsers[0].matchId : null,
+  );
+
   const isMultiple = matchedUsers.length > 1;
 
   const handleClickStart = () => {
     onClose();
-    navigate('/talkList');
+
+    if (selectedMatchId) {
+      navigate(`/talks/${selectedMatchId}`);
+    } else {
+      navigate('/talkList');
+    }
+  };
+
+  const handleSelect = (matchId: number) => {
+    setSelectedMatchId((prev) => (prev === matchId ? null : matchId));
   };
 
   return (
@@ -52,13 +72,15 @@ const MatchNotificationModal = ({ isOpen, onClose, matchedUsers }: MatchNotifica
               imageUrl={partner.imageUrl}
               name={partner.name}
               size={isMultiple ? 'small' : 'normal'}
+              onClickIcon={() => handleSelect(partner.matchId)}
+              isSelected={selectedMatchId === partner.matchId}
             />
           ))}
         </div>
 
         <div className={styles.buttonWrapper}>
           <Button fullWidth onClick={handleClickStart}>
-            さっそくトークをはじめる！
+            {selectedMatchId ? '選んだ人とトークをはじめる！' : 'トーク一覧を見る'}
           </Button>
           <Button fullWidth variant="tertiary" onClick={onClose}>
             とじる

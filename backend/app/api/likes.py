@@ -31,10 +31,13 @@ async def like_user(
 
     # 💡 2. マッチングが成立した場合、相手(user_id)にWebSocketで通知を飛ばす！
     if result.get("is_match"):
+        match_id = result.get("match_id")
+
         await manager.send_personal_message(
             {
                 "event": "MATCH",
                 "data": {
+                    "match_id": match_id,
                     "matched_user_id": current_user.user_id,
                     "message": "新しいマッチングが成立しました！",
                 },
