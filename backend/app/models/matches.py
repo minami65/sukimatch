@@ -1,5 +1,5 @@
 from app.db import Base
-from sqlalchemy import Boolean, Column, ForeignKey, Integer
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, func
 from sqlalchemy.orm import relationship
 
 
@@ -11,6 +11,8 @@ class Matches(Base):
 
     user1_checked_match = Column(Boolean, default=False, nullable=False)
     user2_checked_match = Column(Boolean, default=False, nullable=False)
+
+    created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
     # foreign_keys を文字列ではなくカラムオブジェクト直接、または明確に参照指定する
     user1 = relationship("User", foreign_keys="[Matches.user1_id]")

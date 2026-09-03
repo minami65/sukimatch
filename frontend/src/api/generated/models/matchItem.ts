@@ -10,5 +10,6 @@ export interface MatchItem {
   match_id: number;
   user1_checked_match: boolean;
   user2_checked_match: boolean;
+  created_at: string;
   user: MatchUserProfile;
 }

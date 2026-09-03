@@ -52,8 +52,6 @@ const MatchNotificationLayout = () => {
     imageUrl: match.user.image_url || '',
   }));
 
-  console.log('unreadMatches: ', unreadMatches);
-  console.log('formatted: ', formattedMatches);
   return (
     <>
       <Outlet />

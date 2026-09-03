@@ -85,6 +85,7 @@ def get_unread_matches(db: Session, user_id: int):
                 "match_id": match.id,
                 "user1_checked_match": match.user1_checked_match,
                 "user2_checked_match": match.user2_checked_match,
+                "created_at": match.created_at,
                 "user": {
                     "user_id": getattr(opp, "user_id", getattr(opp, "id", None)),
                     "name": opp.name,
