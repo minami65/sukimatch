@@ -154,9 +154,7 @@ class CRUDMessage:
                     partner_id=partner.user_id,
                     partner_name=partner.name,
                     partner_icon_url=partner_icon_url,
-                    latest_message=latest_msg.content
-                    if latest_msg
-                    else "マッチングしました！メッセージを送りましょう",
+                    latest_message=latest_msg.content if latest_msg else None,
                     latest_message_at=latest_msg.created_at
                     if latest_msg
                     else match.created_at,
