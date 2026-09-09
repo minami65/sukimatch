@@ -8,6 +8,8 @@ import MatchNotificationModal, {
 
 import { useMarkMatchesAsRead, useUnreadMatches } from '@/hooks/useMatchNotification';
 
+import { MatchItem } from '@/api/generated/models';
+
 const MatchNotificationLayout = () => {
   const { unreadMatches, refetch } = useUnreadMatches();
   const { markAsRead } = useMarkMatchesAsRead();
@@ -43,8 +45,9 @@ const MatchNotificationLayout = () => {
     setShowModal(false);
   };
 
-  const formattedMatches: MatchedUser[] = (unreadMatches || []).map((match: any) => ({
+  const formattedMatches: MatchedUser[] = (unreadMatches || []).map((match: MatchItem) => ({
     id: match.user.user_id,
+    matchId: match.match_id,
     name: match.user.name,
     imageUrl: match.user.image_url || '',
   }));

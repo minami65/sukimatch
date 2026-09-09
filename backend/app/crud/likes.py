@@ -37,21 +37,22 @@ def create_like(db: Session, from_user_id: int, to_user_id: int):
         user1_id = min(from_user_id, to_user_id)
         user2_id = max(from_user_id, to_user_id)
 
-        # 今いいねを押した人（from_user_id）は既読(True)、相手（to_user_id）は未読(False)
-        is_from_user1 = from_user_id == user1_id
-
         match = Matches(
             user1_id=user1_id,
             user2_id=user2_id,
-            user1_checked_match=bool(is_from_user1),
-            user2_checked_match=not is_from_user1,
+            user1_checked_match=False,
+            user2_checked_match=False,
         )
         db.add(match)
+        db.flush()
         is_match = True
+        match_id = match.id
+    else:
+        match_id = None
 
     db.commit()
 
-    return {"like": like, "is_match": is_match}
+    return {"like": like, "is_match": is_match, "match_id": match_id}
 
 
 def get_my_likes(db: Session, user_id: int):

@@ -9,4 +9,5 @@ import type { LikeBase } from './likeBase.ts';
 export interface LikeResponse {
   like: LikeBase;
   is_match: boolean;
+  match_id?: number | null;
 }

@@ -1603,6 +1603,17 @@
           "is_match": {
             "type": "boolean",
             "title": "Is Match"
+          },
+          "match_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Id"
           }
         },
         "type": "object",
@@ -1700,6 +1711,11 @@
             "type": "boolean",
             "title": "User2 Checked Match"
           },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
           "user": {
             "$ref": "#/components/schemas/MatchUserProfile"
           }
@@ -1709,6 +1725,7 @@
           "match_id",
           "user1_checked_match",
           "user2_checked_match",
+          "created_at",
           "user"
         ],
         "title": "MatchItem"

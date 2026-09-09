@@ -31,7 +31,20 @@ export function useWebSocket() {
         if (data.event === 'MATCH') {
           console.log('🎉 MATCHイベント受信！未読マッチを再取得します');
 
-          window.dispatchEvent(new CustomEvent('ws-match-event'));
+          // 新しいマッチができたのでトーク一覧のキャッシュを無効化して再取得させる
+          queryClient.invalidateQueries({
+            queryKey: getGetTalkListMatchesMeTalksGetQueryKey(),
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ['unreadMatches'],
+          });
+
+          window.dispatchEvent(
+            new CustomEvent('ws-match-event', {
+              detail: data.data,
+            }),
+          );
         }
 
         // ==========================================

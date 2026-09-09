@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -12,6 +14,7 @@ class MatchItem(BaseModel):
     match_id: int
     user1_checked_match: bool
     user2_checked_match: bool
+    created_at: datetime
     user: MatchUserProfile
 
     class Config:

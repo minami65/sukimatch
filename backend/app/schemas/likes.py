@@ -13,6 +13,7 @@ class LikeBase(BaseModel):
 class LikeResponse(BaseModel):
     like: LikeBase
     is_match: bool
+    match_id: int | None = None
 
 
 class DeleteResponse(BaseModel):

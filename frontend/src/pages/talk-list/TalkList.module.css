@@ -1,0 +1,82 @@
+.container {
+  width: 100%;
+}
+
+/* メッセージ未開始セクション */
+.unstartedSection {
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sectionTitle {
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #8e8e93;
+  margin-bottom: 12px;
+}
+
+/* 横スクロールリスト */
+.unstartedList {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 0 16px;
+  -webkit-overflow-scrolling: touch;
+  /* スクロールバーの非表示 */
+  scrollbar-width: none; /* Firefox */
+}
+
+.unstartedList::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* 個々のユーザーアイテム */
+.unstartedItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.avatarWrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e5e5ea;
+  margin-bottom: 6px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.partnerName {
+  font-size: 14px;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* メッセージ表示系 */
+.statusMessage {
+  text-align: center;
+  padding: 24px;
+  color: #8e8e93;
+  font-size: 14px;
+}
+
+.errorMessage {
+  text-align: center;
+  padding: 24px;
+  color: #ff3b30;
+  font-size: 14px;
+}
